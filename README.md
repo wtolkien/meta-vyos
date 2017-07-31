@@ -79,7 +79,7 @@ git clone https://github.com/wtolkien/meta-vyos.git
 cd poky
 source oe-init-build-env
 ```
-* edit Yocto layer configuration file conf/bblayers.conf to include the
+* edit Yocto layer configuration file ```conf/bblayers.conf``` to include the
   meta-vyos layer: add an entry pointing to the meta-vyos layer to the list
   of included layers - adjust your path as required:
 ```
@@ -90,7 +90,7 @@ BBLAYERS ?= " \
       /opt/src/meta-vyos \
       "
 ```
-* edit the Yocto config file conf/local.conf to build a 'vyos' distro and use
+* edit the Yocto config file ```conf/local.conf``` to build a 'vyos' distro and use
   the 'deb' package format (the latter isn't strictly required, but recommended
   due to VyOS's Debian heritage):
 ```
