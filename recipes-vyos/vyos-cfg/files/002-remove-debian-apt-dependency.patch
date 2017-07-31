@@ -1,0 +1,34 @@
+--- a/src/cstore/cstore.cpp	2017-07-10 16:28:33.989858141 -0700
++++ b/src/cstore/cstore.cpp	2017-07-11 09:56:32.490439143 -0700
+@@ -25,8 +25,8 @@
+ #include <sstream>
+ #include <memory>
+ 
+-#include <apt-pkg/version.h>
+-#include <apt-pkg/debversion.h>
++//#include <apt-pkg/version.h>
++//#include <apt-pkg/debversion.h>
+ 
+ #include <cli_cstore.h>
+ #include <cstore/cstore.hpp>
+@@ -2022,7 +2022,8 @@ Cstore::assert_internal(bool cond, const
+ bool
+ Cstore::sort_func_deb_version(string a, string b)
+ {
+-  return debVS.CmpVersion(a, b) < 0;
++  return 0;
++//  return debVS.CmpVersion(a, b) < 0;
+ }
+ 
+ void
+--- a/Makefile.am	2017-07-11 10:01:06.367115109 -0700
++++ b/Makefile.am	2017-07-11 10:02:01.995251342 -0700
+@@ -42,7 +42,7 @@ src_libvyatta_cfg_la_LIBADD += -lgio-2.0
+ src_libvyatta_cfg_la_LIBADD += -lgobject-2.0
+ src_libvyatta_cfg_la_LIBADD += -lboost_system
+ src_libvyatta_cfg_la_LIBADD += -lboost_filesystem
+-src_libvyatta_cfg_la_LIBADD += -lapt-pkg
++#src_libvyatta_cfg_la_LIBADD += -lapt-pkg
+ src_libvyatta_cfg_la_LIBADD += -lperl
+ src_libvyatta_cfg_la_LDFLAGS = -version-info 1:0:0
+ src_libvyatta_cfg_la_SOURCES = src/cli_parse.y src/cli_def.l src/cli_val.l

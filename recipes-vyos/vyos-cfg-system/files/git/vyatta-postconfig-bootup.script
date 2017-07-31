@@ -1,0 +1,5 @@
+#!/bin/sh
+# This script is called from /etc/rc.local on boot after the Vyatta
+# configuration is fully applied. Any modifications done to work around
+# unfixed bugs and implement enhancements which are not complete in the Vyatta
+# system can be placed here.

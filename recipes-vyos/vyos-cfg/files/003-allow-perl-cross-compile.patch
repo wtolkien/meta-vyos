@@ -1,0 +1,12 @@
+diff -rupN a/Makefile.PL b/Makefile.PL
+--- a/perl_dmod/Cstore/Makefile.PL	2017-07-11 15:23:19.468989599 -0700
++++ b/perl_dmod/Cstore/Makefile.PL	2017-07-11 15:23:06.360964652 -0700
+@@ -81,7 +81,7 @@ WriteMakefile(
+     LIBS   => ['-L../../src/.libs -lvyatta-cfg'],
+     DEFINE => '',
+     INC    => '-I../../src',
+-    CC => 'g++',
++    #CC => 'g++',
+     PREFIX => '/opt/vyatta',
+     INSTALLDIRS => 'site',
+ );
