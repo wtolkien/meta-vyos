@@ -43,7 +43,7 @@ FILES_${PN} += "/opt /usr/share /lib /etc/apt"
 
 # NOTE: this software seems not capable of being built in a separate build directory
 # from the source, therefore using 'autotools-brokensep' instead of 'autotools'
-inherit setuptools3 autotools-brokensep cpan-passive python3native python3-dir \
+inherit setuptools3 cpan autotools-brokensep python3native python3-dir \
 	update-rc.d
 
 # TODO: replace std::auto_ptr with std::unique_ptr - for now just turn
