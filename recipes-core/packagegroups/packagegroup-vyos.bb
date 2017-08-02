@@ -16,6 +16,9 @@ VYOS_CORE = "\
     vyos-wireless \
     vyos-quagga \
     vyos-cfg-quagga \
+    vyos-openvpn \
+    vyos-wirelessmodem \
+    vyos-cfg-op-pppoe \
     "
 
 RDEPENDS_${PN} = "\
