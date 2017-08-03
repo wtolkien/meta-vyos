@@ -9,6 +9,7 @@ SRC_URI = "git://github.com/vyos/vyatta-cfg.git;branch=current;protocol=https \
 	   file://001-fix-namespace-ambiguity.patch \
 	   file://002-remove-debian-apt-dependency.patch \
 	   file://003-allow-perl-cross-compile.patch \
+	   file://004-unionfs-fuse-path.patch \
 	   file://git/init-functions \
 	  "
 

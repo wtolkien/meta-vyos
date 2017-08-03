@@ -1,0 +1,22 @@
+diff -rupN a/cstore-unionfs.cpp b/cstore-unionfs.cpp
+--- a/src/cstore/unionfs/cstore-unionfs.cpp	2017-08-02 15:15:06.350690609 -0700
++++ b/src/cstore/unionfs/cstore-unionfs.cpp	2017-08-02 15:15:58.122940448 -0700
+@@ -1631,8 +1631,8 @@ UnionfsCstore::do_mount(const FsPath& rw
+   const char *fuseopt1, *fuseopt2;
+   string mopts;
+
+-  fusepath = "/usr/bin/unionfs-fuse";
+-  fuseprog = "unionfs-fuse";
++  fusepath = "/usr/bin/unionfs";
++  fuseprog = "unionfs";
+   fuseoptinit = "-o";
+   fuseopt1 = "cow";
+   fuseopt2 = "allow_other";
+@@ -1688,7 +1688,7 @@ UnionfsCstore::do_umount(const FsPath& m
+   const char *fusermount_path, *fusermount_prog;
+   const char *fusermount_umount;
+
+-  fusermount_path = "/bin/fusermount";
++  fusermount_path = "/usr/bin/fusermount";
+   fusermount_prog = "fusermount";
+   fusermount_umount = "-u";
