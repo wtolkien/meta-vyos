@@ -23,19 +23,18 @@ This project aims to create a meta layer for OpenEmbedded / Yocto that will make
 easy to run VyOS router software on a wide variety of embedded platforms.
 
 The project is currently at a very early stage: Some core VyOS packages have been
-converted to OpenEmbedded and it is possible to start up a VyOS image in Qemu and
-try out VyOS's command completion feature. That's about it.
+converted to OpenEmbedded and it is possible to start up a VyOS image in Qemu. It
+is possible to change configuration and, for example, configure an Ethernet port. 
+Other features may or may not work yet
 
 There is a lot more work to do and any help from interested parties is very welcome.
 
 ## Some of the immediate issues:
 
-- Privileged mode does not yet work: Once the 'configure' command has been
-  entered, command completion and the build-in CLI help system no longer works.
-  This could be related to permission problems or problems with the unionfs-fuse
-  sytem that's used by Debian VyOS
-- Config load/save is not yet working. This is likely related to the way how
-  a config partition is traditionally mounted in Debian VyOS.
+- More packages need to be converted, features need to be tested.
+- Most VyOS source packages build with GNU autotools, however they don't allow 
+  building outside of the source directory. This prevents the usage of the 
+  'devtool' command that's useful for local developmend with OpenEmbedded/bitbake.
 - Image management is not working, and it may never work in the same way usually
   does with Debian VyOS. Debian VyOS uses Debian's LiveCD architecture with
   initramfs/squashfs to handle multiple images. It is not clear yet how this
@@ -49,15 +48,15 @@ There is a lot more work to do and any help from interested parties is very welc
 
 ## Rough roadmap:
 
-- Resolve issues with privileged mode and configuration load/save.
-- Make sure some very basic config commands work, i.e. setting an Ethernet
-  interface IP address
 - Port over more VyOS features by creating recipes for other VyOS packages
 - Resolve issues related to image management / firmware upgrade. Either find a
   way to use the existing 'VyOS way' with OpenEmbedded, or design something new
   that possibly makes more sense in an embedded environment
 - Deal with issues related to logging and frequent file system write access that
   could wear out an embedded flash filesystem
+- Performance improvements: embedded devices often have slow disk access because 
+  the underlaying technology is SDCards, etc. VyOS's CLI is disk-read heavy, 
+  performance may be improved by copying the whole /opt/vyatta tree to a ramdisk
 - Debug!
 
 
