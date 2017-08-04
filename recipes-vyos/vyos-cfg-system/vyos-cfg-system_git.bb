@@ -8,6 +8,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
 SRC_URI = "git://github.com/vyos/vyatta-cfg-system.git;branch=current;protocol=https \
 		  file://git/vyatta-postconfig-bootup.script \
+		  file://git/bashrc.template \
 	      "
 
 # snapshot from Jul 13, 2017:
@@ -29,6 +30,10 @@ RDEPENDS_${PN} = " \
 	libpam \
 	rsyslog \
 	less \
+	lsof \
+	ntp \
+	iptables \
+	conntrack-tools \
 	unionfs-fuse \
 	debianutils \
 	perl \
@@ -87,6 +92,7 @@ do_install_append () {
 	install -d ${D}/opt/vyatta/etc/netdevice.d
 
 	install vyatta-postconfig-bootup.script ${D}/opt/vyatta/etc/config/scripts
+	install bashrc.template ${D}/opt/vyatta/etc
 }
 
 # perform some post-installation actions, but only on target device, not at
@@ -129,6 +135,10 @@ pkg_postinst_${PN} () {
 		if [ "${vy_sysconfdir}" != "/etc" ]; then
     		touch /etc/sudoers
     		cp -p /etc/sudoers /etc/sudoers.bak
+
+			# install .bashrc for 'vyos' users
+			mv /opt/vyatta/etc/bashrc.template /home/vyos/.bashrc
+			chown vyos:users /home/vyos/.bashrc
 
     		# enable ssh banner
     		sed -i 's/^#Banner/Banner/' /etc/ssh/sshd_config
