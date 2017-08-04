@@ -57,7 +57,19 @@ do_install_append() {
     if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
         install -d ${D}${sysconfdir}/modules-load.d
         install -m 0644 ${WORKDIR}/fuse.conf ${D}${sysconfdir}/modules-load.d
+    else
+        install -d ${D}${sysconfdir}
+        install -m 0640 ${WORKDIR}/fuse.conf ${D}${sysconfdir}
     fi
 }
 
 BBCLASSEXTEND = "native nativesdk"
+
+# perform some post-installation actions related to file ownership
+pkg_postinst_${PN} () {
+	if [ x"$D" = "x" ]; then
+		chgrp users /etc/fuse.conf
+    else
+        exit 1
+    fi
+}
