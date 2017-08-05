@@ -16,8 +16,8 @@ PV = "1.0+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
-DEPENDS = "readline"
-RDEPENDS_${PN} += "dpkg"
+DEPENDS = "readline net-snmp"
+RDEPENDS_${PN} += "dpkg net-snmp"
 
 FILES_${PN} += "/usr/lib /usr/share /var/run"
 
@@ -52,9 +52,9 @@ EXTRA_OECONF = "\
        	--enable-gcc-rdynamic \
 		--with-libpam \
 		--disable-doc \
+       	--enable-snmp \
 		"
 
-#       	--enable-snmp
 
 INSANE_SKIP_${PN} = "dev-so"
 

@@ -132,88 +132,86 @@ pkg_postinst_${PN} () {
 		# files
 		rm -f /etc/logrotate.d/rsyslog
 
-		if [ "${vy_sysconfdir}" != "/etc" ]; then
-    		touch /etc/sudoers
-    		cp -p /etc/sudoers /etc/sudoers.bak
+   		touch /etc/sudoers
+   		cp -p /etc/sudoers /etc/sudoers.bak
 
-			# install .bashrc for 'vyos' users
-			mv /opt/vyatta/etc/bashrc.template /home/vyos/.bashrc
-			chown vyos:users /home/vyos/.bashrc
+		# install .bashrc for 'vyos' users
+		mv /opt/vyatta/etc/bashrc.template /home/vyos/.bashrc
+		chown vyos:users /home/vyos/.bashrc
 
-    		# enable ssh banner
-    		sed -i 's/^#Banner/Banner/' /etc/ssh/sshd_config
-    		# make sure PermitRoot is off
-    		sed -i '/^PermitRootLogin/s/yes/no/' /etc/ssh/sshd_config
-    		# make sure PasswordAuthentication is on
-    		sed -i 's/^#PasswordAuthentication/PasswordAuthentication/' /etc/ssh/sshd_config
-    		sed -i '/^PasswordAuthentication/s/no/yes/' /etc/ssh/sshd_config
+   		# enable ssh banner
+   		sed -i 's/^#Banner/Banner/' /etc/ssh/sshd_config
+   		# make sure PermitRoot is off
+   		sed -i '/^PermitRootLogin/s/yes/no/' /etc/ssh/sshd_config
+   		# make sure PasswordAuthentication is on
+   		sed -i 's/^#PasswordAuthentication/PasswordAuthentication/' /etc/ssh/sshd_config
+   		sed -i '/^PasswordAuthentication/s/no/yes/' /etc/ssh/sshd_config
 
-			# TODO: remove ssh v1 support
-    		# add HostKeys for protocol version 1
-			if [ ! -s /etc/ssh/ssh_host_key ]; then
-				echo "  generating ssh RSA1 key..."
-				ssh-keygen -q -f /etc/ssh/ssh_host_key -N '' -t rsa1
-			fi
-			sed -i 's/^Protocol 2/Protocol 1,2/' /etc/ssh/sshd_config
-
-    		# add UseDNS line
-    		sed -i '/^UseDNS/d' /etc/ssh/sshd_config
-    		echo 'UseDNS yes' >>/etc/ssh/sshd_config
-
-    		# Turn off Debian default for %sudo
-    		sed -i -e '/^%sudo/d' /etc/sudoers || true
-
-    		# Add VyOS entries for sudoers
-    		cp ${vy_sysconfdir}/sudoers /etc/sudoers.d/vyatta
-    		chmod 0440 /etc/sudoers.d/vyatta
-
-    		# purge off ancient devfs stuff from /etc/securetty
-			# WT: nope, OE's default is not so ancient!
-    		# cp $sysconfdir/securetty /etc/securetty
-
-    		for f in issue issue.net; do
-				if [ ! -e /etc/$f.old ]; then
-            		cp ${vy_sysconfdir}/$f /etc/$f
-        		fi
-    		done
-
-			mkdir -p /etc/sysctl.d
-    		cp ${vy_sysconfdir}/vyatta-sysctl.conf /etc/sysctl.d/30-vyatta-router.conf
-
-			# Set file capabilities - paths can be different from original Debian/VyOS
-			# distro, so we always check in /bin /sbin /usr/bin and /usr/sbin
-			sed -r -e '/^#/d' -e '/^[[:blank:]]*$/d' < ${vy_sysconfdir}/filecaps | \
-			    while read capability path; do
-					file_name=`basename $path`
-					for p in /bin /sbin /usr/bin /usr/sbin; do
-						if [ -f $p/$file_name ]; then
-							# if symlink, then get symlink target. setcap doesn't work
-							# on symlinks
-							if [ -h $p/$file_name ]; then
-							    sym_target=`readlink $p/$file_name`
-								touch -c $sym_target
-			       				setcap $capability $sym_target
-							else
-			       				touch -c $p/$file_name
-			       				setcap $capability $p/$file_name
-							fi
-						fi
-					done
-			    done
-
-			# Install pam_cap config
-			cp ${vy_sysconfdir}/capability.conf /etc/security/capability.conf
-
-			# Install our own version of rsyslog.conf without
-			# default targets
-			mv /etc/rsyslog.conf /etc/rsyslog.conf.orig
-			cp ${vy_sysconfdir}/rsyslog.conf /etc/rsyslog.conf
-
-			# TODO: VyOS wants full speed, embedded devices may want to be more
-			# power-efficient
-			# Install own version of cpufrequtils config
-			#cp ${vy_sysconfdir}/cpufrequtils /etc/default/cpufrequtils
+		# TODO: remove ssh v1 support
+   		# add HostKeys for protocol version 1
+		if [ ! -s /etc/ssh/ssh_host_key ]; then
+			echo "  generating ssh RSA1 key..."
+			ssh-keygen -q -f /etc/ssh/ssh_host_key -N '' -t rsa1
 		fi
+		sed -i 's/^Protocol 2/Protocol 1,2/' /etc/ssh/sshd_config
+
+   		# add UseDNS line
+   		sed -i '/^UseDNS/d' /etc/ssh/sshd_config
+   		echo 'UseDNS yes' >>/etc/ssh/sshd_config
+
+   		# Turn off Debian default for %sudo
+  		sed -i -e '/^%sudo/d' /etc/sudoers || true
+
+   		# Add VyOS entries for sudoers
+   		cp ${vy_sysconfdir}/sudoers /etc/sudoers.d/vyatta
+   		chmod 0440 /etc/sudoers.d/vyatta
+
+   		# purge off ancient devfs stuff from /etc/securetty
+		# WT: nope, OE's default is not so ancient!
+   		# cp $sysconfdir/securetty /etc/securetty
+
+   		for f in issue issue.net; do
+			if [ ! -e /etc/$f.old ]; then
+          		cp ${vy_sysconfdir}/$f /etc/$f
+       		fi
+   		done
+
+		mkdir -p /etc/sysctl.d
+   		cp ${vy_sysconfdir}/vyatta-sysctl.conf /etc/sysctl.d/30-vyatta-router.conf
+
+		# Set file capabilities - paths can be different from original Debian/VyOS
+		# distro, so we always check in /bin /sbin /usr/bin and /usr/sbin
+		sed -r -e '/^#/d' -e '/^[[:blank:]]*$/d' < ${vy_sysconfdir}/filecaps | \
+		    while read capability path; do
+				file_name=`basename $path`
+				for p in /bin /sbin /usr/bin /usr/sbin; do
+					if [ -f $p/$file_name ]; then
+						# if symlink, then get symlink target. setcap doesn't work
+						# on symlinks
+						if [ -h $p/$file_name ]; then
+						    sym_target=`readlink $p/$file_name`
+							touch -c $sym_target
+		       				setcap $capability $sym_target
+						else
+		       				touch -c $p/$file_name
+		       				setcap $capability $p/$file_name
+						fi
+					fi
+				done
+		    done
+
+		# Install pam_cap config
+		cp ${vy_sysconfdir}/capability.conf /etc/security/capability.conf
+
+		# Install our own version of rsyslog.conf without
+		# default targets
+		mv /etc/rsyslog.conf /etc/rsyslog.conf.orig
+		cp ${vy_sysconfdir}/rsyslog.conf /etc/rsyslog.conf
+
+		# TODO: VyOS wants full speed, embedded devices may want to be more
+		# power-efficient
+		# Install own version of cpufrequtils config
+		#cp ${vy_sysconfdir}/cpufrequtils /etc/default/cpufrequtils
 
 		# TODO: it seems that OE doesn't have an rc.local file to start with...
 		# call vyatta-postconfig-bootup.script from /etc/rc.local

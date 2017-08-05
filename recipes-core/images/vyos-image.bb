@@ -14,6 +14,7 @@ IMAGE_FEATURES_append = " ssh-server-openssh"
 
 IMAGE_INSTALL_append = " packagegroup-vyos"
 
+
 # create home directory for vyos user
 python do_rootfs_append () {
     bb.build.exec_func('add_vyos_home_dir', d)

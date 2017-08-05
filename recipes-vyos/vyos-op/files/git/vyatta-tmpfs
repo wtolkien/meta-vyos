@@ -1,0 +1,42 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:             vyatta-tmpfs
+# Required-Start:       $local_fs
+# Required-Stop:        $local_fs
+# Default-Start:        1 2 3 4 5 6
+# Default-Stop:
+# Description:          un-tars /opt/vyatta files onto tmpfs
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+# Untar /opt/vyatta/share files onto tmpfs mounted at that location to 
+# speed up the CLI (mostly useful on embedded systems that have slow
+# disk access)
+case "$1" in
+  start)
+        # first startup only - create tar file (we can't do this at
+        # build time because we need to run those first-time-powerup
+        # script to run against /opt/vyatta before createing the tgz file)
+        if [ ! -e /opt/vyatta/share.tgz ]; then
+            echo "Creating VyOS file archive to speed up CLI, please wait..."
+            tar -C /opt/vyatta -cpzf /opt/vyatta/share.tgz share
+            mv /opt/vyatta/share /opt/vyatta/share.orig
+        fi
+        # subsequent startups - untar previously created file
+        if [ -e /opt/vyatta/share.tgz ]; then
+            echo "Moving VyOS files to RAM to increase performance..."
+            mkdir -p /opt/vyatta/share
+            mount -t tmpfs tmpfs /opt/vyatta/share
+            tar -C /opt/vyatta -xpzf /opt/vyatta/share.tgz
+        fi
+        ;;
+  stop|restart|force-reload)
+        exit 0
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+        exit 3
+        ;;
+esac
