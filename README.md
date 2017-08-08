@@ -17,9 +17,9 @@ http://dev.packages.vyos.net/devices/clearfog/solidrun/
 
 While Debian is available for many different processor architectures, it was never
 explicitly designed for embedded systems. As a result, embedded platform support
-lags far behind compared to other build environments such as OpenEmbedded / Yocto.
+lags far behind compared to other build environments such as OpenEmbedded.
 
-This project aims to create a meta layer for OpenEmbedded / Yocto that will make it
+This project aims to create a meta layer for OpenEmbedded that will make it
 easy to run VyOS router software on a wide variety of embedded platforms.
 
 The project is currently at a very early stage: Some core VyOS packages have been
@@ -62,49 +62,67 @@ There is a lot more work to do and any help from interested parties is very welc
 
 # Build Instructions:
 
-Development is currently done against Yocto 2.3 ('pyro'), however other
+Development is currently done against OpenEmbedded (release 'pyro'), however other
 OpenEmbedded-based distributions will likely work as well. If you are not familiar
-with OpenEmbedded/Yocto, extensive documentation can be found here:
+with OpenEmbedded (or the 'Yocto' derivative), extensive documentation can be found 
+here:
 
 https://www.yoctoproject.org/documentation
 
-* get the OpenEmbedded/Yocto source as well as this project's source:
+* make sure you install the required packages as described here:
+
+https://www.openembedded.org/wiki/Getting_started#Systems_based_upon_OE-Core
+
+* get the OpenEmbedded core packages, the 'meta-openembedded' layer and the 'bitbake'
+sources:
 ```
-git clone -b pyro git://git.yoctoproject.org/poky.git
+git clone git://git.openembedded.org/openembedded-core oe-core
+cd oe-core
+git clone git://git.openembedded.org/meta-openembedded
+git clone git://git.openembedded.org/bitbake bitbake
+git checkout pyro
+cd meta-openembedded
+git checkout pyro
+cd ..
+cd bitbake
+git checkout 1.34
+cd ..
+````
+* get this project's source:
+```
 git clone https://github.com/wtolkien/meta-vyos.git
 ```
-* change into the Yocto directory and initialize the build-environment:
+* from the ```oe-core``` directory, initialize the build-environment:
 ```
-cd poky
 source oe-init-build-env
 ```
-* edit Yocto layer configuration file ```conf/bblayers.conf``` to include the
-  meta-vyos layer: add an entry pointing to the meta-vyos layer to the list
-  of included layers - adjust your path as required:
+* edit the OpenEmbedded layer configuration file ```conf/bblayers.conf``` to include
+  some additional layers from 'meta-openembedded' as well as the `meta-vyos layer`.
+  Your ```BBLAYERS``` variable should look as below, however you may have to adjust 
+  your path
 ```
 BBLAYERS ?= " \
-      /opt/src/poky/meta \
-      /opt/src/poky/meta-poky \
-      /opt/src/poky/meta-yocto-bsp \
-      /opt/src/meta-vyos \
-      "
+  [your existing path]/oe-core/meta \
+  ${TOPDIR}/../meta-openembedded/meta-oe \
+  ${TOPDIR}/../meta-openembedded/meta-networking \
+  ${TOPDIR}/../meta-openembedded/meta-python \
+  ${TOPDIR}/../meta-openembedded/meta-perl \
+  ${TOPDIR}/../meta-openembedded/meta-filesystems \
+  ${TOPDIR}/../meta-vyos \
+  "
 ```
-* edit the Yocto config file ```conf/local.conf``` to build a 'vyos' distro and use
-  the 'deb' package format (the latter isn't strictly required, but recommended
-  due to VyOS's Debian heritage):
+* add the following line to the OpenEmbedded config file ```conf/local.conf``` to 
+  to build a 'vyos' distro. This line can be added anywhere in the config file:
 ```
-[...]
 DISTRO ?= "vyos"
-[...]
-PACKAGE_CLASSES ?= "package_deb"
 ```
-* you are now ready to start the build process. From the ```poky/build``` directory,
+* you are now ready to start the build process. From the ```oe-core/build``` directory,
   enter:
 ```
 bitbake vyos-image
 ```
 * When done (likely after 45 minutes or more), an image will be in the
-  ```poky/build/tmp/deploy/image/qemux86``` directory. It can be started by entering
+  ```oe-core/build/tmp-glibc/deploy/image/qemux86``` directory. It can be started by entering
 ```
 runqemu
 ```
