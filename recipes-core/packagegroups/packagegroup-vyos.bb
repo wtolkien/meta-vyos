@@ -21,6 +21,12 @@ VYOS_CORE = "\
     vyos-cfg-op-pppoe \
     "
 
+VYOS_VPN = "\
+    vyos-cfg-vpn \
+    vyos-op-vpn \
+    "
+
 RDEPENDS_${PN} = "\
-    ${@bb.utils.contains('DISTRO_FEATURES', 'vyos', '${VYOS_CORE}', '',d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-core', '${VYOS_CORE}', '',d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-vpn', '${VYOS_VPN}', '',d)} \
     "

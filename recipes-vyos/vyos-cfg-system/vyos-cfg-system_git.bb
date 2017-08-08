@@ -25,6 +25,7 @@ RDEPENDS_${PN} = " \
 	procps \
 	iproute2 \
 	ethtool \
+	net-tools \
 	bridge-utils \
 	tcpdump \
 	libpam \
