@@ -24,55 +24,54 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 
 ## Current Status:
 
-|Component|VyOS Package|Status|Comment|
-|---|---|---|---|
-| Operating System| vyos-kernel| replaced| using upstream ver 4.4 + patches, see note 1)|
-| | vyatta-bash| ported| see note 2)|
-| | vyatta-util| | |
-| | vyatta-cron| | |
-| | vyatta-busybox| | |
-| | ipaddrcheck| | |
+|Component|VyOS Package|Based on|Status|Comment|
+|---|---|---|---|---|
+| Operating System| vyos-kernel| linux-4.4.48| replaced| using upstream ver 4.4 + patches, see note 1)|
+| | vyatta-bash| bash|ported| see note 2)|
+| | vyatta-util| | | |
+| | vyatta-busybox| busybox-1.19.0| | not used ?|
+| | ipaddrcheck| | | |
 | | 
-| Config System| vyatta-cfg| ported| |
-| | vyatta-cfg-system| ported| |
-| | vyatta-op| ported| | |
-| | vyatta-config-migrate| ported|may not be required|
-| | vyatta-config-mgmt| | |
+| Config System| vyatta-cfg| | ported| |
+| | vyatta-cfg-system| | ported| |
+| | vyatta-op| | ported| |
+| | vyatta-config-migrate| | ported|may not be required| 
+| | vyatta-config-mgmt| | | |
+| | vyatta-cron| | | |
 | |
 | General Networking| vyatta-conntrack| | |
-| |conntrack-tools| | |
-| | vyatta-conntrack-sync| | |
-| | vyatta-nat| | |
-| | vyatta-iproute| | |
-| | vyos-iptables| | |
-| | vyatta-lldp| | |
-| | vyatta-wanloadbalance| | |
-| | vyatta-keepalived| | replaced by 'vyos-keepalived' ?|
-| | vyos-keepalived| | replaces 'vyatta-keepalived' ?|
-| | igmpproxy| | |
-| | vyos-igmpproxy| | |
-| | vyatta-zone| | |
-| | vyatta-watchdog| | |
-| | vyatta-ipv6-rtadv| | |
-| | ipset| | |
-| | iputils| | |
-| | ppp| | |
-| | openssl| | |
-| | netplug| | |
-| | lldpd| | |
+| |conntrack-tools| conntrack-tools-1.4.2| | |
+| | vyatta-conntrack-sync| | | |
+| | vyatta-nat| | | |
+| | vyatta-iproute| iproute2-3.12.0| | |
+| | vyos-iptables| iptables-1.4.21| | |
+| | vyatta-wanloadbalance| | | |
+| | vyatta-lldp| | | |
+| | lldpd| lldpd-0.6.0| | |
+| | vyos-keepalived| keepalived-1.2.19| | | replaces 'vyatta-keepalived'|
+| | igmpproxy| igmpproxy-1.0.1| | contains Ubiquiti ERL patches|
+| | vyos-igmpproxy| | | derived from Ubiquiti ERL 1.4.1 |
+| | vyatta-zone| | | |
+| | vyatta-watchdog| | | |
+| | vyatta-ipv6-rtadv| | | |
+| | ipset| ipset-6.19.1| | |
+| | iputils| iputils-20101006| | |
+| | ppp| ppp-2.4.4| | |
+| | openssl| openssl-0.9.8zg| | |
+| | netplug| netplug 1.2.9| | |
 | |
-| WLAN| vyatta-wireless| ported| |
-| | wpa| | |
+| WLAN| vyatta-wireless| | ported| |
+| | wpa| wpa-supplicant-1.1| | |
 | |
-| Routing| vyatta-quagga| ported| |
-| | vyatta-cfg-quagga| ported| |
-| | vyatta-op-quagga| | |
-| | vyos-frr| | may replace quagga in the future|
-| | vyos-opennhrp| | |
-| | vyos-nhrp| | |
-| | radvd| | |
+| Routing| vyatta-quagga| quagga-0.99.14| ported| |
+| | vyatta-cfg-quagga| | ported| |
+| | vyatta-op-quagga| | | |
+| | vyos-frr| frr| | may replace quagga in the future|
+| | vyos-opennhrp| opennhrp-0.14.2| | |
+| | vyos-nhrp| | | |
+| | radvd| radvd-1.15| | |
 | |
-| WWAN| vyatta-wirelessmodem| ported| |
+| WWAN| vyatta-wirelessmodem| | ported| |
 | |
 | DNS| ddclient| | |
 | |
@@ -154,6 +153,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | iptables| | replaced by 'vyos-iptables'|
 | | libzmq-constants-perl| | no longer used|
 | | libzmq-libzmq2-perl| | no longer used|
+| | vyatta-keepalived| | replaced by 'vyos-keepalived' ?|
 
 
 
