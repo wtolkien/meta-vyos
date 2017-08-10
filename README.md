@@ -28,9 +28,8 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 |---|---|---|---|---|
 | Operating System| vyos-kernel| linux-4.4.48| using upstream ver 4.4 + patches| see note 1)|
 | | vyatta-bash| bash|ported| see note 2)|
-| | vyatta-util| | | |
 | | vyatta-busybox| busybox-1.19.0| | not used ?|
-| | ipaddrcheck| | | |
+| | ipaddrcheck| | | not used ?|
 | | 
 | Config System| vyatta-cfg| | ported| |
 | | vyatta-cfg-system| | ported| |
@@ -107,6 +106,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | Firewall| vyatta-cfg-firewall| | | |
 | | vyatta-op-firewall| | | |
+| | vyatta-util| | ported| |
 | | 
 | Redundancy| vyatta-vrrp| | | |
 | | 
