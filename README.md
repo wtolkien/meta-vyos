@@ -46,14 +46,13 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-iproute| iproute2-3.12.0| | |
 | | vyos-iptables| iptables-1.4.21| | |
 | | vyatta-wanloadbalance| | ported| |
-| | vyatta-lldp| | | |
+| | vyatta-lldp| | ported| |
 | | lldpd| lldpd-0.6.0| | |
 | | vyos-keepalived| keepalived-1.2.19| | replaces 'vyatta-keepalived'|
 | | igmpproxy| igmpproxy-1.0.1| | contains Ubiquiti ERL patches|
-| | vyos-igmpproxy| | | derived from Ubiquiti ERL 1.4.1 |
-| | vyatta-zone| | | |
-| | vyatta-watchdog| | | |
-| | vyatta-ipv6-rtadv| | | |
+| | vyos-igmpproxy| | ported| derived from Ubiquiti ERL 1.4.1 |
+| | vyatta-zone| | ported| |
+| | vyatta-watchdog| | ported| |
 | | ipset| ipset-6.19.1| | |
 | | iputils| iputils-20101006| | |
 | | ppp| ppp-2.4.4| | |
@@ -69,6 +68,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyos-frr| frr-?| | may replace quagga in the future|
 | | vyos-opennhrp| opennhrp-0.14.2| | |
 | | vyos-nhrp| | | |
+| | vyatta-ipv6-rtadv| | ported| |
 | | radvd| radvd-1.15| | |
 | |
 | WWAN| vyatta-wirelessmodem| | ported| |
