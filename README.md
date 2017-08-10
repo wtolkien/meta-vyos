@@ -35,10 +35,11 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-cfg-system| | ported| |
 | | vyatta-op| | ported| |
 | | vyatta-config-migrate| | ported|may not be required| 
-| | vyatta-config-mgmt| | | |
-| | vyatta-cron| | | |
+| | vyatta-config-mgmt| | ported| |
+| | vyatta-util| | ported| |
+| | vyatta-cron| | ported| |
 | |
-| General Networking| vyatta-conntrack| | |
+| General Networking| vyatta-conntrack| | ported| |
 | |conntrack-tools| conntrack-tools-1.4.2| | |
 | | vyatta-conntrack-sync| | | |
 | | vyatta-nat| | | |
@@ -47,7 +48,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-wanloadbalance| | | |
 | | vyatta-lldp| | | |
 | | lldpd| lldpd-0.6.0| | |
-| | vyos-keepalived| keepalived-1.2.19| | | replaces 'vyatta-keepalived'|
+| | vyos-keepalived| keepalived-1.2.19| | replaces 'vyatta-keepalived'|
 | | igmpproxy| igmpproxy-1.0.1| | contains Ubiquiti ERL patches|
 | | vyos-igmpproxy| | | derived from Ubiquiti ERL 1.4.1 |
 | | vyatta-zone| | | |
@@ -106,7 +107,6 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | Firewall| vyatta-cfg-firewall| | | |
 | | vyatta-op-firewall| | | |
-| | vyatta-util| | ported| |
 | | 
 | Redundancy| vyatta-vrrp| | | |
 | | 
