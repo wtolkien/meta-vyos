@@ -149,12 +149,12 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vytest| | n/a| test suite|
 | | vyatta-dummy| | n/a| template package|
 | |
-| Obsolete| vyos-ocserv| | | empty repository|
-| | iptables| | | replaced by 'vyos-iptables'|
-| | libzmq-constants-perl| | | no longer used|
-| | libzmq-libzmq2-perl| | | no longer used|
-| | vyatta-keepalived| | | replaced by 'vyos-keepalived'|
-| | vyatta-strongswan| | | replaced by 'vyos-strongswan'|
+| Obsolete| vyos-ocserv| | n/a| empty repository|
+| | iptables| | n/a| replaced by 'vyos-iptables'|
+| | libzmq-constants-perl| | n/a| no longer used|
+| | libzmq-libzmq2-perl| | n/a| no longer used|
+| | vyatta-keepalived| | n/a| replaced by 'vyos-keepalived'|
+| | vyatta-strongswan| | n/a| replaced by 'vyos-strongswan'|
 
 
 ### Notes:
