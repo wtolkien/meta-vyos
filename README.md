@@ -41,11 +41,11 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | General Networking| vyatta-conntrack| | ported| |
 | |conntrack-tools| conntrack-tools-1.4.2| | |
-| | vyatta-conntrack-sync| | | |
-| | vyatta-nat| | | |
+| | vyatta-conntrack-sync| | ported| |
+| | vyatta-nat| | ported| |
 | | vyatta-iproute| iproute2-3.12.0| | |
 | | vyos-iptables| iptables-1.4.21| | |
-| | vyatta-wanloadbalance| | | |
+| | vyatta-wanloadbalance| | ported| |
 | | vyatta-lldp| | | |
 | | lldpd| lldpd-0.6.0| | |
 | | vyos-keepalived| keepalived-1.2.19| | replaces 'vyatta-keepalived'|
