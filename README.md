@@ -63,10 +63,10 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | WLAN| vyatta-wireless| | ported| |
 | | wpa| wpa-supplicant-1.1| | |
 | |
-| Routing| vyatta-quagga| quagga-0.99.14| ported| |
+| Routing| vyatta-quagga| quagga-0.99.14| ported| too many patches - won't use upstream|
 | | vyatta-cfg-quagga| | ported| |
 | | vyatta-op-quagga| | | |
-| | vyos-frr| frr| | may replace quagga in the future|
+| | vyos-frr| frr-?| | may replace quagga in the future|
 | | vyos-opennhrp| opennhrp-0.14.2| | |
 | | vyos-nhrp| | | |
 | | radvd| radvd-1.15| | |
@@ -136,7 +136,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | squashfs| | n/a| |
 | | vyos-world| | n/a| |
 | |
-| Other| vyconf| n/a| next generation config system|
+| Other| vyconf| | n/a| next generation config system|
 | | vyos| | n/a| VyOS 2.0|
 | | emrk| | n/a| Ubiquiti EdgeMax Rescue scripts|
 | | vyatta-biosdevname| | n/a| BIOS device name util (x86 only)|
