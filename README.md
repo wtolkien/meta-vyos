@@ -22,16 +22,153 @@ lags far behind compared to other build environments such as OpenEmbedded.
 This project aims to create a meta layer for OpenEmbedded that will make it
 easy to run VyOS router software on a wide variety of embedded platforms.
 
-The project is currently at a very early stage: Some core VyOS packages have been
-converted to OpenEmbedded and it is possible to start up a VyOS image in Qemu. It
-is possible to change configuration and, for example, configure an Ethernet port. 
-Other features may or may not work yet
+## Current Status:
+
+|Component|VyOS Package|Based on|Status|Comment|
+|---|---|---|---|---|
+| Operating System| vyos-kernel| linux-4.4.48| using upstream ver 4.4 + patches| see note 1)|
+| | vyatta-bash| bash|ported| see note 2)|
+| | vyatta-busybox| busybox-1.19.0| | not used ?|
+| | ipaddrcheck| | | not used ?|
+| | 
+| Config System| vyatta-cfg| | ported| |
+| | vyatta-cfg-system| | ported| |
+| | vyatta-op| | ported| |
+| | vyatta-config-migrate| | ported|may not be required| 
+| | vyatta-config-mgmt| | ported| |
+| | vyatta-util| | ported| |
+| | vyatta-cron| | ported| |
+| |
+| General Networking| vyatta-conntrack| | ported| |
+| |conntrack-tools| conntrack-tools-1.4.2| | |
+| | vyatta-conntrack-sync| | ported| |
+| | vyatta-nat| | ported| |
+| | vyatta-iproute| iproute2-3.12.0| | |
+| | vyos-iptables| iptables-1.4.21| | |
+| | vyatta-wanloadbalance| | ported| |
+| | vyatta-lldp| | | |
+| | lldpd| lldpd-0.6.0| | |
+| | vyos-keepalived| keepalived-1.2.19| | replaces 'vyatta-keepalived'|
+| | igmpproxy| igmpproxy-1.0.1| | contains Ubiquiti ERL patches|
+| | vyos-igmpproxy| | | derived from Ubiquiti ERL 1.4.1 |
+| | vyatta-zone| | | |
+| | vyatta-watchdog| | | |
+| | vyatta-ipv6-rtadv| | | |
+| | ipset| ipset-6.19.1| | |
+| | iputils| iputils-20101006| | |
+| | ppp| ppp-2.4.4| | |
+| | openssl| openssl-0.9.8zg| | |
+| | netplug| netplug 1.2.9| | |
+| |
+| WLAN| vyatta-wireless| | ported| |
+| | wpa| wpa-supplicant-1.1| | |
+| |
+| Routing| vyatta-quagga| quagga-0.99.14| ported| too many patches - won't use upstream|
+| | vyatta-cfg-quagga| | ported| |
+| | vyatta-op-quagga| | | |
+| | vyos-frr| frr-?| | may replace quagga in the future|
+| | vyos-opennhrp| opennhrp-0.14.2| | |
+| | vyos-nhrp| | | |
+| | radvd| radvd-1.15| | |
+| |
+| WWAN| vyatta-wirelessmodem| | ported| |
+| |
+| DNS| ddclient| ddclient-3.8.2| | |
+| |
+| Tunnel| vyos-vxlan| | | |
+| |
+| VPN| vyatta-cfg-vpn| | ported| |
+| | vyatta-op-vpn| | ported| |
+| | vyos-strongswan| strongswan-5.3.5| using upstream ver 5.5.3 + patches| |
+| | vyatta-openvpn| | ported| |
+| | openvpn| openvpn-2.2.3| | |
+| | vyatta-ravpn| | | |
+| |
+| SNMP| net-snmp| net-snmp-5.7.2.1| | |
+| |
+| NTP| ntp| ntp-4.2.4| | |
+| |
+| QoS| vyatta-cfg-qos| | | |
+| |vyatta-op-qos| | | |
+| |
+| PPPoE| vyatta-cfg-op-pppoe| | ported| |
+| | vyos-pppoe-server| | | |
+| | rp-pppoe| rp-pppoe-1.3.11| | |
+| |
+| DHCP| vyatta-op-dhcp-dserver| | | |
+| | vyatta-cfg-dhcp-server| | | |
+| | vyatta-dhcp3| isc-dhcp-4.1.1| | |
+| | vyatta-cfg-dhcp-relay| | | |
+| |
+| Monitoring| vyatta-netflow| | | |
+| | pmacct| pmacct-1.6.2| | |
+| | vyatta-eventwatch| | |
+| | eventwatchd| eventwatchd-0.2 | | |
+| |
+| Firewall| vyatta-cfg-firewall| | | |
+| | vyatta-op-firewall| | | |
+| | 
+| Redundancy| vyatta-vrrp| | | |
+| | 
+| Cluster| vyatta-cluster| | | |
+| | heartbeat| heartbeat-3.0.5|  | |
+| | 
+| Proxy| vyatta-webproxy| | | |
+| | squidguard| squidguard-1.4| | |
+| | 
+| Libraries| libnfnetlink| libnfnetlink-1.0.1| | |
+| | libnetfilter-cttimeout| libnetfilter-cttimeout-1.0.0| | |
+| | libnetfilter-cthelper| libnetfilter-cthelper-1.0.0| | |
+| | libnetfilter-conntrack| libnetfilter-conntrack-1.0.5| | |
+| | libnetfilter-queue| libnetfilter-queue1.0.2| | |
+| | libmnl| libmnl-1.0.3| | |
+| | libnl3| libnl-3.2.25| | |
+| | libcap| libcap-2.19| |
+| |
+| Build-system| vyos-build| | | |
+| | build-iso| | | |
+| | vyos-replace| | | |
+| | live-boot| | n/a| |
+| | vyatta-grub| | n/a| |
+| | vyos-ami| | n/a| |
+| | live-initramfs| | n/a| |
+| | initramfs-tools| | n/a| |
+| | squashfs| | n/a| |
+| | vyos-world| | n/a| |
+| |
+| Other| vyconf| | n/a| next generation config system|
+| | vyos| | n/a| VyOS 2.0|
+| | emrk| | n/a| Ubiquiti EdgeMax Rescue scripts|
+| | vyatta-biosdevname| | n/a| BIOS device name util (x86 only)|
+| | vyatta-webgui| | n/a| Web GUI|
+| | linux-firmware| | n/a| |
+| | python-vyos-mgmt| | n/a| library for route management|
+| | hvinfo| | n/a| hypervisor detection tools|
+| | vyatta-open-vm-tools| | n/a| virtual machine tools|
+| | MAC-Telnet| | n/a| Microtik tool| 
+| | vytest| | n/a| test suite|
+| | vyatta-dummy| | n/a| template package|
+| |
+| Obsolete| vyos-ocserv| | n/a| empty repository|
+| | iptables| | n/a| replaced by 'vyos-iptables'|
+| | libzmq-constants-perl| | n/a| no longer used|
+| | libzmq-libzmq2-perl| | n/a| no longer used|
+| | vyatta-keepalived| | n/a| replaced by 'vyos-keepalived'|
+| | vyatta-strongswan| | n/a| replaced by 'vyos-strongswan'|
+
+
+### Notes:
+1) this project currently builds for the 'qemux86' target. Other targets will require 
+    a different kernel package.
+2) VyOS uses two shells: a VyOS-modified version of bash 4.1, installed as 'vbash' and 
+    generic bash 4.3 installed as 'bash'. This project currently installs 'vbash' and symlinks
+    'bash' to it.
+
 
 There is a lot more work to do and any help from interested parties is very welcome.
 
-## Some of the immediate issues:
+### Other Issues:
 
-- More packages need to be converted, features need to be tested.
 - Most VyOS source packages build with GNU autotools, however they don't allow 
   building outside of the source directory. This prevents the usage of the 
   'devtool' command that's useful for local developmend with OpenEmbedded/bitbake.
@@ -39,14 +176,12 @@ There is a lot more work to do and any help from interested parties is very welc
   does with Debian VyOS. Debian VyOS uses Debian's LiveCD architecture with
   initramfs/squashfs to handle multiple images. It is not clear yet how this
   translates into the embedded realm, or even if it makes sense at all.
-- So far there are bitbake recipes for only a select few core VyOS packages,
-  so functionality will be limited at best and more bitbake recipes will have to
-  be created.
-- There are likely going to be a fair number of other bugs that stem from
-  differences between core Debian vs. OpenEmbedded packages.
+- Even for packages that have already been ported, there are likely going to be 
+  a fair number of other bugs that stem from differences between core Debian 
+  vs. OpenEmbedded packages.
 
 
-## Rough roadmap:
+### Rough roadmap:
 
 - Port over more VyOS features by creating recipes for other VyOS packages
 - Resolve issues related to image management / firmware upgrade. Either find a
@@ -54,9 +189,6 @@ There is a lot more work to do and any help from interested parties is very welc
   that possibly makes more sense in an embedded environment
 - Deal with issues related to logging and frequent file system write access that
   could wear out an embedded flash filesystem
-- Performance improvements: embedded devices often have slow disk access because 
-  the underlaying technology is SDCards, etc. VyOS's CLI is disk-read heavy, 
-  performance may be improved by copying the whole /opt/vyatta tree to a ramdisk
 - Debug!
 
 
