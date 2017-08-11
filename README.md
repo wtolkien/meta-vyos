@@ -64,10 +64,8 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | Routing| vyatta-quagga| quagga-0.99.14| ported| too many patches - won't use upstream|
 | | vyatta-cfg-quagga| | ported| |
-| | vyatta-op-quagga| | | |
+| | vyatta-op-quagga| | ported| |
 | | vyos-frr| frr-?| | may replace quagga in the future|
-| | vyos-opennhrp| opennhrp-0.14.2| | |
-| | vyos-nhrp| | | |
 | | vyatta-ipv6-rtadv| | ported| |
 | | radvd| radvd-1.15| | |
 | |
@@ -83,6 +81,8 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-openvpn| | ported| |
 | | openvpn| openvpn-2.2.3| | |
 | | vyatta-ravpn| | | |
+| | vyos-opennhrp| opennhrp-0.14.2| | |
+| | vyos-nhrp| | ported| |
 | |
 | SNMP| net-snmp| net-snmp-5.7.2.1| | |
 | |
