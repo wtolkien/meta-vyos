@@ -88,8 +88,8 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | NTP| ntp| ntp-4.2.4| | |
 | |
-| QoS| vyatta-cfg-qos| | | |
-| |vyatta-op-qos| | | |
+| QoS| vyatta-cfg-qos| | ported| |
+| |vyatta-op-qos| | ported| |
 | |
 | PPPoE| vyatta-cfg-op-pppoe| | ported| |
 | | vyos-pppoe-server| | | |
