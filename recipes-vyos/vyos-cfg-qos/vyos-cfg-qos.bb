@@ -1,23 +1,23 @@
-SUMMARY = "VyOS NHRP (for DMVPN compatibility) cfg and op package"
-HOMEPAGE = "https://github.com/vyos/vyos-nhrp"
+SUMMARY = "VyOS Configuration templates and scripts for QoS"
+HOMEPAGE = "https://github.com/vyos/vyatta-cfg-qos"
 SECTION = "vyos/net"
 
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
-SRC_URI = "git://github.com/vyos/vyos-nhrp.git;branch=current;protocol=https \
+SRC_URI = "git://github.com/vyos/vyatta-cfg-qos.git;branch=current;protocol=https \
 	  "
 
-# snapshot from Aug 10, 2017:
-SRCREV = "6c968c689b7c22919ef4200f4597ba28237e868d"
+# snapshot from Aug 11, 2017:
+SRCREV = "52f85ec00b8e85723920ebaab49ed8b318d9d475"
 
 PV = "1.0+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
-RDEPENDS_${PN} = "vyos-cfg-system vyos-cfg vyos-op vyos-opennhrp"
+RDEPENDS_${PN} = "sed perl procps vyos-cfg vyos-bash iproute2 bridge-utils ethtool"
 
 FILES_${PN} += "/opt"
 
