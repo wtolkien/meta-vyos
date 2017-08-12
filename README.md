@@ -81,7 +81,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-openvpn| | ported| |
 | | openvpn| openvpn-2.2.3| | |
 | | vyatta-ravpn| | ported| |
-| | vyos-opennhrp| opennhrp-0.14.1| | using vyos version instead of upstream |
+| | vyos-opennhrp| opennhrp-0.14.1| ported| using vyos version instead of upstream |
 | | vyos-nhrp| | ported| |
 | |
 | SNMP| net-snmp| net-snmp-5.7.2.1| | |
