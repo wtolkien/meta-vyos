@@ -92,13 +92,13 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |vyatta-op-qos| | ported| |
 | |
 | PPPoE| vyatta-cfg-op-pppoe| | ported| |
-| | vyos-pppoe-server| | | |
+| | vyos-pppoe-server| | ported| |
 | | rp-pppoe| rp-pppoe-1.3.11| | |
 | |
-| DHCP| vyatta-op-dhcp-dserver| | | |
-| | vyatta-cfg-dhcp-server| | | |
+| DHCP| vyatta-op-dhcp-server| | ported| |
+| | vyatta-cfg-dhcp-server| | ported| |
 | | vyatta-dhcp3| isc-dhcp-4.1.1| | |
-| | vyatta-cfg-dhcp-relay| | | |
+| | vyatta-cfg-dhcp-relay| | ported| |
 | |
 | Monitoring| vyatta-netflow| | | |
 | | pmacct| pmacct-1.6.2| | |
