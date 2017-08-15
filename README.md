@@ -100,18 +100,18 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-dhcp3| isc-dhcp-4.1.1| | |
 | | vyatta-cfg-dhcp-relay| | ported| |
 | |
-| Monitoring| vyatta-netflow| | | |
+| Monitoring| vyatta-netflow| | ported| |
 | | pmacct| pmacct-1.6.2| | |
-| | vyatta-eventwatch| | |
-| | eventwatchd| eventwatchd-0.2 | | |
+| | vyatta-eventwatch| | ported| |
+| | eventwatchd| eventwatchd-0.2 | ported| |
 | |
-| Firewall| vyatta-cfg-firewall| | | |
-| | vyatta-op-firewall| | | |
+| Firewall| vyatta-cfg-firewall| | ported| |
+| | vyatta-op-firewall| | ported| |
 | | 
-| Redundancy| vyatta-vrrp| | | |
+| Redundancy| vyatta-vrrp| | ported| |
 | | 
-| Cluster| vyatta-cluster| | | |
-| | heartbeat| heartbeat-3.0.5|  | |
+| Cluster| vyatta-cluster| | n/a| won't implement on embedded|
+| | heartbeat| heartbeat-3.0.5| n/a| |
 | | 
 | Proxy| vyatta-webproxy| | | |
 | | squidguard| squidguard-1.4| | |
