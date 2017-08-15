@@ -1,0 +1,99 @@
+--- a/configure.in	2010-09-08 04:57:18.000000000 -0700
++++ b/configure.in	2017-08-15 10:54:18.673035950 -0700
+@@ -42,7 +42,7 @@ db_inc=-I$dbprefix/BerkeleyDB/include
+ ldap_lib=-L$ldapprefix/lib
+ ldap_inc=-I$ldapprefix/include
+ 
+-AC_DEFUN(FAIL_MESSAGE,[
++AC_DEFUN([FAIL_MESSAGE],[
+    echo
+    echo
+    echo "**********************************************"
+@@ -230,7 +230,7 @@ else
+ fi
+ if test "$with_ldap" = "yes"; then
+        AC_DEFINE(HAVE_LIBLDAP, 1, [Define if LDAP support should be compiled])
+-       AC_RUN_IFELSE([
++       AC_RUN_IFELSE([AC_LANG_SOURCE([
+ 
+        #include <ldap.h>
+        int main()
+@@ -239,7 +239,7 @@ if test "$with_ldap" = "yes"; then
+                p = ldap_init("localhost", LDAP_PORT);
+                exit(0);
+        }
+-       ],,[
++       ])],,[
+                echo
+                echo "Unable to link to LDAP library."
+                echo
+@@ -341,7 +341,7 @@ AC_CHECK_LIB(pthread,pthread_create,,[
+ 
+ dnl Check DB
+ LIBS="$LIBS -ldb"
+-AC_RUN_IFELSE([
++AC_RUN_IFELSE([AC_LANG_SOURCE([
+ 	#include <db.h>
+ 	int main() 
+ 	{
+@@ -359,7 +359,7 @@ AC_RUN_IFELSE([
+ 			exit (0);
+ 		exit (1);
+ 	}	
+-	], db_ok_version=yes, db_ok_version=no, db_ok_version=yes)
++	])], db_ok_version=yes, db_ok_version=no, db_ok_version=yes)
+ 
+ if test $db_ok_version = no; then
+ 	echo
+@@ -372,7 +372,7 @@ if test $db_ok_version = no; then
+ 	exit 1;
+ fi
+ 
+-AC_RUN_IFELSE([
++AC_RUN_IFELSE([AC_LANG_SOURCE([
+ 	#include <db.h>
+ 	int main() 
+ 	{
+@@ -390,7 +390,7 @@ AC_RUN_IFELSE([
+ 			exit (1);
+ 		exit (0);
+ 	}	
+-	], db_ok_version=yes, db_ok_version=no, db_ok_version=yes)
++	])], db_ok_version=yes, db_ok_version=no, db_ok_version=yes)
+ 
+ if test $db_ok_version = no; then
+ 	echo
+@@ -404,7 +404,7 @@ if test $db_ok_version = no; then
+ 	exit 1;
+ fi
+ 
+-AC_RUN_IFELSE([
++AC_RUN_IFELSE([AC_LANG_SOURCE([
+ 	#include <db.h>
+ 	int main() 
+ 	{
+@@ -422,13 +422,13 @@ AC_RUN_IFELSE([
+ 			exit (0);
+ 		exit (1);
+ 	}	
+-	], dbg2_ok_version=yes, dbg2_ok_version=no, dbg2_ok_version=yes)
++	])], dbg2_ok_version=yes, dbg2_ok_version=no, dbg2_ok_version=yes)
+ 
+ if test $dbg2_ok_version = yes; then
+ 	AC_DEFINE(DB_VERSION_GT2, 1, [Define if you have dbversion greater than 3.2])
+ fi
+ 
+-AC_RUN_IFELSE([
++AC_RUN_IFELSE([AC_LANG_SOURCE([
+         #include <db.h>
+         int main()
+         {
+@@ -446,7 +446,7 @@ AC_RUN_IFELSE([
+                         exit (0);
+                 exit (1);
+         }
+-        ], dbg3_ok_version=yes, dbg3_ok_version=no, dbg3_ok_version=yes)
++        ])], dbg3_ok_version=yes, dbg3_ok_version=no, dbg3_ok_version=yes)
+ 
+ if test $dbg3_ok_version = yes; then
+         AC_DEFINE(DB_VERSION_GT3, 1, [Define if you have dbversion greater than 4.0])

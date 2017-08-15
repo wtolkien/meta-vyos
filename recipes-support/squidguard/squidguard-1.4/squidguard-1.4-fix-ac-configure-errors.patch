@@ -1,0 +1,80 @@
+--- a/configure.in	2017-08-15 14:08:01.822669220 -0700
++++ b/configure.in	2017-08-15 14:11:19.367753786 -0700
+@@ -38,7 +38,7 @@ default_directory="/usr /usr/local"
+ db_lib=-L$dbprefix/BerkeleyDB/lib
+ db_inc=-I$dbprefix/BerkeleyDB/include
+ 
+-AC_DEFUN(FAIL_MESSAGE,[
++AC_DEFUN([FAIL_MESSAGE],[
+    echo
+    echo
+    echo "**********************************************"
+@@ -93,18 +93,18 @@ AC_ARG_WITH(squiduser,
+ 	     squiduser=$withval)
+ 
+ if test -n "$sg_config"; then
+-	AC_DEFINE(ACCONFIG)
++	AC_DEFINE(ACCONFIG, 1, [Defined if you supply --with-sg-config])
+ changequote(, )dnl
+ 	sg_cfgdir=`echo $sg_config|sed "s%/[^/][^/]*$%%"`
+ changequote([, ])dnl
+ fi
+ 
+ if test -n "$sg_logdir"; then
+-	AC_DEFINE(ACLOGDIR)
++	AC_DEFINE(ACLOGDIR, 1, [Defined if you supply --with-sg-logdir])
+ fi
+ 
+ if test -n "$sg_dbhome"; then
+-	AC_DEFINE(ACDBHOME)
++	AC_DEFINE(ACDBHOME, 1, [Defined if you supply --with-sg-dbhome])
+ fi
+ 
+ CFLAGS="$CFLAGS $db_inc"
+@@ -186,8 +186,8 @@ else
+ 	YACCLINE=""
+ fi
+ if test "$with_ldap" = "yes"; then
+-       AC_DEFINE(HAVE_LIBLDAP)
+-       AC_COMPILE_IFELSE([
++       AC_DEFINE(HAVE_LIBLDAP, 1, [Define if LDAP support should be compiled])
++       AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+ 
+        #include <ldap.h>
+        int main()
+@@ -196,7 +196,7 @@ if test "$with_ldap" = "yes"; then
+                p = ldap_init("localhost", LDAP_PORT);
+                exit(0);
+        }
+-       ],,[
++       ])],,[
+                echo
+                echo "Unable to link to LDAP library."
+                echo
+@@ -277,7 +277,7 @@ if test "$with_mysql" != "no"; then
+       CPPFLAGS="${CPPFLAGS} -I${MYSQL_INC_DIR}"
+       AC_CHECK_LIB(z, compress)
+       LIBS="-lmysqlclient ${LIBS}"
+-      AC_DEFINE(HAVE_MYSQL)
++      AC_DEFINE(HAVE_MYSQL, 1, [Define if MySQL support should be compiled])
+     fi
+   fi
+ else
+@@ -380,7 +380,7 @@ LIBS="$LIBS -ldb"
+ #	], dbg2_ok_version=yes, dbg2_ok_version=no, dbg2_ok_version=no)
+ #
+ if test $dbg2_ok_version = yes; then
+-	AC_DEFINE(DB_VERSION_GT2)
++	AC_DEFINE(DB_VERSION_GT2, 1, [Define if you have dbversion greater than 3.2])
+ fi
+ 
+ #AC_RUN_IFELSE([
+@@ -404,7 +404,7 @@ fi
+ #        ], dbg3_ok_version=yes, dbg3_ok_version=no, dbg3_ok_version=no)
+ #
+ if test $dbg3_ok_version = yes; then
+-        AC_DEFINE(DB_VERSION_GT3)
++        AC_DEFINE(DB_VERSION_GT3, 1, [Define if you have dbversion greater than 4.0])
+ fi
+ 
+ 

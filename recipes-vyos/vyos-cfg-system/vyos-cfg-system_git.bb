@@ -49,7 +49,7 @@ RDEPENDS_${PN} = " \
 	libtimedate-perl \
 	libfileslurp-perl \
 	libjsonany-perl \
-	liblwww-perl \
+	libwww-perl \
 	libhttpmessage-perl \
 	vyos-bash \
 	vyos-wireless \

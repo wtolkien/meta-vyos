@@ -1,0 +1,590 @@
+diff -rupN squidGuard-1.4/src/ec.c squidGuard-1.4_new/src/ec.c
+--- squidGuard-1.4/src/ec.c	1969-12-31 16:00:00.000000000 -0800
++++ squidGuard-1.4_new/src/ec.c	2017-08-15 13:20:15.738712314 -0700
+@@ -0,0 +1,156 @@
++/*
++ *
++ * Module: ec.c
++ *
++ * **** License ****
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * General Public License for more details.
++ *
++ * This code was originally developed by Vyatta, Inc.
++ * Portions created by Vyatta are Copyright (C) 2009 Vyatta, Inc.
++ * All Rights Reserved.
++ *
++ * Author: Stig Thormodsrud
++ * Date: August 2009
++ * Description: interface to external classifier
++ *
++ * **** End License ****
++ *
++ */
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <sys/un.h>
++#include <netinet/in.h>
++#include <errno.h>
++#include <signal.h>
++
++#include "sg.h"
++#include "ecp.h"
++
++/*
++ * globals
++ */
++char tmp_lookup[ECP_MAX_URL];
++char last_lookup[ECP_MAX_URL];
++int  last_result_count = -1;
++ecp_results last_result;      
++
++int ec_debug = 0;
++
++static
++void sig_pipe(int signo)
++{
++   sgLogError("ec caught sigpipe, exiting...");
++   ecp_shutdown();
++   exit(1);
++}
++
++int ec_init(void)
++{
++    int ret = ecp_init(ECP_SOCKET_PATH);
++    if (ret < 0) {
++       sgLogFatalError("ec_init %s\n", strerror(errno));
++       exit(1);
++    }
++    signal(SIGPIPE, sig_pipe);
++    return 0;
++}
++
++#define MIN(A,B)	((A) < (B) ? (A):(B)) 
++
++int is_category_in_result(int category, int result_count, ecp_results *result)
++{
++   int i;
++   
++   for (i = 0; i < result_count; i++) {
++      if (ec_debug)
++         sgLogError("result[%d] = %d", i, (*result)[i]);
++      if ((*result)[i] == category) {
++         return 1;
++      }
++   } 
++   return 0;
++}
++
++static
++void strip_url(char *url)
++{
++   char *p = NULL;
++
++   p = strchr(url, '?');
++   if (p) 
++      p[0] = '\0';
++
++   p = strchr(url, '#');
++   if (p) 
++      p[0] = '\0';
++}
++
++#if __STDC__
++int ec_url_category(int category, char *lookup_url) 
++#else
++int ec_url_category(category, lookup_url)
++     int   category;
++     char *lookup_url;
++#endif
++{	
++   ecp_results result;       
++   int result_count;
++   int len1, len2;
++
++   if (strlen(lookup_url) > ECP_MAX_URL-1) {
++      sgLogError("truncating long url %d", strlen(lookup_url));   
++   }
++   /*
++    * Don't modify the original url.
++    */
++   strncpy(tmp_lookup, lookup_url, ECP_MAX_URL-1);                
++   len1 = strlen(tmp_lookup);
++   if (len1 == 0) {
++      sgLogError("skipping 0 len url");
++      return -1;
++   }
++   strip_url(tmp_lookup);
++   len2 = strlen(tmp_lookup);
++
++   if (strncmp(last_lookup, tmp_lookup, ECP_MAX_URL-1) == 0) {
++      if (ec_debug) 
++         sgLogError("cache match - result [%d]", last_result[0]);
++      return is_category_in_result(category, last_result_count, &last_result);
++   }
++
++   /*
++    * Do a new classification
++    */
++   if (ec_debug) {
++      sgLogError("%d [%s]", len1, lookup_url);
++      if (len1 > len2)
++         sgLogError("%d [%s]", len2, tmp_lookup);
++   }
++
++   strncpy(last_lookup, tmp_lookup, ECP_MAX_URL-1);      
++   result_count = ecp_url_classify(last_lookup, &result);
++   if (ec_debug)
++      sgLogError("ec result_count %d", result_count);
++   if (result_count >= 0) {
++      last_result_count = result_count;
++      memcpy(last_result, result, sizeof(ecp_results));
++      return  is_category_in_result(category, result_count, &result);
++   } else {
++      char *msg = ecp_errstring(result_count);
++      sgLogError("ec classify error [%s] [%s]", msg, last_lookup);
++      last_lookup[0] = 0;
++      return -1;
++   }
++   return 0;
++}
++
++/* end of file */
+diff -rupN squidGuard-1.4/src/ecp.c squidGuard-1.4_new/src/ecp.c
+--- squidGuard-1.4/src/ecp.c	1969-12-31 16:00:00.000000000 -0800
++++ squidGuard-1.4_new/src/ecp.c	2017-08-15 13:20:15.738712314 -0700
+@@ -0,0 +1,141 @@
++/*
++ * Author: Stig Thormodsrud <stig@vyatta.com>
++ * Date: October 2009  
++ * Description: client code to issue a ECP request over a
++ *              socket interface.  
++ *
++ * Note: This is essentially the same code that will be linked 
++ *       into squidguard, but copied here for the stand-alone 
++ *       vyattaguard client.
++ * 
++ * This code was originally developed by Vyatta, Inc.
++ * Copyright (C) 2009 Vyatta, Inc.
++ * All Rights Reserved.
++ *
++ */
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <sys/un.h>
++#include <netinet/in.h>
++#include <errno.h>
++
++#include "ecp.h"
++#include "sock_util.h"
++
++#define MAX_MSG_BUF 256
++char classify_msg[MAX_MSG_BUF];    
++
++int sockfd = -1;
++
++int ecp_init(char *socket_path)
++{
++   struct sockaddr_un serv_addr;
++
++   if (sockfd > 0)  // already been called
++      return 0; 
++
++   sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
++   if (sockfd < 0) {
++      return ECP_ESOCKET;
++   }
++
++   bzero((char *)&serv_addr, sizeof(serv_addr));
++   serv_addr.sun_family = AF_UNIX;
++   strncpy(serv_addr.sun_path, socket_path, strlen(socket_path));
++   if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) < 0) {
++      return ECP_ECONNECT;
++   }
++
++   return 0;
++}
++
++int ecp_url_classify(char *buffer, ecp_results *result)
++{
++   int n;
++   int url_length;
++   ecp_classify_cmd_t cmd;
++   ecp_classify_rsp_t rsp;
++
++   url_length = strlen(buffer);
++   if (url_length >= ECP_MAX_URL) {
++      return ECP_EMAXURL;
++   }
++
++   /*
++    * send command
++    */
++   bzero(&cmd, sizeof(cmd));
++   cmd.magic      = ECP_MAGIC;
++   cmd.url_length = url_length;
++   n = writen(sockfd, &cmd, sizeof(cmd));
++   n = writen(sockfd, buffer, url_length);
++
++   /*
++    * block waiting for response
++    */
++   bzero(&rsp, sizeof(rsp));
++   n = readn(sockfd, &rsp, sizeof (rsp));
++   if (n != sizeof (rsp)) {
++      return ECP_ERSPSZ;
++   }       
++   if (rsp.magic != ECP_MAGIC) {
++      return ECP_EBADMAGIC;
++   }
++
++   int status = rsp.status;
++   if (status >= 0) {
++      int i;
++      bzero(result, sizeof(ecp_results));
++      for (i = 0; i < ECP_MAX_RESULTS && rsp.result[i] > 0; i++) {
++         (*result)[i] = rsp.result[i];
++      } 
++   } else {
++      int len      = rsp.length;
++      int msg_size = len - sizeof (rsp);
++      bzero(classify_msg, MAX_MSG_BUF);
++      n = readn(sockfd, classify_msg, msg_size);
++      status = ECP_ECLASSIFY;
++   }
++   return status;
++}
++
++int ecp_shutdown(void) 
++{
++   shutdown(sockfd, SHUT_RDWR);
++   sockfd = -1;
++   return 0;
++}
++
++char *ecp_errstring(int ret)
++{
++   char *msg = NULL;
++
++   switch (ret) {
++      case ECP_ESOCKET:
++         msg = "Error failed to open socket";
++         break;
++      case ECP_ECONNECT:
++         msg = "Error failed to connect to server";
++         break;
++      case ECP_ERSPSZ:
++         msg = "Error bad response size";
++         break;
++      case ECP_EBADMAGIC:
++         msg = "Error bad response magic";
++         break;
++      case ECP_ECLASSIFY:
++         return classify_msg;
++      case ECP_EMAXURL:
++         msg = "Error max url length exceeded";
++         break;
++      default:
++         msg = "Error undefined code";
++         break;
++   }
++   return msg;
++}
++
++/* end of file */
+diff -rupN squidGuard-1.4/src/ecp.h squidGuard-1.4_new/src/ecp.h
+--- squidGuard-1.4/src/ecp.h	1969-12-31 16:00:00.000000000 -0800
++++ squidGuard-1.4_new/src/ecp.h	2017-08-15 13:20:15.738712314 -0700
+@@ -0,0 +1,69 @@
++/*
++ * ECP - external classification protocol
++ */
++#ifndef ECP_H
++#define ECP_H
++
++#define ECP_MAGIC 0x1215
++
++/*
++ * Max URL to be passed over the socket
++ */
++#define ECP_MAX_URL      8191  
++
++/*
++ * Unix domain socket
++ */
++#define ECP_SOCKET_PATH "/tmp/ecp"
++
++/*
++ * Max number of classifitions per url
++ */
++#define ECP_MAX_RESULTS     5
++typedef int ecp_results[ECP_MAX_RESULTS];
++
++/*
++ * ECP_URL_CLASSIFY command
++ *
++ */
++typedef struct ecp_classify_cmd_t_ {
++      uint16_t   magic;
++      uint16_t   url_length;  
++      uint8_t    url[0]; 
++} ecp_classify_cmd_t;
++
++/*
++ * ECP_URL_CLASSIFY response 
++ *
++ * status - Number of classification results.
++ *          Negative values represents an error code, 
++ *          the error message can be read after the
++ *          header for length - sizeof(ecp_classify_rsp_t).
++ */
++typedef struct ecp_classify_rsp_t_ {
++      uint16_t    magic;
++      uint16_t    length;
++      int32_t     status;        
++      ecp_results result;
++} ecp_classify_rsp_t;
++
++
++/*
++ * Error codes
++ */
++#define  ECP_ESOCKET    -1
++#define  ECP_ECONNECT   -2
++#define  ECP_ERSPSZ     -3
++#define  ECP_EBADMAGIC  -4
++#define  ECP_ECLASSIFY  -5
++#define  ECP_EMAXURL    -6
++
++/*
++ * function prototypes
++ */
++extern int  ecp_init(char *socket_path);
++extern int  ecp_url_classify(char *buffer, ecp_results *result);
++extern int  ecp_shutdown(void);
++extern char *ecp_errstring(int ret);
++
++#endif // ECP_H
+diff -rupN squidGuard-1.4/src/Makefile.in squidGuard-1.4_new/src/Makefile.in
+--- squidGuard-1.4/src/Makefile.in	2009-01-03 12:05:39.000000000 -0800
++++ squidGuard-1.4_new/src/Makefile.in	2017-08-15 13:20:15.738712314 -0700
+@@ -38,7 +38,7 @@ logdir	= @sg_logdir@
+ cfgdir	= @sg_cfgdir@
+ infodir	= $(prefix)/info
+ 
+-OBJS	= main.o sgLog.o sgDb.o HTParse.o sgDiv.o sgFree.o y.tab.o lex.yy.o
++OBJS	= main.o sgLog.o sgDb.o HTParse.o sgDiv.o sgFree.o y.tab.o lex.yy.o ec.o ecp.o sock_util.o
+ 
+ all::
+ 	@echo making $@ in `basename \`pwd\``
+@@ -149,7 +149,7 @@ realclean:: clean
+ 
+ distclean:: realclean
+ 	@echo making $@ in `basename \`pwd\``
+-	$(RM) Makefile sg.h config.h
++	$(RM) Makefile sg.h config.h sg.y sgDiv.c
+ 
+ #
+ # Dependencies for maintenance
+diff -rupN squidGuard-1.4/src/sg.h.in squidGuard-1.4_new/src/sg.h.in
+--- squidGuard-1.4/src/sg.h.in	2017-08-15 13:17:15.522257145 -0700
++++ squidGuard-1.4_new/src/sg.h.in	2017-08-15 13:20:15.738712314 -0700
+@@ -262,6 +262,7 @@ struct Destination {
+   int within;
+   struct LogFile *logfile;
+   struct Destination *next;
++  int    EcCategory;
+ };
+ 
+ struct Source {
+@@ -352,6 +353,7 @@ void   sgDest __P((char *));
+ void   sgDestEnd __P(());
+ void   sgDestDomainList __P((char *));
+ void   sgDestUrlList __P((char *));
++void   sgDestEcCategory __P((char *));
+ void   sgDestExpressionList __P((char *, char *));
+ void   sgDestRedirect __P((char *));
+ void   sgDestRewrite __P((char *));
+@@ -443,4 +445,5 @@ int    sgDoLdapSearch __P((const char *,
+ 
+ int    expand_url __P((char *, size_t, const char *, const char *));
+ 
+-
++int    ec_init __P((void));
++int    ec_url_category  __P((int, char*));
+diff -rupN squidGuard-1.4/src/sg.l squidGuard-1.4_new/src/sg.l
+--- squidGuard-1.4/src/sg.l	2008-08-30 03:27:41.000000000 -0700
++++ squidGuard-1.4_new/src/sg.l	2017-08-15 13:20:15.738712314 -0700
+@@ -115,6 +115,7 @@ ldapdn                 ({ldapnamecompone
+ domainlist  return DOMAINLIST;
+ urllist     return URLLIST;
+ expressionlist return EXPRESSIONLIST;
++eccategory  return ECCATEGORY;
+ iplist      return IPLIST;
+ user        return USER;
+ userlist    return USERLIST;
+diff -rupN squidGuard-1.4/src/sg.y.in squidGuard-1.4_new/src/sg.y.in
+--- squidGuard-1.4/src/sg.y.in	2008-05-17 11:25:18.000000000 -0700
++++ squidGuard-1.4_new/src/sg.y.in	2017-08-15 13:20:15.738712314 -0700
+@@ -88,7 +88,7 @@ rfc1738_unescape(char *s)
+ %token WORD END START_BRACKET STOP_BRACKET WEEKDAY LDAPDNSTR
+ %token DESTINATION REWRITE ACL TIME TVAL DVAL DVALCRON
+ %token SOURCE CIDR IPCLASS CONTINUE
+-%token IPADDR DBHOME DOMAINLIST URLLIST EXPRESSIONLIST IPLIST
++%token IPADDR DBHOME DOMAINLIST URLLIST EXPRESSIONLIST ECCATEGORY IPLIST
+ %token DOMAIN USER USERLIST USERQUERY LDAPUSERSEARCH USERQUOTA IP NL NUMBER
+ %token PASS REDIRECT LOGDIR SUBST CHAR MINUTELY HOURLY DAILY WEEKLY DATE
+ %token WITHIN OUTSIDE ELSE LOGFILE ANONYMOUS VERBOSE CONTINIOUS SPORADIC
+@@ -174,6 +174,7 @@ destination_content:
+             | EXPRESSIONLIST '-' { sgDestExpressionList(NULL,NULL); }
+             | EXPRESSIONLIST 'i' WORD { sgDestExpressionList($3,"i"); }
+             | EXPRESSIONLIST WORD  { sgDestExpressionList($2,"n"); }
++            | ECCATEGORY NUMBER { sgDestEcCategory($2); }
+             | REDIRECT WORD  {sgDestRedirect($2); }
+             | REWRITE WORD  {sgDestRewrite($2); }
+             | WITHIN WORD { sgDestTime($2,WITHIN); }
+@@ -1146,7 +1147,7 @@ void sgDestEnd()
+  struct Destination *d;
+  d = lastDest;
+  if(d->domainlist == NULL && d->urllist == NULL && d->expressionlist == NULL
+-    && d->redirect == NULL && d->rewrite == NULL){
++    && d->redirect == NULL && d->rewrite == NULL && d->EcCategory == 0){
+    sgLogError("destblock %s missing active content, set inactive",d->name);
+    d->time = NULL;
+    d->active = 0;
+@@ -1244,6 +1245,19 @@ void sgDestUrlList(urllist)
+ }
+ 
+ #if __STDC__
++void sgDestEcCategory(char *value)
++#else
++void sgDestEcCategory(value)
++     char *value;
++#endif
++{
++  struct Destination *sp;
++  sp = lastDest;
++  sp->EcCategory = atoi(value);
++  ec_init();
++}
++
++#if __STDC__
+ void sgDestExpressionList(char *exprlist, char *chcase)
+ #else
+ void sgDestExpressionList(exprlist, chcase)
+@@ -2441,6 +2455,18 @@ char *sgAclAccess(src, acl, req)
+ 	  }
+ 	}
+       }
++      if(aclpass->dest->EcCategory != 0){
++        result = ec_url_category(aclpass->dest->EcCategory,req->furl);
++	if(result > 0) {
++           if (aclpass->access){
++             access++;
++	     break;
++	   } else {
++	     access = 0;
++	     break;
++           }
++        }
++      }
+     }
+     if(!access){
+       if(dbdata != NULL)
+diff -rupN squidGuard-1.4/src/sock_util.c squidGuard-1.4_new/src/sock_util.c
+--- squidGuard-1.4/src/sock_util.c	1969-12-31 16:00:00.000000000 -0800
++++ squidGuard-1.4_new/src/sock_util.c	2017-08-15 13:20:15.738712314 -0700
+@@ -0,0 +1,71 @@
++/* 
++ * Inspired by sample code from "Unix Network Programming" 
++ * by W. Richard Stevens
++ */
++
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include <errno.h>
++#include <sys/types.h>
++#include <unistd.h>
++
++#include "sock_util.h"
++
++
++int sock_debug = 0;
++
++size_t
++readn(int fd, void *vptr, size_t n)
++{
++   size_t  nleft;
++   size_t  nread;
++   char	   *ptr;
++   
++   if (sock_debug)
++      printf("%d - readn(%d)\n", getpid(), n);
++   ptr   = vptr;
++   nleft = n;
++   while (nleft > 0) {
++      if ((nread = read(fd, ptr, nleft)) < 0) {
++         if (sock_debug)
++            printf("%d - read error [%s]\n", getpid(), strerror(errno));
++         if (errno == EINTR)
++            nread = 0;		/* and call read() again */
++         else
++            exit(1);
++      } else if (nread == 0)    /* EOF */
++         exit(1);		
++      nleft -= nread;
++      ptr   += nread;
++   }
++   return(n - nleft);		/* return >= 0 */
++}       
++
++size_t	
++writen(int fd, const void *vptr, size_t n)
++{
++   size_t     nleft;
++   size_t     nwritten;
++   const char *ptr;
++   
++   if (sock_debug)
++      printf("%d - writen(%d)\n", getpid(), n);
++   ptr   = vptr;
++   nleft = n;
++   while (nleft > 0) {
++      if ((nwritten = write(fd, ptr, nleft)) <= 0) {
++         if (sock_debug)
++            printf("%d - write error [%s]\n", getpid(), strerror(errno));
++         if (nwritten < 0 && errno == EINTR)
++            nwritten = 0;	/* and call write() again */
++         else 
++            exit(1);
++      }
++      nleft -= nwritten;
++      ptr   += nwritten;
++   }
++   return(n);
++}       
++
++/* end of file */
+diff -rupN squidGuard-1.4/src/sock_util.h squidGuard-1.4_new/src/sock_util.h
+--- squidGuard-1.4/src/sock_util.h	1969-12-31 16:00:00.000000000 -0800
++++ squidGuard-1.4_new/src/sock_util.h	2017-08-15 13:20:15.738712314 -0700
+@@ -0,0 +1,7 @@
++#ifndef SOCK_UTIL_H
++#define SOCK_UTIL_H
++
++extern size_t readn(int, void *, size_t);
++extern size_t writen(int, const void *, size_t);
++
++#endif  //  SOCK_UTIL_H
