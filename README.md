@@ -113,8 +113,8 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | Cluster| vyatta-cluster| | n/a| won't implement on embedded|
 | | heartbeat| heartbeat-3.0.5| n/a| |
 | | 
-| Proxy| vyatta-webproxy| | | |
-| | squidguard| squidguard-1.4| | |
+| Proxy| vyatta-webproxy| | ported| |
+| | squidguard| squidguard-1.4| using upstream ver 1.4 + patches| adds large amount of dependent packages|
 | | 
 | Libraries| libnfnetlink| libnfnetlink-1.0.1| | |
 | | libnetfilter-cttimeout| libnetfilter-cttimeout-1.0.0| | |
