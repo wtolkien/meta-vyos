@@ -116,18 +116,18 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | Proxy| vyatta-webproxy| | ported| |
 | | squidguard| squidguard-1.4| using upstream ver 1.4 + patches| adds large amount of dependent packages|
 | | 
-| Libraries| libnfnetlink| libnfnetlink-1.0.1| | |
-| | libnetfilter-cttimeout| libnetfilter-cttimeout-1.0.0| | |
-| | libnetfilter-cthelper| libnetfilter-cthelper-1.0.0| | |
-| | libnetfilter-conntrack| libnetfilter-conntrack-1.0.5| | |
-| | libnetfilter-queue| libnetfilter-queue1.0.2| | |
-| | libmnl| libmnl-1.0.3| | |
-| | libnl3| libnl-3.2.25| | |
-| | libcap| libcap-2.19| |
+| Libraries| libnfnetlink| libnfnetlink-1.0.1| n/a| |
+| | libnetfilter-cttimeout| libnetfilter-cttimeout-1.0.0| n/a| |
+| | libnetfilter-cthelper| libnetfilter-cthelper-1.0.0| n/a| |
+| | libnetfilter-conntrack| libnetfilter-conntrack-1.0.5| n/a| |
+| | libnetfilter-queue| libnetfilter-queue1.0.2| n/a| |
+| | libmnl| libmnl-1.0.3| n/a| |
+| | libnl3| libnl-3.2.25| n/a| |
+| | libcap| libcap-2.19| n/a| |
 | |
-| Build-system| vyos-build| | | |
-| | build-iso| | | |
-| | vyos-replace| | | |
+| Build-system| vyos-build| | | double-check for anything that needs to be transferred|
+| | build-iso| | | double-check for anything that needs to be transferred|
+| | vyos-replace| | | double-check for anything that needs to be transferred|
 | | live-boot| | n/a| |
 | | vyatta-grub| | n/a| |
 | | vyos-ami| | n/a| |
