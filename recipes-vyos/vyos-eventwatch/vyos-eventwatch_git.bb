@@ -1,6 +1,6 @@
 SUMMARY = "VyOS configuration templates and scripts for eventwatchd"
 HOMEPAGE = "https://github.com/vyos/vyatta-eventwatch"
-SECTION = "vyos/net"
+SECTION = "vyos/monitor"
 
 
 LICENSE = "GPLv2"

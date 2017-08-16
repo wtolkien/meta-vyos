@@ -1,6 +1,6 @@
 SUMMARY = "VyOS config/op code for IPv6 router advertisements"
 HOMEPAGE = "https://github.com/vyos/vyatta-ipv6-rtradv"
-SECTION = "vyos/net"
+SECTION = "vyos/routing"
 
 
 LICENSE = "GPLv2"

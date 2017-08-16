@@ -1,6 +1,6 @@
 SUMMARY = "VyOS operational templates for Quagga router daemons"
 HOMEPAGE = "https://github.com/vyos/vyatta-op-quagga"
-SECTION = "vyos/net"
+SECTION = "vyos/routing"
 
 
 LICENSE = "GPLv2"

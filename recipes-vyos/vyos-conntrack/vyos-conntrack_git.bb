@@ -1,6 +1,6 @@
 SUMMARY = "VyOS configuration/operational commands for Conntrack"
 HOMEPAGE = "https://github.com/vyos/vyatta-conntrack"
-SECTION = "vyos/core"
+SECTION = "vyos/net"
 
 
 LICENSE = "GPLv2"

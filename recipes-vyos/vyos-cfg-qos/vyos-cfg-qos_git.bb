@@ -1,6 +1,6 @@
 SUMMARY = "VyOS Configuration templates and scripts for QoS"
 HOMEPAGE = "https://github.com/vyos/vyatta-cfg-qos"
-SECTION = "vyos/net"
+SECTION = "vyos/qos"
 
 
 LICENSE = "GPLv2"

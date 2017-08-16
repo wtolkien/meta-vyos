@@ -1,6 +1,6 @@
 SUMMARY = "VyOS configuration/operational commands for OpenVPN"
 HOMEPAGE = "https://github.com/vyos/vyatta-openvpn"
-SECTION = "vyos/core"
+SECTION = "vyos/vpn"
 
 
 LICENSE = "GPLv2"

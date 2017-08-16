@@ -1,6 +1,6 @@
 SUMMARY = "VyOS configuration/operational commands for remote access VPN"
 HOMEPAGE = "https://github.com/vyos/vyos-ravpn"
-SECTION = "vyos/net"
+SECTION = "vyos/vpn"
 
 
 LICENSE = "GPLv2"

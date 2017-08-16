@@ -1,6 +1,6 @@
 SUMMARY = "VyOS Wireless 3G modem templates and scripts"
 HOMEPAGE = "https://github.com/vyos/vyatta-wirelessmodem"
-SECTION = "vyos/core"
+SECTION = "vyos/wwan"
 
 
 LICENSE = "GPLv2"

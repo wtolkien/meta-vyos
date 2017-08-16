@@ -1,6 +1,6 @@
 SUMMARY = "VyOS config management config & op templates/scripts"
 HOMEPAGE = "https://github.com/vyos/vyatta-config-mgmt"
-SECTION = "vyos/core"
+SECTION = "vyos/config"
 
 
 LICENSE = "GPLv2"

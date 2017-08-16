@@ -1,6 +1,6 @@
 SUMMARY = "VyOS netflow config & op templates/scripts"
 HOMEPAGE = "https://github.com/vyos/vyatta-netflow"
-SECTION = "vyos/net"
+SECTION = "vyos/monitor"
 
 
 LICENSE = "GPLv2"

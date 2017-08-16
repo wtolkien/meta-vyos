@@ -1,6 +1,6 @@
 SUMMARY = "Various utilities written in C for speed"
 HOMEPAGE = "https://github.com/vyos/vyatta-util"
-SECTION = "vyos/core"
+SECTION = "vyos/config"
 
 
 LICENSE = "GPLv2"

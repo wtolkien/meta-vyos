@@ -1,6 +1,6 @@
 SUMMARY = "VyOS configuration migration scripts"
 HOMEPAGE = "https://github.com/vyos/vyatta-config-migrate"
-SECTION = "vyos/core"
+SECTION = "vyos/config"
 
 
 LICENSE = "GPLv2"

@@ -1,6 +1,6 @@
 SUMMARY = "VyOS DHCP server configuration mechanism"
 HOMEPAGE = "https://github.com/vyos/vyatta-cfg-dhcp-server"
-SECTION = "vyos/net"
+SECTION = "vyos/dhcp"
 
 
 LICENSE = "GPLv2"
@@ -17,8 +17,10 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
-RDEPENDS_${PN} = "vyos-cfg vyos-bash perl sed  perl libnetaddrip-perl dhcp \
+RDEPENDS_${PN} = "vyos-cfg vyos-bash perl sed  perl libnetaddrip-perl \
 	procps ntp sudo net-snmp"
+
+# TODO: should RDEPEND on 'dhcp', but that causes do_rootfs to fail
 
 FILES_${PN} += "/opt"
 

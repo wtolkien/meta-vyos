@@ -1,6 +1,6 @@
 SUMMARY = "VyOS DHCP relay configuration mechanism"
 HOMEPAGE = "https://github.com/vyos/vyatta-cfg-dhcp-relay"
-SECTION = "vyos/net"
+SECTION = "vyos/dhcp"
 
 
 LICENSE = "GPLv2"
@@ -17,7 +17,9 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
-RDEPENDS_${PN} = "vyos-cfg vyos-bash perl  perl libnetaddrip-perl dhcp procps sudo"
+RDEPENDS_${PN} = "vyos-cfg vyos-bash perl  perl libnetaddrip-perl procps sudo"
+
+# TODO: should RDEPEND on 'dhcp', but that causes do_rootfs to fail
 
 FILES_${PN} += "/opt"
 

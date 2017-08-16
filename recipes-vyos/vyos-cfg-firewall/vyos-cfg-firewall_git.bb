@@ -1,6 +1,6 @@
 SUMMARY = "VyOS Configuration templates and scripts for the firewall subsystem"
 HOMEPAGE = "https://github.com/vyos/vyatta-cfg-firewall"
-SECTION = "vyos/net"
+SECTION = "vyos/firewall"
 
 
 LICENSE = "GPLv2"

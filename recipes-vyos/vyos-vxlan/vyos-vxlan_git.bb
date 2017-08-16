@@ -1,6 +1,6 @@
 SUMMARY = "VXLAN configuration templates and scripts"
 HOMEPAGE = "https://github.com/vyos/vyos-vxlan"
-SECTION = "vyos/net"
+SECTION = "vyos/tunnel"
 
 
 LICENSE = "GPLv2"

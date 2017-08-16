@@ -1,6 +1,6 @@
 SUMMARY = "VyOS VRRP config & op templates/scripts"
 HOMEPAGE = "https://github.com/vyos/vyatta-vrrp"
-SECTION = "vyos/net"
+SECTION = "vyos/redundancy"
 
 
 LICENSE = "GPLv2"

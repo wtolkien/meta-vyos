@@ -1,6 +1,6 @@
 SUMMARY = "VyOS cron configuration scripts and templates"
 HOMEPAGE = "https://github.com/vyos/vyatta-cron"
-SECTION = "vyos/core"
+SECTION = "vyos/config"
 
 
 LICENSE = "GPLv2"

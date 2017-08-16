@@ -1,6 +1,6 @@
 SUMMARY = "VyOS PPPoE Server conf & op templates"
 HOMEPAGE = "https://github.com/vyos/vyatta-pppoe-server"
-SECTION = "vyos/net"
+SECTION = "vyos/pppoe"
 
 
 LICENSE = "GPLv2"

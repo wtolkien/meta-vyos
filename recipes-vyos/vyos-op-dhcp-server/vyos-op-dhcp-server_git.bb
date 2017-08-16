@@ -1,6 +1,6 @@
 SUMMARY = "VyOS DHCP server operations mechanism"
 HOMEPAGE = "https://github.com/vyos/vyatta-op-dhcp-server"
-SECTION = "vyos/net"
+SECTION = "vyos/dhcp"
 
 
 LICENSE = "GPLv2"
@@ -17,7 +17,9 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
-RDEPENDS_${PN} = "vyos-op vyos-bash perl libfileslurp-perl dhcp"
+RDEPENDS_${PN} = "vyos-op vyos-bash perl libfileslurp-perl "
+
+# TODO: should RDEPEND on 'dhcp', but that causes do_rootfs to fail
 
 FILES_${PN} += "/opt"
 

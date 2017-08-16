@@ -1,6 +1,6 @@
 SUMMARY = "VyOS Operation templates and scripts for QoS"
 HOMEPAGE = "https://github.com/vyos/vyatta-op-qos"
-SECTION = "vyos/net"
+SECTION = "vyos/qos"
 
 
 LICENSE = "GPLv2"

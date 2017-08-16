@@ -1,6 +1,6 @@
 SUMMARY = "VyOS operational command completion script"
 HOMEPAGE = "https://github.com/vyos/vyatta-op"
-SECTION = "vyos/core"
+SECTION = "vyos/config"
 
 
 LICENSE = "GPLv2"
@@ -29,10 +29,10 @@ inherit autotools-brokensep update-rc.d
 EXTRA_OECONF = "\
     --prefix=/opt/vyatta \
     --exec_prefix=/opt/vyatta \
-	--sbindir=/opt/vyatta/sbin \	
-	--bindir=/opt/vyatta/bin \	
-	--datadir=/opt/vyatta/share \	
-	--sysconfdir=/opt/vyatta/etc \	
+	--sbindir=/opt/vyatta/sbin \
+	--bindir=/opt/vyatta/bin \
+	--datadir=/opt/vyatta/share \
+	--sysconfdir=/opt/vyatta/etc \
 	"
 
 do_install_append () {

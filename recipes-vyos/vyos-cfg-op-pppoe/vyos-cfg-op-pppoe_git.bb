@@ -1,6 +1,6 @@
 SUMMARY = "VyOS Configuration and operational mode templates for the PPPOE feature"
 HOMEPAGE = "https://github.com/vyos/vyatta-cfg-op-pppoe"
-SECTION = "vyos/core"
+SECTION = "vyos/pppoe"
 
 
 LICENSE = "GPLv2"

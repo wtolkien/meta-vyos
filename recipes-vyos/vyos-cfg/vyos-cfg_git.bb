@@ -1,6 +1,6 @@
 SUMMARY = "VyOS config library"
 HOMEPAGE = "https://github.com/vyos/vyatta-cfg"
-SECTION = "vyos/core"
+SECTION = "vyos/config"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"

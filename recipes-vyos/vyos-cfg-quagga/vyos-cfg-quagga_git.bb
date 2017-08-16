@@ -1,6 +1,6 @@
 SUMMARY = "VyOS configuration templates and scripts for Quagga"
 HOMEPAGE = "https://github.com/vyos/vyatta-cfg-quagga"
-SECTION = "vyos/core"
+SECTION = "vyos/routing"
 
 
 LICENSE = "GPLv2"
@@ -17,6 +17,16 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-quagga"
+
+RDEPENDS_${PN} = " \
+	sed \
+	perl \
+	procps \
+	vyos-cfg \
+	vyos-cfg-system \
+	vyos-bash \
+	vyos-quagga \
+	"
 
 FILES_${PN} += "/opt"
 

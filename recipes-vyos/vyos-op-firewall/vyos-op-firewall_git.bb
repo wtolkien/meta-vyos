@@ -1,6 +1,6 @@
 SUMMARY = "VyOS Operatation command templates and scripts for the firewall subsystem"
 HOMEPAGE = "https://github.com/vyos/vyatta-op-firewall"
-SECTION = "vyos/net"
+SECTION = "vyos/firewall"
 
 
 LICENSE = "GPLv2"

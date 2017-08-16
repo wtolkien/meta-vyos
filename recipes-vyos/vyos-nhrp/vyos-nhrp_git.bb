@@ -1,6 +1,6 @@
 SUMMARY = "VyOS NHRP (for DMVPN compatibility) cfg and op package"
 HOMEPAGE = "https://github.com/vyos/vyos-nhrp"
-SECTION = "vyos/net"
+SECTION = "vyos/vpn"
 
 
 LICENSE = "GPLv2"

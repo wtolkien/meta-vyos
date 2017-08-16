@@ -1,6 +1,6 @@
 SUMMARY = "VyOS 802.11 wireless services templates and scripts"
 HOMEPAGE = "https://github.com/vyos/vyatta-wireless"
-SECTION = "vyos/core"
+SECTION = "vyos/wlan"
 
 
 LICENSE = "GPLv2"

@@ -1,6 +1,6 @@
 SUMMARY = "VyOS system-level configuration templates/scripts"
 HOMEPAGE = "https://github.com/vyos/vyatta-cfg-system"
-SECTION = "vyos/core"
+SECTION = "vyos/config"
 
 
 LICENSE = "GPLv2"
@@ -53,7 +53,6 @@ RDEPENDS_${PN} = " \
 	libhttpmessage-perl \
 	vyos-bash \
 	vyos-wireless \
-	vyos-cfg-quagga \
 	"
 
 # add directories that otherwise wouldn't automatically get packaged up...
