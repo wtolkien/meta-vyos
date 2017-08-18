@@ -1,0 +1,107 @@
+--- a/src/libcharon/plugins/vici/vici_control.c	2017-08-18 16:32:17.712434201 -0700
++++ b/src/libcharon/plugins/vici/vici_control.c	2017-08-18 16:35:15.849122683 -0700
+@@ -270,11 +270,12 @@ CALLBACK(terminate, vici_message_t*,
+ 	private_vici_control_t *this, char *name, u_int id, vici_message_t *request)
+ {
+ 	enumerator_t *enumerator, *isas, *csas;
+-	char *child, *ike, *errmsg = NULL;
++	char *child, *ike, *errmsg = NULL, *my_host_str, *other_host_str;
+ 	u_int child_id, ike_id, current, *del, done = 0;
+ 	int timeout;
+ 	ike_sa_t *ike_sa;
+ 	child_sa_t *child_sa;
++	host_t *my_host = NULL, *other_host = NULL;
+ 	array_t *ids;
+ 	vici_builder_t *builder;
+ 	controller_cb_t log_cb = NULL;
+@@ -289,12 +290,24 @@ CALLBACK(terminate, vici_message_t*,
+ 	ike_id = request->get_int(request, 0, "ike-id");
+ 	timeout = request->get_int(request, 0, "timeout");
+ 	log.level = request->get_int(request, 1, "loglevel");
+-
+-	if (!child && !ike && !ike_id && !child_id)
++	my_host_str = request->get_str(request, NULL, "my-host");
++	other_host_str = request->get_str(request, NULL, "other-host");
++ 
++	if (!child && !ike && !ike_id && !child_id && !my_host_str &&!other_host_str)
+ 	{
+ 		return send_reply(this, "missing terminate selector");
+ 	}
+ 
++	if (my_host_str && !other_host_str || other_host_str && !my_host_str)
++	{
++		return send_reply(this, "missing source or remote");
++	}
++	else
++	{
++		my_host = host_create_from_string(my_host_str, 0);
++		other_host = host_create_from_string(other_host_str, 0);
++		DBG1(DBG_CFG, "vici terminate with source me %H and other %H", my_host, other_host);
++	}
+ 	if (ike_id)
+ 	{
+ 		DBG1(DBG_CFG, "vici terminate IKE_SA #%d", ike_id);
+@@ -357,6 +370,15 @@ CALLBACK(terminate, vici_message_t*,
+ 		{
+ 			array_insert(ids, ARRAY_TAIL, &ike_id);
+ 		}
++		else if (my_host && other_host)
++		{
++			if (my_host && !streq(my_host, ike_sa->get_my_host(ike_sa)) && other_host && !streq(other_host, ike_sa->get_other_host(ike_sa)))
++			{
++				continue;
++			}
++			current = ike_sa->get_unique_id(ike_sa);
++			array_insert(ids, ARRAY_TAIL, &current);
++		}
+ 	}
+ 	isas->destroy(isas);
+ 
+--- a/src/swanctl/commands/terminate.c	2017-08-18 16:43:30.540866681 -0700
++++ b/src/swanctl/commands/terminate.c	2017-08-18 16:45:11.536967086 -0700
+@@ -37,7 +37,7 @@ static int terminate(vici_conn_t *conn)
+ 	vici_req_t *req;
+ 	vici_res_t *res;
+ 	command_format_options_t format = COMMAND_FORMAT_NONE;
+-	char *arg, *child = NULL, *ike = NULL;
++	char *arg, *child = NULL, *ike = NULL, *my_host = NULL, *other_host = NULL;
+ 	int ret = 0, timeout = 0, level = 1, child_id = 0, ike_id = 0;
+ 
+ 	while (TRUE)
+@@ -64,6 +64,12 @@ static int terminate(vici_conn_t *conn)
+ 			case 'I':
+ 				ike_id = atoi(arg);
+ 				continue;
++			case 'S':
++				my_host = arg;
++				continue;
++			case 'R':
++				other_host = arg;
++				continue;
+ 			case 't':
+ 				timeout = atoi(arg);
+ 				continue;
+@@ -101,6 +107,14 @@ static int terminate(vici_conn_t *conn)
+ 	{
+ 		vici_add_key_valuef(req, "ike-id", "%d", ike_id);
+ 	}
++	if (my_host)
++	{
++		vici_add_key_valuef(req, "my-host", "%s", my_host);
++	}
++	if (other_host)
++	{
++		vici_add_key_valuef(req, "other-host", "%s", other_host);
++	}
+ 	if (timeout)
+ 	{
+ 		vici_add_key_valuef(req, "timeout", "%d", timeout * 1000);
+@@ -147,6 +161,8 @@ static void __attribute__ ((constructor)
+ 		{
+ 			{"help",		'h', 0, "show usage information"},
+ 			{"child",		'c', 1, "terminate by CHILD_SA name"},
++			{"source",		'S', 1, "override source address"},
++			{"remote",		'R', 1, "override remote address"},
+ 			{"ike",			'i', 1, "terminate by IKE_SA name"},
+ 			{"child-id",	'C', 1, "terminate by CHILD_SA reqid"},
+ 			{"ike-id",		'I', 1, "terminate by IKE_SA unique identifier"},

@@ -13,19 +13,61 @@ SRC_URI = "http://download.strongswan.org/strongswan-${PV}.tar.bz2 \
         file://0002-charon-add-opt-src.patch \
         file://0003-vici-send-certs-for-ike_sa-events.patch \
         file://0004-vici-support-indiv-sa-state-changes.patch \
+        file://0005-vici-support-async-initiation.patch \
+        file://0006-terminate-by-src-and-dst.patch \
+        file://libstrongswan.strongswan.logcheck.ignore.paranoid \
+        file://libstrongswan.strongswan.logcheck.ignore.server \
+        file://libstrongswan.strongswan.logcheck.ignore.workstation \
+        file://libstrongswan.strongswan.logcheck.violations.ignore \
+        file://strongswan-starter.ipsec.init \
         "
 
 SRC_URI[md5sum] = "4afffe3c219bb2e04f09510905af836b"
 SRC_URI[sha256sum] = "c5ea54b199174708de11af9b8f4ecf28b5b0743d4bc0e380e741f25b28c0f8d4"
 
 EXTRA_OECONF = " \
+        --disable-blowfish --disable-des \
         --without-lib-prefix \
-"
+        --enable-agent \
+        --enable-ctr --enable-ccm --enable-gcm --enable-addrblock \
+        --with-capabilities=libcap \
+        --enable-farp \
+        --enable-dhcp \
+        --enable-af-alg \
+        --enable-vici \
+        --enable-ha \
+		--enable-led --enable-gcrypt \
+		--enable-test-vectors \
+		--enable-xauth-eap --enable-xauth-pam --enable-xauth-noauth \
+        --enable-cmd \
+		--enable-certexpire \
+		--enable-lookip \
+		--enable-error-notify \
+		--enable-unity \
+        --enable-eap-radius --enable-eap-identity --enable-eap-md5 \
+		--enable-eap-gtc --enable-eap-aka --enable-eap-mschapv2 \
+		--enable-eap-tls --enable-eap-ttls --enable-eap-tnc \
+        "
+
+# TODO: the following will cause install paths for charon, etc to match what they
+# are on VyOS 1.2, however we may want to keep the original OE paths...
+EXTRA_OECONF += " \
+        --libexecdir=/usr/lib \
+        "
+
+#--with-user=strongswan --with-group=nogroup
+#	--enable-kernel-pfkey --enable-kernel-klips \
+# And for --enable-eap-sim we would need the library, which we don't
+# have right now.
+# Don't --enable-cisco-quirks, because some other IPsec implementations
+# (most notably the Phion one) have problems connecting when pluto
+# sends these Cisco options.
 
 EXTRA_OECONF += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '--with-systemdsystemunitdir=${systemd_unitdir}/system/', '--without-systemdsystemunitdir', d)}"
 
 
-PACKAGECONFIG ??= "aesni charon curl gmp openssl stroke sqlite3 \
+PACKAGECONFIG ??= "aesni charon curl gmp openssl stroke \
+        swanctl connmark pkcs11 scep \
         ${@bb.utils.filter('DISTRO_FEATURES', 'ldap', d)} \
 "
 PACKAGECONFIG[aesni] = "--enable-aesni,--disable-aesni,,${PN}-plugin-aesni"
@@ -40,6 +82,14 @@ PACKAGECONFIG[soup] = "--enable-soup,--disable-soup,libsoup-2.4,${PN}-plugin-sou
 PACKAGECONFIG[sqlite3] = "--enable-sqlite,--disable-sqlite,sqlite3,${PN}-plugin-sqlite"
 PACKAGECONFIG[stroke] = "--enable-stroke,--disable-stroke,,${PN}-plugin-stroke"
 PACKAGECONFIG[swanctl] = "--enable-swanctl,--disable-swanctl,,libgcc"
+PACKAGECONFIG[mediation] = "--enable-mediation --enable-medcli --enable-medsrv, \
+                            --disable-mediation --disable-medcli --disable-medsrv, \
+                            clearsilver, clearsilver"
+PACKAGECONFIG[connmark] = "--enable-connmark, --disable-connmark, iptables, iptables"
+PACKAGECONFIG[pkcs11] = "--enable-pkcs11, --disable-pkcs11, ,${PN}-plugin-pkcs11"
+PACKAGECONFIG[fast] = "--enable-fast, --disable-fast, ,${PN}-plugin-fast"
+PACKAGECONFIG[tpm] = "--enable-tpm, --disable-tpm,"
+
 
 # requires swanctl
 PACKAGECONFIG[systemd-charon] = "--enable-systemd,--disable-systemd,systemd,"
@@ -48,6 +98,7 @@ inherit autotools systemd pkgconfig
 
 RRECOMMENDS_${PN} = "kernel-module-ipsec"
 
+FILES_${PN} += "/usr/lib"
 FILES_${PN} += "${libdir}/ipsec/lib*${SOLIBS}"
 FILES_${PN}-dbg += "${bindir}/.debug ${libdir}/ipsec/.debug ${libexecdir}/ipsec/.debug"
 FILES_${PN}-dev += "${libdir}/ipsec/lib*${SOLIBSDEV} ${libdir}/ipsec/*.la"
@@ -60,6 +111,27 @@ ALLOW_EMPTY_${PN}-plugins = "1"
 
 PACKAGES_DYNAMIC += "^${PN}-plugin-.*$"
 NOAUTOPACKAGEDEBUG = "1"
+
+do_compile_append () {
+    rm -rf ${D}/usr/sbin/.debug
+}
+
+# emulate what the VyOS strongswan package does, without necessarily knowning why...
+do_install_append () {
+    install -d ${D}/etc/ipsec.d/policies
+    install -d ${D}/var/lib/strongswan
+    install -d ${D}/etc/init.d
+    cp ${WORKDIR}/strongswan-starter.ipsec.init ${D}/etc/init.d/ipsec
+    install -d ${D}/etc/logcheck/ignore.d.paranoid
+    cp ${WORKDIR}/libstrongswan.strongswan.logcheck.ignore.paranoid ${D}/etc/logcheck/ignore.d.paranoid/strongswan
+    install -d ${D}/etc/logcheck/ignore.d.server
+    cp ${WORKDIR}/libstrongswan.strongswan.logcheck.ignore.server ${D}/etc/logcheck/ignore.d.server/strongswan
+    install -d ${D}/etc/logcheck/ignore.d.workstation
+    cp ${WORKDIR}/libstrongswan.strongswan.logcheck.ignore.workstation ${D}/etc/logcheck/ignore.d.workstation/strongswan
+    install -d ${D}/etc/logcheck/violations.ignore.d
+    cp ${WORKDIR}/libstrongswan.strongswan.logcheck.violations.ignore ${D}/etc/logcheck/violations.ignore.d/strongswan
+}
+
 
 python split_strongswan_plugins () {
     sysconfdir = d.expand('${sysconfdir}/strongswan.d/charon')
