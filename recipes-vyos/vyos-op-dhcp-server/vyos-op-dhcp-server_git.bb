@@ -17,9 +17,7 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
-RDEPENDS_${PN} = "vyos-op vyos-bash perl libfileslurp-perl "
-
-# TODO: should RDEPEND on 'dhcp', but that causes do_rootfs to fail
+RDEPENDS_${PN} = "vyos-op vyos-bash perl libfileslurp-perl dhcp-server"
 
 FILES_${PN} += "/opt"
 

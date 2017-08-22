@@ -18,9 +18,7 @@ S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
 RDEPENDS_${PN} = "vyos-cfg vyos-bash perl sed  perl libnetaddrip-perl \
-	procps ntp sudo net-snmp"
-
-# TODO: should RDEPEND on 'dhcp', but that causes do_rootfs to fail
+	procps ntp sudo net-snmp dhcp-server"
 
 FILES_${PN} += "/opt"
 
