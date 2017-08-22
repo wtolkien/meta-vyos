@@ -22,6 +22,7 @@ DEPENDS = "perl"
 
 RDEPENDS_${PN} = " \
 	sudo \
+	at \
 	procps \
 	iproute2 \
 	ethtool \
@@ -73,9 +74,25 @@ EXTRA_OECONF = "\
 	"
 
 do_install_append () {
+	# TODO: this needs to get cleaned up upstream: this package provides templates
+	# for vxlan which conflict with files from the vyos-vxlan package. For now we
+	# delete them here
+	rm -rf ${D}/opt/vyatta/share/vyatta-cfg/templates/interfaces/vxlan
+
 	# copy MIB files...
 	install -d ${D}/usr/share/snmp/mibs
-	install ${S}/mibs/* ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/BGP4-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/OSPF-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/OSPF-TRAP-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/RIPv2-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/SOURCE-ROUTING-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/NETWORK-SERVICES-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/MTA-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/DISMAN-EXPRESSION-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/DISMAN-NSLOOKUP-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/DISMAN-PING-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/DISMAN-TRACEROUTE-MIB.txt ${D}/usr/share/snmp/mibs
+	install ${S}/mibs/VYATTA-TRAP-MIB.txt ${D}/usr/share/snmp/mibs
 
 	# stuff that used to be in the Debian 'postinst' script
 	install -d ${D}/var/log/user

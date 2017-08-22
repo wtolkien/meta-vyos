@@ -38,6 +38,11 @@ EXTRA_OECONF = "\
 do_install_append () {
 	install -d ${D}${sysconfdir}/init.d
 	install vyatta-tmpfs ${D}${sysconfdir}/init.d
+
+	# TODO: this needs to get cleaned up upstream: this package provides templates
+	# for vxlan which conflict with files from the vyos-vxlan package. For now we
+	# delete them here
+	rm -rf ${D}/opt/vyatta/share/vyatta-op/templates/show/interfaces/vxlan
 }
 
 INITSCRIPT_PACKAGES = "${PN}"

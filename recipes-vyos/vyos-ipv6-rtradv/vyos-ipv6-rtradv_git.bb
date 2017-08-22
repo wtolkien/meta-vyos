@@ -35,3 +35,10 @@ EXTRA_OECONF = "\
 	--datadir=/opt/vyatta/share \
 	--sysconfdir=/etc \
 	"
+
+do_install_append () {
+	# TODO: this needs to get cleaned up upstream: this package provides templates
+	# for vxlan which conflict with files from the vyos-vxlan package. For now we
+	# delete them here
+	rm -rf ${D}/opt/vyatta/share/vyatta-cfg/templates/interfaces/vxlan
+}
