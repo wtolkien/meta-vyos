@@ -43,7 +43,7 @@ do_install_append() {
 FILES_${PN} += "${datadir}/snmp/mibs/KEEPALIVED-MIB.txt"
 
 INITSCRIPT_NAME = "keepalived"
-INITSCRIPT_PARAMS = "remove"
+INITSCRIPT_PARAMS = "defaults 30"
 
 SYSTEMD_SERVICE_${PN} = "keepalived.service"
 SYSTEMD_AUTO_ENABLE ?= "disable"
