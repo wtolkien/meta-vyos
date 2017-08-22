@@ -89,6 +89,7 @@ PACKAGECONFIG[connmark] = "--enable-connmark, --disable-connmark, iptables, ipta
 PACKAGECONFIG[pkcs11] = "--enable-pkcs11, --disable-pkcs11, ,${PN}-plugin-pkcs11"
 PACKAGECONFIG[fast] = "--enable-fast, --disable-fast, ,${PN}-plugin-fast"
 PACKAGECONFIG[tpm] = "--enable-tpm, --disable-tpm,"
+PACKAGECONFIG[des] = "--enable-des, --disable-des, ,${PN}-plugin-des"
 
 
 # requires swanctl
@@ -172,7 +173,6 @@ RDEPENDS_${PN} += "\
     ${PN}-plugin-attr \
     ${PN}-plugin-cmac \
     ${PN}-plugin-constraints \
-    ${PN}-plugin-des \
     ${PN}-plugin-dnskey \
     ${PN}-plugin-hmac \
     ${PN}-plugin-kernel-netlink \
