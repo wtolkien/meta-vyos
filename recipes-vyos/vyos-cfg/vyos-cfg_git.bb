@@ -10,7 +10,6 @@ SRC_URI = "git://github.com/vyos/vyatta-cfg.git;branch=current;protocol=https \
 	   file://002-remove-debian-apt-dependency.patch \
 	   file://003-allow-perl-cross-compile.patch \
 	   file://004-unionfs-fuse-path.patch \
-	   file://git/init-functions \
 	  "
 
 # snapshot from Jul 10, 2017:
@@ -40,7 +39,7 @@ RDEPENDS_${PN} += " \
 	vyos-config-migrate \
 	"
 
-FILES_${PN} += "/opt /usr/share /lib /etc/apt"
+FILES_${PN} += "/opt /usr/share /etc/apt"
 
 # NOTE: this software seems not capable of being built in a separate build directory
 # from the source, therefore using 'autotools-brokensep' instead of 'autotools'
@@ -83,10 +82,6 @@ do_install_append () {
 	# create an empty Debian apt-sources file
 	install -d ${D}/etc/apt
 	touch ${D}/etc/apt/sources.list
-
-	# Linux Standard Base (LSB) init functions
-	install -d ${D}/lib/lsb
-	install init-functions ${D}/lib/lsb
 
 	# commit hooks
 	install -d ${D}/etc/commit/pre-hooks.d
