@@ -116,7 +116,5 @@ EOF
 		cat <<-EOF >> $ETC_DIR/vtysh.conf
 username root nopassword
 EOF
-	else
-		exit 1
 	fi
 }

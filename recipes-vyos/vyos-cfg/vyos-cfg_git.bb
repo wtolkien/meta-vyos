@@ -116,7 +116,5 @@ pkg_postinst_${PN} () {
   			touch -ac /opt/vyatta/sbin/${vy_bin}
   			setcap cap_sys_admin=pe /opt/vyatta/sbin/${vy_bin}
 		done
-	else
-   		exit 1
 	fi
 }

@@ -1,6 +1,9 @@
 SUMMARY = "The VyOS Router Image"
 
-IMAGE_INSTALL = "packagegroup-core-boot ${CORE_IMAGE_EXTRA_INSTALL}"
+IMAGE_INSTALL = " \
+    packagegroup-core-boot \
+    ${CORE_IMAGE_EXTRA_INSTALL} \
+    "
 
 IMAGE_LINGUAS = " "
 
