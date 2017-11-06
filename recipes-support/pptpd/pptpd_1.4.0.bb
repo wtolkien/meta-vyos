@@ -23,7 +23,8 @@ S = "${WORKDIR}/pptpd-${PV}"
 
 FILES_${PN} += "/usr/lib"
 
-inherit autotools-brokensep update-rc.d
+inherit autotools-brokensep
+#inherit update-rc.d
 
 do_install_append() {
         # Install init script
@@ -50,11 +51,9 @@ FILES_${PN}-bcrelay = "${sbindir}/bcrelay"
 CONFFILES_${PN} = "${sysconfdir}/pptpd.conf \
                    ${sysconfdir}/ppp/options.pptpd"
 
-INITSCRIPT_NAME = "pptpd"
-INITSCRIPT_PARAMS = "defaults 92 8"
-
-#SRC_URI[md5sum] = "b38df9c431041922c997c1148bedf591"
-#SRC_URI[sha256sum] = "c23a9bdd219a0a36ae7ca20e7c9749f2efdcdbf108aabeeeb5066ba442ec88b6"
+# no autostart at startup - VyOS will control this
+#INITSCRIPT_NAME = "pptpd"
+#INITSCRIPT_PARAMS = "defaults 92 8"
 
 SRC_URI[md5sum] = "36f9f45c6ffa92bc3b6e24ae2d053505"
 SRC_URI[sha256sum] = "8fcd8b8a42de2af59e9fe8cbaa9f894045c977f4d038bbd6346a8522bb7f06c0"
