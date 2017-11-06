@@ -63,7 +63,8 @@ do_install_append () {
 pkg_postinst_${PN} () {
 	if [ x"$D" = "x" ]; then
 
-		# TODO: check the following postinst commands
+# TODO: check what needs to be done here, for now just leave one dummy cmd...
+		DUMMY=1
 # remove init of daemons that we start/stop
 #for init in pppoe-server; do
 #  update-rc.d -f ${init} remove >/dev/null

@@ -42,7 +42,8 @@ EXTRA_OECONF = "\
 pkg_postinst_${PN} () {
 	if [ x"$D" = "x" ]; then
 
-# TODO: check me!
+# TODO: check what needs to be done here, for now just leave one dummy cmd...
+		DUMMY=1
 
 #prefix=/opt/vyatta
 #exec_prefix=${prefix}

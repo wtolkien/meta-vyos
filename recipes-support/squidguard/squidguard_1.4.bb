@@ -68,7 +68,8 @@ do_install() {
 pkg_postinst_${PN} () {
 	if [ x"$D" = "x" ]; then
 
-# TODO: check what needs to be done here...
+# TODO: check what needs to be done here, for now just leave one dummy cmd...
+		DUMMY=1
 
 #CONF="/etc/default/squidguard"
 
