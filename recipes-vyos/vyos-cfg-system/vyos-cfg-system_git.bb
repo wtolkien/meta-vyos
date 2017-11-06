@@ -27,6 +27,13 @@ RDEPENDS_${PN} = " \
 	at \
 	procps \
 	iproute2 \
+	iproute2-tc \
+	iproute2-ss \
+	iproute2-nstat \
+	iproute2-rtacct \
+	iproute2-genl \
+	iproute2-ifstat \
+	iproute2-lnstat \
 	ethtool \
 	net-tools \
 	bridge-utils \
