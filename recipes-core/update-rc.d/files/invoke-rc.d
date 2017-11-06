@@ -1,4 +1,4 @@
-#!/bin/sh  
+#!/bin/sh
 #
 # invoke-rc.d.sysvinit - Executes initscript actions
 #
@@ -44,7 +44,7 @@ is_openrc=
 set +e
 
 dohelp () {
- # 
+ #
  # outputs help and usage
  #
 cat <<EOF
@@ -61,7 +61,7 @@ Usage:
                 [force-]reload, status
   WARNING: not all initscripts implement all of the above actions.
 
-  extra parameters are passed as is to the initscript, following 
+  extra parameters are passed as is to the initscript, following
   the action (first initscript parameter).
 
 Options:
@@ -185,7 +185,7 @@ else
         fi
     fi
 
-    if test x${RC} = x ; then 
+    if test x${RC} = x ; then
 	RC=104
     fi
 fi
@@ -221,7 +221,7 @@ fi
 state=I
 while test $# -gt 0 && test ${state} != III ; do
     case "$1" in
-      --help)   dohelp 
+      --help)   dohelp
 		exit 0
 		;;
       --quiet)  BEQUIET=--quiet
@@ -333,7 +333,7 @@ if test x${RL} = x0 || test x${RL} = x6 ; then
     printerror "-----------------------------------------------------"
 fi
 
-## Verifies the existance of proper S??initscriptID and K??initscriptID 
+## Verifies the existance of proper S??initscriptID and K??initscriptID
 ## *links* in the proper /etc/rc?.d/ directory
 verifyrclink () {
   #
@@ -413,8 +413,10 @@ else
 	    RC=101
 	elif testexec ${SSLINK} ; then
 	    RC=104
-	else
-	    RC=101
+# VyOS: we disable the following case to allow scripts to start even if
+#       there is no link in the associated runlevel directory
+#	else
+#	    RC=101
 	fi
       ;;
     esac
