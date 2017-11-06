@@ -1,0 +1,9 @@
+--- a/scripts/system/vyatta_update_hosts.pl	2017-11-02 10:15:53.862781152 -0700
++++ b/scripts/system/vyatta_update_hosts.pl	2017-11-02 10:16:16.954860209 -0700
+@@ -110,5 +110,5 @@ set_mailname $mail_name;
+ # Restart services that use the system hostname;
+ # add more ase needed.
+ if ($restart_services) {
+-    system("invoke-rc.d rsyslog restart");
++    system("/usr/sbin/invoke-rc.d rsyslog restart");
+ }

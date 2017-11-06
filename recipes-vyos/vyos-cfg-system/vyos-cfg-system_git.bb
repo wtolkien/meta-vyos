@@ -7,6 +7,8 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
 SRC_URI = "git://github.com/vyos/vyatta-cfg-system.git;branch=current;protocol=https \
+		  file://001-invoke-rc-path.patch \
+		  file://002-update-timezone-node.patch \
 		  file://git/vyatta-postconfig-bootup.script \
 		  file://git/bashrc.template \
 	      "
@@ -52,6 +54,7 @@ RDEPENDS_${PN} = " \
 	libjsonany-perl \
 	libwww-perl \
 	libhttpmessage-perl \
+	tzdata \
 	vyos-bash \
 	vyos-wireless \
 	"

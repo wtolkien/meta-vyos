@@ -1,0 +1,37 @@
+--- a/templates/system/time-zone/node.def	2017-11-02 10:49:42.513726372 -0700
++++ b/templates/system/time-zone/node.def	2017-11-02 11:02:39.904387820 -0700
+@@ -4,13 +4,13 @@ help: Local time zone
+ default: "UTC"
+ update: LTF="/usr/share/zoneinfo"
+   case "$VAR(@)" in
+-    [Ll][Oo][Ss]*) LTF="$LTF/US/Pacific" ;;
+-    [Dd][Ee][Nn]*) LTF="$LTF/US/Mountain" ;;
+-    [Hh][Oo][Nn][Oo]*) LTF="$LTF/US/Hawaii" ;;
+-    [Nn][Ee][Ww]*) LTF="$LTF/US/Eastern" ;;
+-    [Cc][Hh][Ii][Cc]*) LTF="$LTF/US/Central" ;;
+-    [Aa][Nn][Cc]*) LTF="$LTF/US/Alaska" ;;
+-    [Pp][Hh][Oo]*) LTF="$LTF/US/Arizona" ;;
++    [Ll][Oo][Ss]*) LTF="$LTF/America/Los_Angeles" ;;
++    [Dd][Ee][Nn]*) LTF="$LTF/America/Denver" ;;
++    [Hh][Oo][Nn][Oo]*) LTF="$LTF/Pacific/Honolulu" ;;
++    [Nn][Ee][Ww]*) LTF="$LTF/America/New_York" ;;
++    [Cc][Hh][Ii][Cc]*) LTF="$LTF/America/Chicago" ;;
++    [Aa][Nn][Cc]*) LTF="$LTF/America/Anchorage" ;;
++    [Pp][Hh][Oo]*) LTF="$LTF/America/Denver" ;;
+     GMT*) LTF="$LTF/Etc/$VAR(@)" ;;
+     *) LTF="$LTF/$VAR(@)" ;;
+   esac
+@@ -53,9 +53,7 @@ allowed: shopt -s nullglob
+ end: if [ "$COMMIT_ACTION" == "SET" -o "$COMMIT_ACTION" == "DELETE" ]; then
+         sudo /etc/init.d/rsyslog restart
+      fi
+-comp_help:Enter the local timezone by specifying "Region/City"
+-  Use auto-completion to see available regions and cities.
+-  Start with one of these regions:
+-    Africa      America   Antarctica   Arctic   Asia     Atlantic
+-    Australia   Brazil    Canada       Chile    Europe   Indian
+-    Mexico      Mideast   Pacific      US
++comp_help:Enter the local timezone by specifying "Region/City"
++  or GMT[+|-][0-12]. Use auto-completion to see available regions
++  and cities. Start with one of these regions:
++    Africa      America      Asia     Australia    Europe    Pacific
