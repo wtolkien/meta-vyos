@@ -23,7 +23,8 @@ FILES_${PN} += "/usr/lib /usr/share /var/run"
 
 # NOTE: this software seems not capable of being built in a separate build directory
 # from the source, therefore using 'autotools-brokensep' instead of 'autotools'
-inherit autotools-brokensep update-rc.d
+inherit autotools-brokensep
+inherit update-rc.d
 
 # additional options to be passed to the configure script:
 EXTRA_OECONF = "\
@@ -101,9 +102,9 @@ log syslog
 log facility local7
 EOF
 			case $daemon in
-				ospfd) echo "smux peer .1.3.6.1.4.1.3317.1.2.5" >>$ETC_DIR/ospfd.conf ;;
-				bgpd)  echo "smux peer .1.3.6.1.4.1.3317.1.2.2" >>$ETC_DIR/bgpd.conf  ;;
+				bgpd)  echo "smux peer .1.3.6.1.4.1.3317.1.2.2" >> $ETC_DIR/bgpd.conf  ;;
 				ripd)  echo "smux peer .1.3.6.1.4.1.3317.1.2.3" >> $ETC_DIR/ripd.conf ;;
+				ospfd) echo "smux peer .1.3.6.1.4.1.3317.1.2.5" >> $ETC_DIR/ospfd.conf ;;
 			esac
 
 			chown quagga:quaggavty $ETC_DIR/${daemon}.conf
@@ -116,5 +117,7 @@ EOF
 		cat <<-EOF >> $ETC_DIR/vtysh.conf
 username root nopassword
 EOF
+	else
+		exit 1
 	fi
 }
