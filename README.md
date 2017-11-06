@@ -43,7 +43,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |conntrack-tools| conntrack-tools-1.4.2| using upstream ver 1.4.4 | VyOS version does not contain custom patches |
 | | vyatta-conntrack-sync| | ported| |
 | | vyatta-nat| | ported| |
-| | vyatta-iproute| iproute2-3.12.0| | |
+| | vyatta-iproute| iproute2-3.12.0| using upstream ver 4.10.0 | upstream contains all previous VyOS patches |
 | | vyos-iptables| iptables-1.4.21| | |
 | | vyatta-wanloadbalance| | ported| |
 | | vyatta-lldp| | ported| |
