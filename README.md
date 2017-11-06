@@ -40,7 +40,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-cron| | ported| |
 | |
 | General Networking| vyatta-conntrack| | ported| |
-| |conntrack-tools| conntrack-tools-1.4.2| | |
+| |conntrack-tools| conntrack-tools-1.4.2| using upstream ver 1.4.4 | VyOS version does not contain custom patches |
 | | vyatta-conntrack-sync| | ported| |
 | | vyatta-nat| | ported| |
 | | vyatta-iproute| iproute2-3.12.0| | |
