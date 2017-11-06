@@ -10,6 +10,7 @@ SRC_URI = "git://github.com/vyos/vyatta-cfg.git;branch=current;protocol=https \
 	   file://002-remove-debian-apt-dependency.patch \
 	   file://003-allow-perl-cross-compile.patch \
 	   file://004-unionfs-fuse-path.patch \
+	   file://git/default-config-qemux86 \
 	  "
 
 # snapshot from Jul 10, 2017:
@@ -96,6 +97,10 @@ do_install_append () {
 		${D}/etc/commit/pre-hooks.d/99vyos-user-precommit-hooks
 	ln -s /opt/vyatta/sbin/vyos-user-postcommit-hooks.sh \
 		${D}/etc/commit/post-hooks.d/99vyos-user-postcommit-hooks
+
+	# install default config
+	install -d ${D}/opt/vyatta/etc/config
+	install ${S}/default-config-${MACHINE} ${D}/opt/vyatta/etc/config/config.boot
 }
 
 
