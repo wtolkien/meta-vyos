@@ -37,65 +37,28 @@ EXTRA_OECONF = "\
 	--sysconfdir=/opt/vyatta/etc \
 	"
 
-# perform some post-installation actions, but only on target device, not at
-# build time (a lot of this probably should be moved to build time, for now
-# they were just copied here from Debian's postinst script)
-# Make sure to prepend variables with 'vy_' to avoid conflicts with bitbake
-# variables
-pkg_postinst_${PN} () {
-	if [ x"$D" = "x" ]; then
-		vy_prefix=/opt/vyatta
-		vy_exec_prefix=${vy_prefix}
-		vy_sysconfdir=${vy_prefix}/etc
-		vy_bindir=${vy_exec_prefix}/bin
-		vy_sbindir=${vy_exec_prefix}/sbin
+do_install_append() {
+	install -d ${D}/etc/radiusclient-ng
+	touch ${D}/etc/radiusclient-ng/radiusclient-pptp.conf
+	touch ${D}/etc/radiusclient-ng/servers-pptp
+	touch ${D}/etc/radiusclient-ng/radiusclient-l2tp.conf
+	touch ${D}/etc/radiusclient-ng/servers-l2tp
+	touch ${D}/etc/radiusclient-ng/port-id-map-ravpn
+	install -d ${D}/etc/ppp
+	touch ${D}/etc/ppp/options.xl2tpd
+	touch ${D}/etc/ppp/options.pptpd
+	install -d ${D}/etc/ppp/secrets
+	touch ${D}/etc/ppp/secrets/chap-ravpn
+	chmod 0600 ${D}/etc/ppp/secrets/chap-ravpn
 
-		# TODO: check the following postinst commands
-# remove init of daemons that we start/stop
-#for init in xl2tpd pptpd; do
-	#update-rc.d -f ${init} remove >/dev/null
-#done
+	install ${S}/scripts/radius-dictionary.microsoft \
+		${D}/etc/radiusclient-ng/dictionary.microsoft
+	echo 'INCLUDE /etc/radiusclient-ng/dictionary.merit' \
+		>> ${D}/etc/radiusclient-ng/dictionary-ravpn
+	echo 'INCLUDE /etc/radiusclient-ng/dictionary.microsoft' \
+		>> ${D}/etc/radiusclient-ng/dictionary-ravpn
 
-#sed '1,/start-stop-daemon/s/start-stop-daemon --start/start-stop-daemon --start --oknodo/' -i /etc/init.d/xl2tpd
-
-#for cfg in /etc/ipsec.d/tunnels/remote-access \
-#           /etc/radiusclient-ng/radiusclient-pptp.conf \
-#           /etc/radiusclient-ng/servers-pptp \
-#           /etc/radiusclient-ng/radiusclient-l2tp.conf \
-#           /etc/radiusclient-ng/servers-l2tp \
-#           /etc/radiusclient-ng/port-id-map-ravpn \
-#           /etc/ppp/secrets/chap-ravpn \
-#           /etc/ppp/options.xl2tpd \
-#           /etc/ppp/options.pptpd; do
-#  mkdir -p ${cfg%/*}
-#  touch $cfg
-#done
-
-# fix Xl2tpd init script that doesn't create its startup directory
-#xl2tpd_init=/etc/init.d/xl2tpd
-#if [ -f $xl2tpd_init ] &&
-#    ! grep -q 'mkdir -p /var/run/xl2tpd' $xl2tpd_init ; then
-#    sed -i -e '/test -x $DAEMON || exit 0/a \
-#mkdir -p /var/run/xl2tpd' $xl2tpd_init
-#fi
-
-#chmod 600 /etc/ppp/secrets/chap-ravpn
-
-#cp -f ${sysconfdir}/ravpn/radius-dictionary.microsoft \
-#  /etc/radiusclient-ng/dictionary.microsoft
-#cp -f /etc/radiusclient-ng/dictionary /etc/radiusclient-ng/dictionary-ravpn
-#echo 'INCLUDE /etc/radiusclient-ng/dictionary.merit' \
-#  >> /etc/radiusclient-ng/dictionary-ravpn
-#echo 'INCLUDE /etc/radiusclient-ng/dictionary.microsoft' \
-#  >> /etc/radiusclient-ng/dictionary-ravpn
-
-#mkdir -p ${sysconfdir}/ravpn/sessions
-
-#for s in up down; do
-#  cp -f ${sysconfdir}/ravpn/ppp-ip-$s /etc/ppp/ip-$s.d/ravpn-ip-$s
-#done
-
-	else
-		exit 1
-	fi
+	install -d ${D}/opt/vyatta/etc/ravpn/sessions
+	install ${S}/scripts/ppp-ip-up ${D}/etc/ppp/ip-up.d/ravpn-ip-up
+	install ${S}/scripts/ppp-ip-down ${D}/etc/ppp/ip-down.d/ravpn-ip-down
 }
