@@ -47,7 +47,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyos-iptables| iptables-1.4.21| using upstream ver 1.6.1 | fix-ups as per bbappend file |
 | | vyatta-wanloadbalance| | ported| |
 | | vyatta-lldp| | ported| |
-| | lldpd| lldpd-0.6.0| | |
+| | lldpd| lldpd-0.6.0| using upstream ver 0.9.6 | VyOS version is old but heavily patched. TODO: check functionality, possibly switch to VyOS version |
 | | vyos-keepalived| keepalived-1.2.19| | replaces 'vyatta-keepalived'|
 | | igmpproxy| igmpproxy-1.0.1| | contains Ubiquiti ERL patches|
 | | vyos-igmpproxy| | ported| derived from Ubiquiti ERL 1.4.1 |
