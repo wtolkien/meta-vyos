@@ -49,7 +49,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-lldp| | ported| |
 | | lldpd| lldpd-0.6.0| using upstream ver 0.9.6 | VyOS version is old but heavily patched. TODO: check functionality, possibly switch to VyOS version |
 | | vyos-keepalived| keepalived-1.2.19| using upstream ver 1.3.9 | replaces 'vyatta-keepalived', VyOS patches were obsolete (for 2.6 kernels) |
-| | igmpproxy| igmpproxy-1.0.1| | contains Ubiquiti ERL patches|
+| | igmpproxy| igmpproxy-0.1 | ported | contains Ubiquiti ERL patches|
 | | vyos-igmpproxy| | ported| derived from Ubiquiti ERL 1.4.1 |
 | | vyatta-zone| | ported| |
 | | vyatta-watchdog| | ported| |
