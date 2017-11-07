@@ -30,11 +30,11 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-bash| bash|ported| see note 2)|
 | | vyatta-busybox| busybox-1.19.0| | not used ?|
 | | ipaddrcheck| | | not used ?|
-| | 
+| |
 | Config System| vyatta-cfg| | ported| |
 | | vyatta-cfg-system| | ported| |
 | | vyatta-op| | ported| |
-| | vyatta-config-migrate| | ported|may not be required| 
+| | vyatta-config-migrate| | ported|may not be required|
 | | vyatta-config-mgmt| | ported| |
 | | vyatta-util| | ported| |
 | | vyatta-cron| | ported| |
@@ -43,7 +43,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |conntrack-tools| conntrack-tools-1.4.2| using upstream ver 1.4.4 | VyOS version does not contain custom patches |
 | | vyatta-conntrack-sync| | ported| |
 | | vyatta-nat| | ported| |
-| | vyatta-iproute| iproute2-3.12.0| using upstream ver 4.10.0 | upstream contains all previous VyOS patches |
+| | vyatta-iproute| iproute2-3.12.0| using upstream ver 4.10.0 | fix-ups as per bbappend file |
 | | vyos-iptables| iptables-1.4.21| using upstream ver 1.6.1 | added iptables-apply script to install package |
 | | vyatta-wanloadbalance| | ported| |
 | | vyatta-lldp| | ported| |
@@ -107,15 +107,15 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | Firewall| vyatta-cfg-firewall| | ported| |
 | | vyatta-op-firewall| | ported| |
-| | 
+| |
 | Redundancy| vyatta-vrrp| | ported| |
-| | 
+| |
 | Cluster| vyatta-cluster| | n/a| won't implement on embedded|
 | | heartbeat| heartbeat-3.0.5| n/a| |
-| | 
+| |
 | Proxy| vyatta-webproxy| | ported| |
 | | squidguard| squidguard-1.4| using upstream ver 1.4 + patches| adds large amount of dependent packages|
-| | 
+| |
 | Libraries| libnfnetlink| libnfnetlink-1.0.1| n/a| |
 | | libnetfilter-cttimeout| libnetfilter-cttimeout-1.0.0| n/a| |
 | | libnetfilter-cthelper| libnetfilter-cthelper-1.0.0| n/a| |
@@ -145,7 +145,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | python-vyos-mgmt| | n/a| library for route management|
 | | hvinfo| | n/a| hypervisor detection tools|
 | | vyatta-open-vm-tools| | n/a| virtual machine tools|
-| | MAC-Telnet| | n/a| Microtik tool| 
+| | MAC-Telnet| | n/a| Microtik tool|
 | | vytest| | n/a| test suite|
 | | vyatta-dummy| | n/a| template package|
 | |
@@ -158,9 +158,9 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 
 
 ### Notes:
-1) this project currently builds for the 'qemux86' target. Other targets will require 
+1) this project currently builds for the 'qemux86' target. Other targets will require
     a different kernel package.
-2) VyOS uses two shells: a VyOS-modified version of bash 4.1, installed as 'vbash' and 
+2) VyOS uses two shells: a VyOS-modified version of bash 4.1, installed as 'vbash' and
     generic bash 4.3 installed as 'bash'. This project currently installs 'vbash' and symlinks
     'bash' to it.
 
@@ -169,15 +169,15 @@ There is a lot more work to do and any help from interested parties is very welc
 
 ### Other Issues:
 
-- Most VyOS source packages build with GNU autotools, however they don't allow 
-  building outside of the source directory. This prevents the usage of the 
+- Most VyOS source packages build with GNU autotools, however they don't allow
+  building outside of the source directory. This prevents the usage of the
   'devtool' command that's useful for local developmend with OpenEmbedded/bitbake.
 - Image management is not working, and it may never work in the same way usually
   does with Debian VyOS. Debian VyOS uses Debian's LiveCD architecture with
   initramfs/squashfs to handle multiple images. It is not clear yet how this
   translates into the embedded realm, or even if it makes sense at all.
-- Even for packages that have already been ported, there are likely going to be 
-  a fair number of other bugs that stem from differences between core Debian 
+- Even for packages that have already been ported, there are likely going to be
+  a fair number of other bugs that stem from differences between core Debian
   vs. OpenEmbedded packages.
 
 
@@ -196,7 +196,7 @@ There is a lot more work to do and any help from interested parties is very welc
 
 Development is currently done against OpenEmbedded (release 'pyro'), however other
 OpenEmbedded-based distributions will likely work as well. If you are not familiar
-with OpenEmbedded (or the 'Yocto' derivative), extensive documentation can be found 
+with OpenEmbedded (or the 'Yocto' derivative), extensive documentation can be found
 here:
 
 https://www.yoctoproject.org/documentation
@@ -230,7 +230,7 @@ source oe-init-build-env
 ```
 * edit the OpenEmbedded layer configuration file ```conf/bblayers.conf``` to include
   some additional layers from 'meta-openembedded' as well as the `meta-vyos layer`.
-  Your ```BBLAYERS``` variable should look as below, however you may have to adjust 
+  Your ```BBLAYERS``` variable should look as below, however you may have to adjust
   your path
 ```
 BBLAYERS ?= " \
@@ -243,7 +243,7 @@ BBLAYERS ?= " \
   ${TOPDIR}/../meta-vyos \
   "
 ```
-* add the following line to the OpenEmbedded config file ```conf/local.conf``` to 
+* add the following line to the OpenEmbedded config file ```conf/local.conf``` to
   to build a 'vyos' distro. This line can be added anywhere in the config file:
 ```
 DISTRO ?= "vyos"
@@ -261,5 +261,5 @@ runqemu
 
 ## Acknowledgements:
 
-Credit goes to the VyOS team for contributing and maintaining such a great router platform! Kudos 
+Credit goes to the VyOS team for contributing and maintaining such a great router platform! Kudos
 to Kim Hagen for having ported VyOS to the ClearFog platform and thereby inspiring this project!
