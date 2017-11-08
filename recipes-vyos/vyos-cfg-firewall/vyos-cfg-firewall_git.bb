@@ -17,8 +17,9 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash kmod"
-RDEPENDS_${PN} = "kmod sed perl procps vyos-cfg vyos-op vyos-bash vyos-cfg vyos-cfg-system \
-	 vyos-util ntp inetutils sudo net-snmp iptables vyos-config-migrate libswitch-perl"
+RDEPENDS_${PN} = "kmod sed perl procps vyos-cfg vyos-op vyos-bash vyos-cfg \
+ 	 vyos-cfg-system vyos-util ntp inetutils sudo net-snmp iptables \
+	 vyos-config-migrate libswitch-perl ipset"
 
 FILES_${PN} += "/opt /run"
 

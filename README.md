@@ -53,7 +53,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyos-igmpproxy| | ported| derived from Ubiquiti ERL 1.4.1 |
 | | vyatta-zone| | ported| |
 | | vyatta-watchdog| | ported| |
-| | ipset| ipset-6.19.1| | |
+| | ipset| ipset-6.23| using upstream ver 6.34 | Didn't find any VyOS patches other than turning it into a Debian package |
 | | iputils| iputils-20101006| | |
 | | ppp| ppp-2.4.4| | |
 | | openssl| openssl-0.9.8zg| | |
