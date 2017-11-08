@@ -34,6 +34,10 @@ RDEPENDS_${PN} = " \
 	iproute2-genl \
 	iproute2-ifstat \
 	iproute2-lnstat \
+	iputils-arping \
+	iputils-ping \
+	iputils-ping6 \
+	traceroute \
 	ethtool \
 	net-tools \
 	bridge-utils \
