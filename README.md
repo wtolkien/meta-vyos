@@ -54,10 +54,10 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-zone| | ported| |
 | | vyatta-watchdog| | ported| |
 | | ipset| ipset-6.23| using upstream ver 6.34 | Didn't find any VyOS patches other than turning it into a Debian package |
-| | iputils| iputils-20101006| | |
-| | ppp| ppp-2.4.4| | |
-| | openssl| openssl-0.9.8zg| | |
-| | netplug| netplug 1.2.9| | |
+| | iputils| iputils-20121221| using upstream ver 20151218 | |
+| | ppp| ppp-2.4.6| using upstream ver 2.4.7 | TODO: check postinst script from VyOS ppp repo (seems not being used any more) |
+| | openssl| openssl-1.0.0| using upstream ver 1.0.2k | |
+| | netplug| netplug 1.2.9| not used any more?| (network cable hotplug daemon) |
 | |
 | WLAN| vyatta-wireless| | ported| |
 | | wpa| wpa-supplicant-1.1| | |
