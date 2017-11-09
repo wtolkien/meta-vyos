@@ -60,16 +60,16 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | netplug| netplug 1.2.9| not used any more?| (network cable hotplug daemon) |
 | |
 | WLAN| vyatta-wireless| | ported| |
-| | wpa| wpa-supplicant-1.1| | |
+| | wpa| wpa-supplicant-1.1| TBD | TODO: WLAN support will be added later |
 | |
 | Routing| vyatta-quagga| quagga-0.99.14| ported| too many patches - won't use upstream|
 | | vyatta-cfg-quagga| | ported| |
 | | vyatta-op-quagga| | ported| |
-| | vyos-frr| frr-?| | may replace quagga in the future|
+| | vyos-frr| frr-?| TBD | may replace quagga in the future|
 | | vyatta-ipv6-rtadv| | ported| |
-| | radvd| radvd-1.15| | |
+| | radvd| radvd-1.15| using upstream ver 2.14 | using VyOS startup script |
 | |
-| WWAN| vyatta-wirelessmodem| | ported| |
+| WWAN| vyatta-wirelessmodem| | ported| TODO: remove and develop updated version |
 | |
 | DNS| ddclient| ddclient-3.8.2| | |
 | |
