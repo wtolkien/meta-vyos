@@ -1,0 +1,7 @@
+# This file controls the activity of snmpd
+
+# snmpd control (yes means start daemon).
+SNMPDRUN=yes
+
+# snmpd options (use syslog, close stdin/out/err).
+SNMPDOPTS='-Lsd -Lf /dev/null -u snmp -g snmp -p /run/snmpd.pid'

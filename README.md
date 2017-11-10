@@ -79,14 +79,14 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-op-vpn| | ported| |
 | | vyos-strongswan| strongswan-5.3.5| using upstream ver 5.5.3 + patches| |
 | | vyatta-openvpn| | ported| |
-| | openvpn| openvpn-2.2.3| using upstream ver 2.3.9| |
+| | openvpn| Debian openvpn-2.3.4| using upstream ver 2.3.9| |
 | | vyatta-ravpn| | ported| |
 | | vyos-opennhrp| opennhrp-0.14.1| ported| using vyos version instead of upstream |
 | | vyos-nhrp| | ported| |
 | |
-| SNMP| net-snmp| net-snmp-5.7.2.1| | |
+| SNMP| net-snmp| Debian net-snmp-5.7.2.1| using upstream ver 5.7.3 | added VyOS config and init scripts |
 | |
-| NTP| ntp| ntp-4.2.4| | |
+| NTP| ntp| Debian ntp-4.2.6p5| | |
 | |
 | QoS| vyatta-cfg-qos| | ported| |
 | |vyatta-op-qos| | ported| |

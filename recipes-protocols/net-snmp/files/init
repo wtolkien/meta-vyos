@@ -1,0 +1,86 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:           snmpd
+# Required-Start:     $network $remote_fs $syslog
+# Required-Stop:      $network $remote_fs $syslog
+# Default-Start:      2 3 4 5
+# Default-Stop:       0 1 6
+# Short-Description:  SNMP agents
+# Description:        NET SNMP (Simple Network Management Protocol) Agents
+### END INIT INFO
+#
+# Author:    Jochen Friedrich <jochen@scram.de>
+#
+set -e
+
+. /lib/lsb/init-functions
+
+export PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+test -x /usr/sbin/snmpd || exit 0
+
+# Defaults
+OLD_MIBS_DIR="/usr/share/mibs/site:/usr/share/snmp/mibs:/usr/share/mibs/iana:/usr/share/mibs/ietf:/usr/share/mibs/netsnmp"
+MIBS_DIR="/usr/share/snmp/mibs:/usr/share/snmp/mibs/iana:/usr/share/snmp/mibs/ietf"
+export MIBDIRS="$MIBS_DIR:$OLD_MIBS_DIR"
+
+SNMP_PID="/run/snmpd.pid"
+SNMPDRUN="yes"
+SNMPDOPTS="-Lsd -Lf /dev/null -p $SNMP_PID"
+
+# Reads config file (will override defaults above)
+[ -r /etc/default/snmpd ] && . /etc/default/snmpd
+
+# Cd to / before starting any daemons.
+cd /
+
+case "$1" in
+  start)
+    log_daemon_msg "Starting SNMP services:"
+    # remove old symlink with previous version
+    if [ -L /var/run/agentx ]; then
+	    rm -f /var/run/agentx
+    fi
+    if [ ! -d /var/run/agentx ]; then
+	    mkdir -p /var/run/agentx
+    fi
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+	start-stop-daemon --quiet --start --oknodo --exec /usr/sbin/snmpd \
+	    -- $SNMPDOPTS
+	log_progress_msg " snmpd"
+    fi
+    ;;
+  stop)
+    log_daemon_msg "Stopping SNMP services:"
+    start-stop-daemon --quiet --stop --oknodo --retry 3 --exec /usr/sbin/snmpd && [ ! -f $SNMP_PID ] || rm $SNMP_PID
+    log_progress_msg " snmpd"
+    ;;
+  restart)
+    log_daemon_msg "Restarting SNMP services:"
+    start-stop-daemon --quiet --stop --oknodo --retry 3 --exec /usr/sbin/snmpd  && [ ! -f $SNMP_PID ] || rm $SNMP_PID
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+	start-stop-daemon --quiet --start --exec /usr/sbin/snmpd -- $SNMPDOPTS
+	log_progress_msg " snmpd"
+    fi
+    ;;
+  reload|force-reload)
+    log_daemon_msg "Reloading SNMP services:"
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+        start-stop-daemon --quiet --stop --signal 1 \
+	    --pidfile "$SNMP_PID" --exec /usr/sbin/snmpd
+	log_progress_msg " snmpd"
+    fi
+    ;;
+  status)
+    status=0
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+    	status_of_proc /usr/sbin/snmpd snmpd || status=$?
+    fi
+    exit $status
+    ;;
+  *)
+    echo "Usage: /etc/init.d/snmpd {start|stop|restart|reload|force-reload|status}"
+    exit 1
+esac
+
+exit 0
