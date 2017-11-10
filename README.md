@@ -79,7 +79,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-op-vpn| | ported| |
 | | vyos-strongswan| strongswan-5.3.5| using upstream ver 5.5.3 + patches| |
 | | vyatta-openvpn| | ported| |
-| | openvpn| openvpn-2.2.3| | |
+| | openvpn| openvpn-2.2.3| using upstream ver 2.3.9| |
 | | vyatta-ravpn| | ported| |
 | | vyos-opennhrp| opennhrp-0.14.1| ported| using vyos version instead of upstream |
 | | vyos-nhrp| | ported| |

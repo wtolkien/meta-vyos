@@ -18,6 +18,8 @@ S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
 
+RDEPENDS_${PN} = " openvpn"
+
 FILES_${PN} += "/opt"
 
 # NOTE: this software seems not capable of being built in a separate build directory
