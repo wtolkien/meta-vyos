@@ -71,7 +71,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | WWAN| vyatta-wirelessmodem| | ported| TODO: remove and develop updated version |
 | |
-| DNS| ddclient| ddclient-3.8.2| | |
+| DNS| ddclient| ddclient-3.8.2| using upstream ver 3.8.3 | added VyOS scripts, needs testing |
 | |
 | Tunnel| vyos-vxlan| | ported| |
 | |

@@ -25,6 +25,7 @@ DEPENDS = "perl"
 RDEPENDS_${PN} = " \
 	sudo \
 	at \
+	ddclient \
 	procps \
 	iproute2 \
 	iproute2-tc \
