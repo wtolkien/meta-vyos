@@ -28,16 +28,7 @@ RDEPENDS_${PN} = " \
 	ddclient \
 	procps \
 	iproute2 \
-	iproute2-tc \
-	iproute2-ss \
-	iproute2-nstat \
-	iproute2-rtacct \
-	iproute2-genl \
-	iproute2-ifstat \
-	iproute2-lnstat \
-	iputils-arping \
-	iputils-ping \
-	iputils-ping6 \
+	iputils \
 	traceroute \
 	ethtool \
 	net-tools \

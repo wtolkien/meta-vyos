@@ -1,3 +1,14 @@
+# include all required individual subpackages
+RDEPENDS_${PN} += " \
+	iproute2-tc \
+	iproute2-ss \
+	iproute2-nstat \
+	iproute2-rtacct \
+	iproute2-genl \
+	iproute2-ifstat \
+	iproute2-lnstat \
+    "
+
 # arpd requires berkeley DB with DB 1.85 compatibility API
 DEPENDS += "db"
 

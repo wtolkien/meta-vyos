@@ -1,3 +1,10 @@
+# include all required individual subpackages
+RDEPENDS_${PN} += " \
+	iputils-arping \
+	iputils-ping \
+	iputils-ping6 \
+    "
+
 # add 'arping' link in /usr/bin to match VyOS/Debian
 do_install_append() {
     install -m 0755 -d ${D}${bindir}
