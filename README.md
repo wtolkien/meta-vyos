@@ -86,7 +86,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | SNMP| net-snmp| Debian net-snmp-5.7.2.1| using upstream ver 5.7.3 | added VyOS config and init scripts |
 | |
-| NTP| ntp| Debian ntp-4.2.6p5| | |
+| NTP| ntp| Debian ntp-4.2.6p5| using upstream ver 4.2.8p10 | added VyOS config and init scripts |
 | |
 | QoS| vyatta-cfg-qos| | ported| |
 | |vyatta-op-qos| | ported| |
