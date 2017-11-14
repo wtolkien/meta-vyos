@@ -93,11 +93,11 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | PPPoE| vyatta-cfg-op-pppoe| | ported| |
 | | vyos-pppoe-server| | ported| |
-| | rp-pppoe| rp-pppoe-1.3.11| | |
+| | rp-pppoe| Debian rp-pppoe-3.8| using upstream ver 3.12 | added missing Debian patches |
 | |
 | DHCP| vyatta-op-dhcp-server| | ported| |
 | | vyatta-cfg-dhcp-server| | ported| |
-| | vyatta-dhcp3| isc-dhcp-4.1.1| | |
+| | vyatta-dhcp3| Debian isc-dhcp-4.3.1| | |
 | | vyatta-cfg-dhcp-relay| | ported| |
 | |
 | Monitoring| vyatta-netflow| | ported| |
