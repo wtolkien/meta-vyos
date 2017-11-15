@@ -101,7 +101,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-cfg-dhcp-relay| | ported| |
 | |
 | Monitoring| vyatta-netflow| | ported| |
-| | pmacct| pmacct-1.6.2| | |
+| | pmacct| Debian pmacct-1.5.0| using upstream ver 1.7.0| TODO: check: VyOS repo uses 1.6.2|
 | | vyatta-eventwatch| | ported| |
 | | eventwatchd| eventwatchd-0.2 | ported| |
 | |

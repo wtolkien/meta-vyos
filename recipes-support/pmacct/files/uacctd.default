@@ -1,0 +1,7 @@
+# Defaults for uacct initscript and systemd service
+
+# Location of the configuration file
+UACCTD_CONF=/etc/pmacct/uacctd.conf
+
+# Additional options that are passed to uacctd
+DAEMON_OPTS=""
