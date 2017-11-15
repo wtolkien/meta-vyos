@@ -97,7 +97,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | DHCP| vyatta-op-dhcp-server| | ported| |
 | | vyatta-cfg-dhcp-server| | ported| |
-| | vyatta-dhcp3| Debian isc-dhcp-4.3.1| | |
+| | vyatta-dhcp3| Debian isc-dhcp-4.3.1| using upstream ver 4.3.5 | added Debian patches and scripts |
 | | vyatta-cfg-dhcp-relay| | ported| |
 | |
 | Monitoring| vyatta-netflow| | ported| |

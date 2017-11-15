@@ -1,0 +1,11 @@
+--- a/client/dhclient.c	2017-11-14 14:58:55.490796355 -0800
++++ b/client/dhclient.c	2017-11-14 14:59:15.218863895 -0800
+@@ -1395,7 +1395,7 @@ void bind_lease (client)
+ 	/* If the BOUND/RENEW code detects another machine using the
+ 	   offered address, it exits nonzero.  We need to send a
+ 	   DHCPDECLINE and toss the lease. */
+-	if (script_go(client)) {
++	if (script_go(client) == 2) {
+ 		make_decline(client, client->new);
+ 		send_decline(client);
+ 		destroy_client_lease(client->new);

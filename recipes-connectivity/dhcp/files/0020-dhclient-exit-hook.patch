@@ -1,0 +1,11 @@
+--- a/client/dhclient.c	2017-11-14 15:01:02.627231615 -0800
++++ b/client/dhclient.c	2017-11-14 15:01:37.363350536 -0800
+@@ -2413,6 +2413,8 @@ void state_panic (cpp)
+ 		if (!quiet)
+ 			log_info ("Unable to obtain a lease on first try.%s",
+ 				  "  Exiting.");
++		script_init (client, "FAIL", (struct string_list *)0);
++		script_go (client);
+ 		exit (2);
+ 	}
+ 

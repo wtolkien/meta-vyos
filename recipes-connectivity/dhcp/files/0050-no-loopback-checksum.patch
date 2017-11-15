@@ -1,0 +1,14 @@
+--- a/common/packet.c	2017-11-14 15:40:00.915236896 -0800
++++ b/common/packet.c	2017-11-14 15:44:25.972144336 -0800
+@@ -352,6 +352,11 @@ decode_udp_ip_header(struct interface_in
+   data = upp + sizeof(udp);
+   len = ulen - sizeof(udp);
+
++  /* loopback interface isn't checksumed in linux */
++  if (interface->hw_address.hbuf [0] == 0) {
++  	csum_ready = 0;
++  }
++
+   /* UDP check sum may be optional (udp.uh_sum == 0) or not ready if checksum
+    * offloading is in use */
+   udp_packets_seen++;

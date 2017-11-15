@@ -1,0 +1,36 @@
+--- a/client/dhclient.c	2017-11-14 15:01:37.363350536 -0800
++++ b/client/dhclient.c	2017-11-14 15:10:06.913095013 -0800
+@@ -2251,9 +2251,12 @@ void send_discover (cpp)
+ 			client->interval += random() % (2 * client->interval);
+
+ 		/* Don't backoff past cutoff. */
+-		if (client->interval > client->config->backoff_cutoff)
+-			client->interval = (client->config->backoff_cutoff / 2)
+-				 + (random() % client->config->backoff_cutoff);
++		if (client->interval > client->config->backoff_cutoff) {
++			client->interval = (client->config->backoff_cutoff / 2);
++			if (client->config->backoff_cutoff)
++				client->interval += (random() %
++					client->config->backoff_cutoff);
++		}
+ 	} else if (!client->interval)
+ 		client->interval = client->config->initial_interval;
+
+@@ -2517,11 +2520,13 @@ void send_request (cpp)
+
+ 	/* Don't backoff past cutoff. */
+ 	if (client -> interval >
+-	    client -> config -> backoff_cutoff)
++	    client -> config -> backoff_cutoff) {
+ 		client -> interval =
+-			((client -> config -> backoff_cutoff / 2)
+-			 + ((random () >> 2) %
+-					client -> config -> backoff_cutoff));
++			(client -> config -> backoff_cutoff / 2);
++		if (client -> config -> backoff_cutoff)
++			client -> interval += ((random () >> 2) %
++				client -> config -> backoff_cutoff);
++	}
+
+ 	/* If the backoff would take us to the expiry time, just set the
+ 	   timeout to the expiry time. */
