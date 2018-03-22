@@ -19,6 +19,7 @@ S = "${WORKDIR}/git"
 DEPENDS = "vyos-bash"
 
 FILES_${PN} += "/opt"
+RDEPENDS_${PN} = "vyos-bash perl"
 
 # NOTE: this software seems not capable of being built in a separate build directory
 # from the source, therefore using 'autotools-brokensep' instead of 'autotools'

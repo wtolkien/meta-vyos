@@ -17,7 +17,7 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "readline net-snmp"
-RDEPENDS_${PN} += "dpkg net-snmp"
+RDEPENDS_${PN} += "dpkg net-snmp vyos-bash"
 
 FILES_${PN} += "/usr/lib /usr/share /var/run"
 

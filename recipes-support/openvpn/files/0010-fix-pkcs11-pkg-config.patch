@@ -1,0 +1,18 @@
+--- a/configure.ac	2018-03-22 14:29:59.838304462 -0700
++++ b/configure.ac	2018-03-22 14:30:39.310304034 -0700
+@@ -847,7 +847,14 @@ PKG_CHECK_MODULES(
+ 	[PKCS11_HELPER],
+ 	[libpkcs11-helper-1 >= 1.11],
+ 	[have_pkcs11_helper="yes"],
+-	[]
++	[AC_CHECK_LIB(
++		[pkcs11-helper],
++		[pkcs11h_initialize],
++		[
++			have_pkcs11_helper="yes"
++			PKCS11_HELPER_LIBS="-lpkcs11-helper"
++		]
++	)]
+ )
+
+ if test "${enable_crypto}" = "yes" -a "${with_crypto_library}" = "openssl"; then

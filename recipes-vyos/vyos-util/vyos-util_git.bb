@@ -18,6 +18,10 @@ S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
 
+# since the original archive and library is named vyatta-util, QA checking will
+# complain because we named this package vyos-util. Turn off QA check.
+INSANE_SKIP_${PN} += "file-rdeps"
+
 FILES_${PN} += "/opt"
 
 # NOTE: this software seems not capable of being built in a separate build directory

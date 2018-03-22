@@ -21,6 +21,7 @@ DEPENDS = "perl"
 RDEPENDS_${PN} = " \
 	perl \
 	vyos-bash \
+	coreutils \
 	"
 
 FILES_${PN} += "/opt"

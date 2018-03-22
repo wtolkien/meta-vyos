@@ -1,10 +1,9 @@
---- a/common/dispatch.c	2017-11-14 15:15:35.042218384 -0800
-+++ b/common/dispatch.c	2017-11-14 15:15:57.142294045 -0800
-@@ -339,7 +339,20 @@ void add_timeout (when, where, what, ref
+--- a/common/dispatch.c	2018-03-21 10:40:33.655391717 -0700
++++ b/common/dispatch.c	2018-03-21 10:47:07.299387445 -0700
+@@ -343,6 +343,19 @@ void add_timeout (when, where, what, ref
  	q->next  = timeouts;
  	timeouts = q;
 
--	isc_interval_set(&interval, sec & DHCP_SEC_MAX, usec * 1000);
 +	/* isc_time_nowplusinterval() is not safe with 64-bit time_t and will
 +	 * return an error for sufficiently large intervals.  We have to limit
 +	 * the interval to INT_MAX or less to ensure the interval doesn't
@@ -18,7 +17,6 @@
 +	if (sec > TIME_MAX)
 +		sec = TIME_MAX - 9;
 +
-+	isc_interval_set(&interval, sec, usec * 1000);
+ 	isc_interval_set(&interval, sec, usec * 1000);
  	status = isc_time_nowplusinterval(&expires, &interval);
  	if (status != ISC_R_SUCCESS) {
- 		/*

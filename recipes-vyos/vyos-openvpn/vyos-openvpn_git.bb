@@ -18,7 +18,7 @@ S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
 
-RDEPENDS_${PN} = " openvpn"
+RDEPENDS_${PN} = " openvpn perl"
 
 FILES_${PN} += "/opt"
 

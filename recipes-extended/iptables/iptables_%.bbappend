@@ -1,3 +1,6 @@
+RDEPENDS_${PN} += " vyos-bash"
+
+
 # enable libnfnetlink to pull in OSF (Operating system
 # fingerprinting) support
 PACKAGECONFIG += "libnfnetlink"

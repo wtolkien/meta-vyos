@@ -1,16 +1,15 @@
---- a/debian/xl2tpd.init	2017-10-24 13:48:27.320696979 -0700
-+++ b/debian/xl2tpd.init	2017-11-03 11:15:00.810720416 -0700
-@@ -19,6 +19,9 @@ NAME=xl2tpd
- DESC=xl2tpd
+--- a/debian/xl2tpd.init	2018-03-20 16:18:28.916109469 -0700
++++ b/debian/xl2tpd.init	2018-03-21 10:17:38.695406642 -0700
+@@ -20,6 +20,8 @@ DESC=xl2tpd
 
  test -x $DAEMON || exit 0
+
 +mkdir -p /var/run/xl2tpd
 +
-+. /lib/lsb/init-functions
+ . /lib/lsb/init-functions
 
  # Include xl2tpd defaults if available
- if [ -f /etc/default/xl2tpd ] ; then
-@@ -33,7 +36,7 @@ case "$1" in
+@@ -35,7 +37,7 @@ case "$1" in
    start)
  	echo -n "Starting $DESC: "
  	test -d ${XL2TPD_RUN_DIR:-/var/run/xl2tpd} || mkdir -p ${XL2TPD_RUN_DIR:-/var/run/xl2tpd}
@@ -19,17 +18,12 @@
  		--exec $DAEMON -- $DAEMON_OPTS
  	echo "$NAME."
  	;;
-@@ -54,7 +57,7 @@ case "$1" in
-   restart)
- 	test -d ${XL2TPD_RUN_DIR:-/var/run/xl2tpd} || mkdir -p ${XL2TPD_RUN_DIR:-/var/run/xl2tpd}
- 	echo -n "Restarting $DESC: "
--	start-stop-daemon --stop --quiet --pidfile \
-+	start-stop-daemon --oknodo --stop --quiet --pidfile \
+@@ -59,7 +61,7 @@ case "$1" in
+ 	start-stop-daemon --oknodo --stop --quiet --pidfile \
  		$PIDFILE --exec $DAEMON
  	sleep 1
- 	start-stop-daemon --start --quiet --pidfile \
-@@ -69,3 +72,4 @@ case "$1" in
- esac
-
- exit 0
-+
+-	start-stop-daemon --start --quiet --pidfile \
++	start-stop-daemon --start --oknodo --quiet --pidfile \
+ 		$PIDFILE --exec $DAEMON -- $DAEMON_OPTS
+ 	echo "$NAME."
+ 	;;

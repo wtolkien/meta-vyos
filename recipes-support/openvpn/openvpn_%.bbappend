@@ -1,3 +1,9 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+
+SRC_URI += " \
+    file://0010-fix-pkcs11-pkg-config.patch \
+    "
+
 # additional options to be passed to the configure script:
 EXTRA_OECONF = "\
     --enable-pkcs11=yes \
@@ -7,4 +13,4 @@ EXTRA_OECONF = "\
 
 DEPENDS += " pkcs11-helper"
 
-RDEPNDS_${PN} += " pkcs11-helper"
+RDEPENDS_${PN} += " pkcs11-helper"

@@ -1,11 +1,11 @@
---- a/client/dhclient.c	2017-11-14 15:01:02.627231615 -0800
-+++ b/client/dhclient.c	2017-11-14 15:01:37.363350536 -0800
-@@ -2413,6 +2413,8 @@ void state_panic (cpp)
- 		if (!quiet)
- 			log_info ("Unable to obtain a lease on first try.%s",
- 				  "  Exiting.");
-+		script_init (client, "FAIL", (struct string_list *)0);
-+		script_go (client);
- 		exit (2);
- 	}
- 
+--- a/includes/site.h	2018-03-21 10:32:21.019397065 -0700
++++ b/includes/site.h	2018-03-21 10:37:30.831393702 -0700
+@@ -336,7 +336,7 @@
+ /* Enable the invocation of the client script with a FAIL state code
+  * by dhclient when running in one-try mode (-T) and the attempt to
+  * obtain the desired lease(s) fails. Applies to IPv4 mode only. */
+-/* #define CALL_SCRIPT_ON_ONETRY_FAIL */
++#define CALL_SCRIPT_ON_ONETRY_FAIL
+
+ /* Include definitions for various options.  In general these
+    should be left as is, but if you have already defined one

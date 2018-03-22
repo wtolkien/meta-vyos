@@ -17,7 +17,7 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
-RDEPENDS_${PN} = "conntrack-tools libnetfilter-conntrack libnfnetlink"
+RDEPENDS_${PN} = "conntrack-tools libnetfilter-conntrack libnfnetlink perl"
 
 FILES_${PN} += "/opt"
 

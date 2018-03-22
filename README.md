@@ -56,7 +56,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | ipset| ipset-6.23| using upstream ver 6.34 | Didn't find any VyOS patches other than turning it into a Debian package |
 | | iputils| iputils-20121221| using upstream ver 20151218 | |
 | | ppp| ppp-2.4.6| using upstream ver 2.4.7 | TODO: check postinst script from VyOS ppp repo (seems not being used any more) |
-| | openssl| openssl-1.0.0| using upstream ver 1.0.2k | |
+| | openssl| openssl-1.0.0| using upstream ver 1.0.2n | |
 | | netplug| netplug 1.2.9| not used any more?| (network cable hotplug daemon) |
 | |
 | WLAN| vyatta-wireless| | ported| |
@@ -79,7 +79,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-op-vpn| | ported| |
 | | vyos-strongswan| strongswan-5.3.5| using upstream ver 5.5.3 + patches| |
 | | vyatta-openvpn| | ported| |
-| | openvpn| Debian openvpn-2.3.4| using upstream ver 2.3.9| |
+| | openvpn| Debian openvpn-2.3.4| using upstream ver 2.4.3| |
 | | vyatta-ravpn| | ported| |
 | | vyos-opennhrp| opennhrp-0.14.1| ported| using vyos version instead of upstream |
 | | vyos-nhrp| | ported| |
@@ -194,37 +194,28 @@ There is a lot more work to do and any help from interested parties is very welc
 
 # Build Instructions:
 
-Development is currently done against OpenEmbedded (release 'pyro'), however other
-OpenEmbedded-based distributions will likely work as well. If you are not familiar
-with OpenEmbedded (or the 'Yocto' derivative), extensive documentation can be found
-here:
+Development is currently done against OpenEmbedded/Yocto, release 'rocko'
+
+If you are not familiar with OpenEmbedded (or the 'Yocto' derivative), extensive documentation can be found here:
 
 https://www.yoctoproject.org/documentation
 
-* make sure you install the required packages as described here:
+* make sure you meet the required prerequisites as described here:
 
-https://www.openembedded.org/wiki/Getting_started#Systems_based_upon_OE-Core
+https://www.yoctoproject.org/docs/current/ref-manual/ref-manual.html#intro-requirements
 
-* get the OpenEmbedded core packages, the 'meta-openembedded' layer and the 'bitbake'
-sources:
+* get the Yocto core packages, and the 'meta-openembedded' layer:
 ```
-git clone git://git.openembedded.org/openembedded-core oe-core
-cd oe-core
-git clone git://git.openembedded.org/meta-openembedded
-git clone git://git.openembedded.org/bitbake bitbake
-git checkout pyro
-cd meta-openembedded
-git checkout pyro
-cd ..
-cd bitbake
-git checkout 1.34
-cd ..
+git clone -b rocko git://git.yoctoproject.org/poky.git yocto-rocko
+cd yocto-rocko
+git clone -b rocko git://git.openembedded.org/meta-openembedded
+
 ````
 * get this project's source:
 ```
 git clone https://github.com/wtolkien/meta-vyos.git
 ```
-* from the ```oe-core``` directory, initialize the build-environment:
+* from the ```yocto-rocko``` directory, initialize the build-environment:
 ```
 source oe-init-build-env
 ```
@@ -234,13 +225,16 @@ source oe-init-build-env
   your path
 ```
 BBLAYERS ?= " \
-  [your existing path]/oe-core/meta \
+  [your existing path]/yocto-rocko/meta \
+  [your existing path]/yocto-rocko/meta-poky \
+  [your existing path]/yocto-rocko/meta-yocto-bsp \
+  \
+  ${TOPDIR}/../meta-vyos \
   ${TOPDIR}/../meta-openembedded/meta-oe \
   ${TOPDIR}/../meta-openembedded/meta-networking \
   ${TOPDIR}/../meta-openembedded/meta-python \
   ${TOPDIR}/../meta-openembedded/meta-perl \
   ${TOPDIR}/../meta-openembedded/meta-filesystems \
-  ${TOPDIR}/../meta-vyos \
   "
 ```
 * add the following line to the OpenEmbedded config file ```conf/local.conf``` to
@@ -248,13 +242,13 @@ BBLAYERS ?= " \
 ```
 DISTRO ?= "vyos"
 ```
-* you are now ready to start the build process. From the ```oe-core/build``` directory,
+* you are now ready to start the build process. From the ```yocto-rocko/build``` directory,
   enter:
 ```
 bitbake vyos-image
 ```
-* When done (likely after 45 minutes or more), an image will be in the
-  ```oe-core/build/tmp-glibc/deploy/image/qemux86``` directory. It can be started by entering
+* When done (likely after an hour or more), an image will be in the
+  ```yocto-rocko/build/tmp-glibc/deploy/image/qemux86``` directory. It can be started by entering
 ```
 runqemu
 ```
