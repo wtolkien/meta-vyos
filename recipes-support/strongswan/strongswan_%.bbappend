@@ -51,8 +51,10 @@ EXTRA_OECONF += " \
 # (most notably the Phion one) have problems connecting when pluto
 # sends these Cisco options.
 
+# aesni is for x86 only...
+PACKAGECONFIG_append = "${@bb.utils.contains('HOST_ARCH', 'i586', ' aesni', '', d)}"
 
-PACKAGECONFIG_append = " aesni swanctl connmark pkcs11 scep"
+PACKAGECONFIG_append = " swanctl connmark pkcs11 scep"
 PACKAGECONFIG_remove = "sqlite3"
 
 PACKAGECONFIG[mediation] = "--enable-mediation --enable-medcli --enable-medsrv, \

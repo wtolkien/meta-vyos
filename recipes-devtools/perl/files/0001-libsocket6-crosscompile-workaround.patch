@@ -1,0 +1,63 @@
+--- a/configure	2018-03-26 15:35:22.154510568 -0700
++++ b/configure	2018-03-26 15:53:06.882499011 -0700
+@@ -569,7 +569,7 @@ ac_default_prefix=/usr/local
+ ac_clean_files=
+ ac_config_libobj_dir=.
+ LIBOBJS=
+-cross_compiling=no
++cross_compiling=maybe
+ subdirs=
+ MFLAGS=
+ MAKEFLAGS=
+@@ -4242,50 +4242,11 @@ if test $ac_cv_lib_inet6_getaddrinfo = y
+ 	INET6LIBS="-L$ipv6_cv_dir/lib -linet6"
+ fi
+
++ipv6_cv_can_inet_ntop=yes
+
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for working inet_ntop" >&5
+-$as_echo_n "checking for working inet_ntop... " >&6; }
+-if ${ipv6_cv_can_inet_ntop+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "$cross_compiling" = yes; then :
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run test program while cross compiling
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-#include <string.h>
+-#include <stdlib.h>
+-#include <sys/types.h>
+-#include <sys/socket.h>
+-#include <netinet/in.h>
+-#include <arpa/inet.h>
+-
+-int
+-main() {
+-  static struct in6_addr addr;
+-  static char str[INET6_ADDRSTRLEN];
+-
+-  addr.s6_addr[15] = 0x21;
+-  inet_ntop(AF_INET6, &addr, str, sizeof(str));
+-  if (strcmp(str, "::21") && strcmp(str, "::0.0.0.33"))
+-    exit(1);
+-}
+-
+-_ACEOF
+-if ac_fn_c_try_run "$LINENO"; then :
+-  ipv6_cv_can_inet_ntop=yes
+-else
+-  ipv6_cv_can_inet_ntop=no
+-fi
+ rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+   conftest.$ac_objext conftest.beam conftest.$ac_ext
+-fi
+
+-fi
+ if test $ipv6_cv_can_inet_ntop = yes; then
+
+ $as_echo "#define CAN_INET_NTOP 1" >>confdefs.h

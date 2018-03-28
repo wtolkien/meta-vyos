@@ -1,0 +1,11 @@
+--- a/Lite/Util/configure.cc	2018-03-26 15:22:56.914518657 -0700
++++ b/Lite/Util/configure.cc	2018-03-26 15:22:50.450518727 -0700
+@@ -569,7 +569,7 @@ ac_default_prefix=/usr/local
+ ac_clean_files=
+ ac_config_libobj_dir=.
+ LIBOBJS=
+-cross_compiling=no
++cross_compiling=maybe
+ subdirs=
+ MFLAGS=
+ MAKEFLAGS=

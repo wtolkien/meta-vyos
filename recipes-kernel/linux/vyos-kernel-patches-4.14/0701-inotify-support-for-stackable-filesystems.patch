@@ -1,0 +1,259 @@
+--- a/fs/notify/inotify/Kconfig	2018-03-11 08:23:23.000000000 -0700
++++ b/fs/notify/inotify/Kconfig	2018-03-18 08:49:58.000000000 -0700
+@@ -15,3 +15,12 @@ config INOTIFY_USER
+ 	  For more information, see <file:Documentation/filesystems/inotify.txt>
+ 
+ 	  If unsure, say Y.
++	  
++config INOTIFY_STACKFS
++	bool "Inotify support for stackable filesystem"
++	select INOTIFY_USER
++	default y
++	---help---
++	  Say Y here to enable inotify support for stackable filesystem.
++
++	  If unsure, say N.
+--- a/fs/notify/inotify/inotify_user.c	2018-03-11 08:23:23.000000000 -0700
++++ b/fs/notify/inotify/inotify_user.c	2018-03-18 08:49:58.000000000 -0700
+@@ -24,6 +24,7 @@
+ 
+ #include <linux/file.h>
+ #include <linux/fs.h> /* struct inode */
++#include <linux/mount.h>
+ #include <linux/fsnotify_backend.h>
+ #include <linux/idr.h>
+ #include <linux/init.h> /* fs_initcall */
+@@ -84,6 +85,94 @@ struct ctl_table inotify_table[] = {
+ };
+ #endif /* CONFIG_SYSCTL */
+ 
++#ifdef CONFIG_INOTIFY_STACKFS
++
++static DEFINE_RWLOCK(inotify_fs_lock);
++static LIST_HEAD(inotify_fs_list);
++
++static inline struct file_system_type* peek_fs_type(struct path *path)
++{
++	return path->mnt->mnt_sb->s_type;
++}
++
++static struct inotify_stackfs* inotify_get_stackfs(struct path *path)
++{
++	struct file_system_type *fs;
++	struct inotify_stackfs *fse, *ret = NULL;
++
++	fs = peek_fs_type(path);
++
++	read_lock(&inotify_fs_lock);
++	list_for_each_entry(fse, &inotify_fs_list, list) {
++		if (fse->fs_type == fs) {
++			ret = fse;
++			break;
++		}
++	}
++	read_unlock(&inotify_fs_lock);
++
++	return ret;
++}
++
++static inline void inotify_put_stackfs(struct inotify_stackfs *fs)
++{
++}
++
++int inotify_register_stackfs(struct inotify_stackfs *fs)
++{
++	int ret = 0;
++	struct inotify_stackfs *fse;
++
++	BUG_ON(IS_ERR_OR_NULL(fs->fs_type));
++	BUG_ON(IS_ERR_OR_NULL(fs->func));
++
++	INIT_LIST_HEAD(&fs->list);
++
++	write_lock(&inotify_fs_lock);
++	list_for_each_entry(fse, &inotify_fs_list, list) {
++		if (fse->fs_type == fs->fs_type) {
++			write_unlock(&inotify_fs_lock);
++			ret = -EBUSY;
++			goto out;
++		}
++	}
++	list_add_tail(&fs->list, &inotify_fs_list);
++	write_unlock(&inotify_fs_lock);
++
++out:
++	return ret;
++}
++EXPORT_SYMBOL_GPL(inotify_register_stackfs);
++
++void inotify_unregister_stackfs(struct inotify_stackfs *fs)
++{
++	struct inotify_stackfs *fse, *n;
++
++	write_lock(&inotify_fs_lock);
++	list_for_each_entry_safe(fse, n, &inotify_fs_list, list) {
++		if (fse == fs) {
++			list_del(&fse->list);
++			break;
++		}
++	}
++	write_unlock(&inotify_fs_lock);
++}
++EXPORT_SYMBOL_GPL(inotify_unregister_stackfs);
++
++#else
++
++static inline struct inotify_stackfs* inotify_get_stackfs(struct path *path)
++{
++	return NULL;
++}
++
++static inline void inotify_put_stackfs(struct inotify_stackfs *fs)
++{
++}
++
++#endif /* CONFIG_INOTIFY_STACKFS */
++
++
+ static inline __u32 inotify_arg_to_mask(u32 arg)
+ {
+ 	__u32 mask;
+@@ -327,7 +416,7 @@ static const struct file_operations inot
+ /*
+  * find_inode - resolve a user-given path to a specific inode
+  */
+-static int inotify_find_inode(const char __user *dirname, struct path *path, unsigned flags)
++static inline int __inotify_find_inode(const char __user *dirname, struct path *path, unsigned flags)
+ {
+ 	int error;
+ 
+@@ -341,6 +430,27 @@ static int inotify_find_inode(const char
+ 	return error;
+ }
+ 
++static int inotify_find_inode(const char __user *dirname, struct path *path, unsigned flags)
++{
++	int ret;
++	struct path tpath;
++	struct inotify_stackfs *fse;
++
++	ret = __inotify_find_inode(dirname, &tpath, flags);
++	if (ret)
++		return ret;
++	fse = inotify_get_stackfs(&tpath);
++	if (fse == NULL) {
++		*path = tpath;
++		return 0;
++	}
++	ret = fse->func(path, &tpath);
++	inotify_put_stackfs(fse);
++	path_put(&tpath);
++
++	return ret;
++}
++
+ static int inotify_add_to_idr(struct idr *idr, spinlock_t *idr_lock,
+ 			      struct inotify_inode_mark *i_mark)
+ {
+--- a/fs/overlayfs/super.c	2018-03-11 08:23:23.000000000 -0700
++++ b/fs/overlayfs/super.c	2018-03-18 08:49:58.000000000 -0700
+@@ -17,6 +17,7 @@
+ #include <linux/statfs.h>
+ #include <linux/seq_file.h>
+ #include <linux/posix_acl_xattr.h>
++#include <linux/inotify.h>
+ #include "overlayfs.h"
+ #include "ovl_entry.h"
+ 
+@@ -1208,6 +1209,18 @@ static void ovl_inode_init_once(void *fo
+ 	inode_init_once(&oi->vfs_inode);
+ }
+ 
++static int ovl_inotify_path(struct path *dst, struct path *src)
++{
++	ovl_path_real(src->dentry, dst);
++	path_get(dst);
++	return 0;
++}
++
++static struct inotify_stackfs ovl_inotify = {
++	.fs_type	= &ovl_fs_type,
++	.func		= ovl_inotify_path,
++};
++
+ static int __init ovl_init(void)
+ {
+ 	int err;
+@@ -1222,13 +1235,21 @@ static int __init ovl_init(void)
+ 
+ 	err = register_filesystem(&ovl_fs_type);
+ 	if (err)
+-		kmem_cache_destroy(ovl_inode_cachep);
++		goto err;
++	err = inotify_register_stackfs(&ovl_inotify);
++	if (err)
++		goto err;
++	return err;
+ 
++err:
++	kmem_cache_destroy(ovl_inode_cachep);
++	unregister_filesystem(&ovl_fs_type);
+ 	return err;
+ }
+ 
+ static void __exit ovl_exit(void)
+ {
++	inotify_unregister_stackfs(&ovl_inotify);
+ 	unregister_filesystem(&ovl_fs_type);
+ 
+ 	/*
+@@ -1237,7 +1258,6 @@ static void __exit ovl_exit(void)
+ 	 */
+ 	rcu_barrier();
+ 	kmem_cache_destroy(ovl_inode_cachep);
+-
+ }
+ 
+ module_init(ovl_init);
+--- a/include/linux/inotify.h	2018-03-11 08:23:23.000000000 -0700
++++ b/include/linux/inotify.h	2018-03-18 08:49:58.000000000 -0700
+@@ -9,6 +9,8 @@
+ 
+ #include <linux/sysctl.h>
+ #include <uapi/linux/inotify.h>
++#include <linux/list.h>
++#include <linux/fs.h>
+ 
+ extern struct ctl_table inotify_table[]; /* for sysctl */
+ 
+@@ -20,4 +22,30 @@ extern struct ctl_table inotify_table[];
+ 			  IN_DONT_FOLLOW | IN_EXCL_UNLINK | IN_MASK_ADD | \
+ 			  IN_ISDIR | IN_ONESHOT)
+ 
++typedef int (*inotify_path_proc)(struct path *dst, struct path *src);
++
++struct inotify_stackfs {
++	struct list_head	list;		/* entry in inotify_fs_list */
++	struct file_system_type	*fs_type;	/* registed file_system_type */	
++	inotify_path_proc	func;		/* registed callback function */
++};
++
++#ifdef CONFIG_INOTIFY_STACKFS
++
++extern int inotify_register_stackfs(struct inotify_stackfs *fs);
++extern void inotify_unregister_stackfs(struct inotify_stackfs *fs);
++
++#else
++
++static inline int inotify_register_stackfs(struct inotify_stackfs *fs)
++{
++	return 0;
++}
++
++static inline void inotify_unregister_stackfs(struct inotify_stackfs *fs)
++{
++}
++
++#endif	/* CONFIG_INOTIFY_STACKFS */
++
+ #endif	/* _LINUX_INOTIFY_H */

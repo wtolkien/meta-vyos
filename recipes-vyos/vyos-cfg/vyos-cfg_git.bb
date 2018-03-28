@@ -11,6 +11,7 @@ SRC_URI = "git://github.com/vyos/vyatta-cfg.git;branch=current;protocol=https \
 	   file://003-allow-perl-cross-compile.patch \
 	   file://004-unionfs-fuse-path.patch \
 	   file://git/default-config-qemux86 \
+	   file://git/default-config \
 	  "
 
 # snapshot from Jul 10, 2017:
@@ -100,7 +101,12 @@ do_install_append () {
 
 	# install default config
 	install -d ${D}/opt/vyatta/etc/config
-	install ${S}/default-config-${MACHINE} ${D}/opt/vyatta/etc/config/config.boot
+	if [ -f ${S}/default-config-${MACHINE} ]; then
+		install ${S}/default-config-${MACHINE} ${D}/opt/vyatta/etc/config/config.boot
+	else
+		install ${S}/default-config ${D}/opt/vyatta/etc/config/config.boot
+	fi
+
 }
 
 

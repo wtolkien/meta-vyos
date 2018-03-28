@@ -1,21 +1,17 @@
 
-LINUX_VERSION = "4.4.47"
-
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-${LINUX_VERSION}:"
-FILESEXTRAPATHS_prepend := "${THISDIR}/vyos-kernel-patches-4.4:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/vyos-kernel-patches-4.14:"
 
-#SRCREV_machine_qemux86 = "9aa404b2a969c4cb5d4cbff92209e1c0943bec37"
-SRCREV_machine_qemux86 = "4686ea264f1dfec6bc5db9ef4bb9ed5babbb78cd"
 SRC_URI += " \
-    file://linux-4-4-47-vyos-additions.patch \
+    file://0700-allow-pkts-on-disabled-interfaces.patch \
+    file://0701-inotify-support-for-stackable-filesystems.patch \
     file://defconfig \
     "
-#    file://fragment.cfg
-#    file://kernel-meta/bsp/common-pc/common-pc-qemuvyos.scc
+
+
+DEPENDS += "${@bb.utils.contains('ARCH', 'x86', 'elfutils-native', '', d)}"
 
 LINUX_VERSION_EXTENSION = "meta-vyos"
-
-#KMACHINE = "qemuvyos"
 
 # remove default stuff which we don't need...
 KERNEL_FEATURES_remove = " \

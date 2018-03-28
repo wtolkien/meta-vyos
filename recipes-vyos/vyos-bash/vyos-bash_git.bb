@@ -40,6 +40,7 @@ S = "${WORKDIR}/git"
 
 # additional options to be passed to the configure script:
 EXTRA_OECONF = "\
+	--enable-job-control \
 	--with-curses \
 	--disable-net-redirections \
 	--enable-largefile \
@@ -59,5 +60,3 @@ pkg_postinst_${PN} () {
 	grep -q "bin/vbash" $D${sysconfdir}/shells || echo /bin/vbash >> $D${sysconfdir}/shells
 	grep -q "bin/sh" $D${sysconfdir}/shells || echo /bin/sh >> $D${sysconfdir}/shells
 }
-
-
