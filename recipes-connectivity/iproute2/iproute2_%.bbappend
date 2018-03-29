@@ -9,11 +9,11 @@ RDEPENDS_${PN} += " \
 	iproute2-lnstat \
     "
 
-# arpd requires berkeley DB with DB 1.85 compatibility API
-DEPENDS += "db"
-
-# also compile 'netem' subdirectory
-EXTRA_OEMAKE += "SUBDIRS='lib tc ip bridge misc netem genl'"
+# also compile 'netem' subdirectory, requires HOSTCC
+EXTRA_OEMAKE += " \
+	SUBDIRS='lib tc ip bridge misc netem genl' \
+	HOSTCC="${BUILD_CC}" \
+	"
 
 FILES_${PN} += "/usr/lib/tc"
 
