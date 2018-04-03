@@ -4,8 +4,17 @@ service {
     }
 }
 system {
-    host-name vyos-yocto-generic
+    host-name vyos-oxygen-ap
 }
+interfaces {
+    ethernet lan0 {
+        address 169.254.0.1/24
+        speed auto
+        smp-affinity auto
+        duplex auto
+    }
+}
+
 
 /* Warning: Do not remove the following line. */
 /* === vyatta-config-version: "vrrp@1:qos@1:conntrack@1:cron@1:wanloadbalance@3:system@7:webproxy@1:watchdog@1:nat@4:dhcp-relay@1:dhcp-server@4:ipsec@4:config-management@1:firewall@5:conntrack-sync@1:zone-policy@1:webgui@1:quagga@2" === */

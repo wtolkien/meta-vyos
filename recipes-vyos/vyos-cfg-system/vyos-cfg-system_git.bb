@@ -79,6 +79,8 @@ EXTRA_OECONF = "\
 	--sysconfdir=/opt/vyatta/etc \
 	"
 
+ISSUEDIR = "${THISDIR}/files/issue"
+
 do_install_append () {
 	# TODO: this needs to get cleaned up upstream: this package provides templates
 	# for vxlan which conflict with files from the vyos-vxlan package. For now we
@@ -116,6 +118,14 @@ do_install_append () {
 
 	install vyatta-postconfig-bootup.script ${D}/opt/vyatta/etc/config/scripts
 	install bashrc.template ${D}/opt/vyatta/etc
+
+	if [ -f "${ISSUEDIR}/prefix_${MACHINE}" ]; then
+		cd ${D}/opt/vyatta/etc
+		for f in issue issue.net; do
+			cat ${ISSUEDIR}/prefix_${MACHINE} ${f} > ${f}.tmp
+			mv ${f}.tmp ${f}
+		done
+	fi
 }
 
 # perform some post-installation actions, but only on target device, not at
