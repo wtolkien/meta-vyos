@@ -15,8 +15,9 @@ IMAGE_ROOTFS_SIZE ?= "8192"
 
 IMAGE_FEATURES_append = " ssh-server-openssh"
 
-IMAGE_INSTALL_append = " packagegroup-vyos"
-
+IMAGE_INSTALL_append = " \
+	packagegroup-vyos \
+	"
 
 # create home directory for vyos user
 python do_rootfs_append () {

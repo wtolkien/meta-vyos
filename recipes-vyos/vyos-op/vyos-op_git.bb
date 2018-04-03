@@ -18,7 +18,13 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-cfg vyos-cfg-system"
-RDEPENDS_${PN} = "vyos-bash perl"
+RDEPENDS_${PN} = " \
+	vyos-bash \
+	perl \
+	pciutils \
+	usbutils \
+	util-linux \
+	"
 
 FILES_${PN} += "/opt"
 
