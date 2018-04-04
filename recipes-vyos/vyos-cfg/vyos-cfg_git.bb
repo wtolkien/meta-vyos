@@ -10,8 +10,6 @@ SRC_URI = "git://github.com/vyos/vyatta-cfg.git;branch=current;protocol=https \
 	   file://002-remove-debian-apt-dependency.patch \
 	   file://003-allow-perl-cross-compile.patch \
 	   file://004-unionfs-fuse-path.patch \
-	   file://git/default-config-qemux86 \
-	   file://git/default-config \
 	  "
 
 # snapshot from Jul 10, 2017:
@@ -62,6 +60,8 @@ EXTRA_OECONF = "\
 	--enable-unionfsfuse \
 	"
 
+VYOSCONFIGDIR = "${THISDIR}/files/config"
+
 # parallel make does not seem to work - possibly due to ylwrap?
 PARALLEL_MAKE = "-j 1"
 
@@ -101,10 +101,10 @@ do_install_append () {
 
 	# install default config
 	install -d ${D}/opt/vyatta/etc/config
-	if [ -f ${S}/default-config-${MACHINE} ]; then
-		install ${S}/default-config-${MACHINE} ${D}/opt/vyatta/etc/config/config.boot
+	if [ -f ${VYOSCONFIGDIR}/default-config-${MACHINE} ]; then
+		install ${VYOSCONFIGDIR}/default-config-${MACHINE} ${D}/opt/vyatta/etc/config/config.boot
 	else
-		install ${S}/default-config ${D}/opt/vyatta/etc/config/config.boot
+		install ${VYOSCONFIGDIR}/default-config ${D}/opt/vyatta/etc/config/config.boot
 	fi
 
 }
