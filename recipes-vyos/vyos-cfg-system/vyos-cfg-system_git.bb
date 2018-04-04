@@ -53,7 +53,7 @@ RDEPENDS_${PN} = " \
 	libfilesync-perl \
 	libsocket6-perl \
 	libtimedate-perl \
-	libfileslurp-perl \
+	libfile-slurp-perl \
 	libjsonany-perl \
 	libwww-perl \
 	libhttpmessage-perl \

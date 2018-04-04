@@ -17,7 +17,15 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
-RDEPENDS_${PN} = "vyos-cfg vyos-op vyos-bash conntrack-tools iptables libxmlsimple-perl"
+RDEPENDS_${PN} = " \
+	vyos-cfg \
+	vyos-op \
+	vyos-bash \
+	conntrack-tools \
+	iptables \
+	libxmlsimple-perl \
+	libfileslurptiny-perl \
+	"
 
 FILES_${PN} += "/opt"
 
