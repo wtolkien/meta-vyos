@@ -7,7 +7,8 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
 SRC_URI = "git://github.com/vyos/vyatta-conntrack.git;branch=current;protocol=https \
-	  "
+		file://0001-fix-iptables-path.patch \
+	  	"
 
 # snapshot from Aug 10, 2017:
 SRCREV = "a8873e0bbaff65a744741976018240f56106a1c3"

@@ -1,0 +1,11 @@
+--- a/scripts/vyatta-show-ignore.pl	2018-04-04 11:17:44.360186479 -0700
++++ b/scripts/vyatta-show-ignore.pl	2018-04-04 11:18:06.876385917 -0700
+@@ -43,7 +43,7 @@ sub print_ignore_rules {
+   $config->setLevel("system conntrack ignore rule");
+   my @rules = sort numerically $config->listOrigNodes();
+
+-  my @rules_in_chain = `sudo iptables -L VYATTA_CT_IGNORE -t raw -nv`;
++  my @rules_in_chain = `sudo /sbin/iptables -L VYATTA_CT_IGNORE -t raw -nv`;
+   if (!(@rules_in_chain)){
+     die "Error: no ignore rules configured\n";
+   }
