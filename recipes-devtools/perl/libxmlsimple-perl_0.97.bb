@@ -17,4 +17,16 @@ S = "${WORKDIR}/XML-LibXML-Simple-${PV}"
 RDEPENDS_${PN} = "libxml-libxml-perl \
 				 "
 
+# we use this as a replacement for XML::Simple, so we put link in the original
+# place
+do_install_append () {
+	XMLS_FILES=`find ${D} -name Simple*`
+	for f in ${XMLS_FILES}; do
+		XMLS_DIR=`dirname ${f}`
+		XMLS_FILE=`basename ${f}`
+		cd ${XMLS_DIR}/..
+		ln -f -s LibXML/${XMLS_FILE} .
+	done
+}
+
 inherit cpan
