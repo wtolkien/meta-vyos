@@ -23,7 +23,8 @@ RDEPENDS_${PN} = " \
 	perl \
 	pciutils \
 	usbutils \
-	util-linux \
+	util-linux-lscpu \
+	bind-utils \
 	"
 
 FILES_${PN} += "/opt"
