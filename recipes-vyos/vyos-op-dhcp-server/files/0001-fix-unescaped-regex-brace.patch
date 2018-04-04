@@ -1,0 +1,20 @@
+--- a/lib/DHCPServerOpMode.pm	2018-04-03 11:01:49.659656703 -0700
++++ b/lib/DHCPServerOpMode.pm	2018-04-03 11:02:39.347656163 -0700
+@@ -59,7 +59,7 @@ sub get_active {
+     my %active_leases = ();
+     while (<$leases>){
+         my $line = $_;
+-        if ($line =~ /lease\s(.*)\s{/){
++        if ($line =~ /lease\s(.*)\s\{/){
+             $ip = $1;
+         }
+         next if (!defined($ip));
+@@ -101,7 +101,7 @@ sub get_pool_size {
+         my $line = $_;
+         $level++ if ( $line =~ /{/ );
+         $level-- if ( $line =~ /}/ );
+-        if ($line =~ /shared-network\s(.*)\s{/) {
++        if ($line =~ /shared-network\s(.*)\s\{/) {
+             $shared_net = $1;
+         } elsif ($line =~ /range\s(.*?)\s(.*?);/) {
+             my $start = iptoint($1);
