@@ -6,7 +6,7 @@ SECTION = "vyos/core"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
-DEPENDS = "ncurses"
+DEPENDS = "ncurses bison-native virtual/libiconv"
 RDEPENDS_${PN} += "bash-completion"
 
 # NOTE: this software seems not capable of being built in a separate build directory
@@ -37,6 +37,8 @@ PV = "4.1-release+git${SRCPV}"
 SRCREV = "a6109c98a25f3eeeff31c6690d6bd50953484bf9"
 
 S = "${WORKDIR}/git"
+
+EXTRA_AUTORECONF += "--exclude=autoheader"
 
 # additional options to be passed to the configure script:
 EXTRA_OECONF = "\
