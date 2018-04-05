@@ -17,8 +17,19 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
-RDEPENDS_${PN} = "vyos-cfg vyos-bash perl sed  perl libnetaddrip-perl \
-	procps ntp sudo net-snmp dhcp-server"
+RDEPENDS_${PN} = " \
+	vyos-cfg \
+	vyos-bash \
+	sed  \
+	perl \
+	libnetaddrip-perl \
+	libhtml-parser-perl \
+	procps \
+	ntp \
+	sudo \
+	net-snmp \
+	dhcp-server \
+	"
 
 FILES_${PN} += "/opt"
 
