@@ -23,6 +23,7 @@ RDEPENDS_${PN} = " \
 	perl \
 	pciutils \
 	usbutils \
+	mmc-utils \
 	util-linux-lscpu \
 	bind-utils \
 	"
