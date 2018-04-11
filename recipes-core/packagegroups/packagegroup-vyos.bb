@@ -92,6 +92,11 @@ VYOS_PROXY = " \
     vyos-webproxy \
     "
 
+VYOS_SWUPDATE = " \
+    swupdate \
+    swupdate-www \
+    "
+
 RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-core', '${VYOS_CORE}', '',d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-config', '${VYOS_CONFIG}', '',d)} \
@@ -108,4 +113,5 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-firewall', '${VYOS_FIREWALL}', '',d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-redundancy', '${VYOS_REDUNDANCY}', '',d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-proxy', '${VYOS_PROXY}', '',d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-swupdate', '${VYOS_SWUPDATE}', '',d)} \
     "
