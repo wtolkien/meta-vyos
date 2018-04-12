@@ -1,0 +1,47 @@
+--- a/etc/init.d/vyatta-router	2018-03-28 16:32:34.000000000 -0700
++++ b/etc/init.d/vyatta-router	2018-04-12 16:18:22.902207458 -0700
+@@ -168,6 +168,35 @@ mount_slash_config ()
+     chgrp -R ${GROUP} /config
+ }
+
++#
++# VyOS devices based on Yocto/OpenEmbedded should have a persistent data
++# partition to store configuration, etc. If not present, it will be created
++# on first power-up. It is mounted at /var/persistent and should have a
++# subdirectory "./config" containing files that normally reside in
++# /opt/vyatta/etc/config
++# At powerup, all files from /opt/vyatta/etc/config shall be moved to
++# /var/persistent/config which shall then be bind-mounted at /config
++# to emulate a normal VyOS file system layout
++#
++
++setup_ppart ()
++{
++	if [ -n "`cat /proc/mounts | grep persistent`" ]; then
++		mkdir -p /var/persistent/config
++		if [ ! -L /opt/vyatta/etc/config ]; then
++			# don't overwrite existing files...
++			cp -n -r /opt/vyatta/etc/config/* /var/persistent/config
++			# ... except for this script
++			cp /opt/vyatta/etc/config/scripts/vyatta-postconfig-bootup.script /var/persistent/config/scripts
++			# remove original files and create link
++			rm -rf /opt/vyatta/etc/config
++			ln -s /var/persistent/config /opt/vyatta/etc/config
++		fi
++	else
++		echo -e "\nCan't find persistent data partition\n"
++	fi
++}
++
+ start ()
+ {
+     log_action_begin_msg "Mounting VyOS Config"
+@@ -182,6 +211,8 @@ start ()
+       && chgrp ${GROUP} ${vyatta_configdir}
+     log_action_end_msg $?
+
++	setup_ppart
++
+     disabled bootfile || init_bootfile
+
+     mount_slash_config
