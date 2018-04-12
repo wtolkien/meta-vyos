@@ -10,6 +10,7 @@ SRC_URI = "git://github.com/vyos/vyatta-cfg.git;branch=current;protocol=https \
 	   file://002-remove-debian-apt-dependency.patch \
 	   file://003-allow-perl-cross-compile.patch \
 	   file://004-unionfs-fuse-path.patch \
+	   file://010-startup-load-persistent-data-part.patch \
 	  "
 
 # snapshot from Jul 10, 2017:
@@ -34,6 +35,7 @@ RDEPENDS_${PN} += " \
 	glibc-utils \
 	boost \
 	glib-2.0 \
+	file \
 	vyos-bash \
 	vyos-cfg-system \
 	vyos-config-migrate \
@@ -100,32 +102,20 @@ do_install_append () {
 		${D}/etc/commit/post-hooks.d/99vyos-user-postcommit-hooks
 
 	# install default config
-	install -d ${D}/opt/vyatta/etc/config
+	install -d ${D}/opt/vyatta/etc
 	if [ -f ${VYOSCONFIGDIR}/default-config-${MACHINE} ]; then
-		install ${VYOSCONFIGDIR}/default-config-${MACHINE} ${D}/opt/vyatta/etc/config/config.boot
+		install ${VYOSCONFIGDIR}/default-config-${MACHINE} ${D}/opt/vyatta/etc/config.boot.default
 	else
-		install ${VYOSCONFIGDIR}/default-config ${D}/opt/vyatta/etc/config/config.boot
+		install ${VYOSCONFIGDIR}/default-config ${D}/opt/vyatta/etc/config.boot.default
 	fi
-
 }
-
-
 
 INITSCRIPT_PACKAGES = "${PN}"
 INITSCRIPT_NAME_${PN} = "vyatta-router"
 INITSCRIPT_PARAMS_${PN} = "start 90 2 3 4 5 ."
 
-# perform some post-installation actions, but only on target device, not at
-# build time (some of these may be moved to build time, but 'setcap' and
-# 'chgrp' may not work at build time...)
-# Make sure to prepend variables with 'vy_' to avoid conflicts with bitbake
-# variables
-pkg_postinst_${PN} () {
-	if [ x"$D" = "x" ]; then
-		# capability stuff has to be done on target
-		for vy_bin in my_cli_bin my_cli_shell_api; do
-  			touch -ac /opt/vyatta/sbin/${vy_bin}
-  			setcap cap_sys_admin=pe /opt/vyatta/sbin/${vy_bin}
-		done
-	fi
-}
+# HACK: we need to perform some post-installation actions, but only on target
+# device, not at build time.
+# However, Yocto does not support using the update-rc.d class and
+# pkg_postinst_${PN} at the same time. Therefore we are moving postinst actions
+# from this package to the 'vyos-cfg-system' package

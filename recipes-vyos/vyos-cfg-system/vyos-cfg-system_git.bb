@@ -141,6 +141,14 @@ pkg_postinst_${PN} () {
 		vy_bindir=${vy_exec_prefix}/bin
 		vy_sbindir=${vy_exec_prefix}/sbin
 
+		# ----- stuff that would normally be done as part of the
+		#       'vyos-cfg' package (see comment there...)
+		for vy_bin in my_cli_bin my_cli_shell_api; do
+  			touch -ac /opt/vyatta/sbin/${vy_bin}
+  			setcap cap_sys_admin=pe /opt/vyatta/sbin/${vy_bin}
+		done
+		# ----- done with 'vyos-cfg' postinst
+
 		# get owner/group setting changes out of the way...
 		chgrp vyattacfg /opt/vyatta/config
 		chgrp -R vyattacfg /opt/vyatta/etc/config
