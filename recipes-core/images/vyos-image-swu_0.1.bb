@@ -27,3 +27,4 @@ SWUPDATE_IMAGES = " \
 # Images can have multiple formats - define which image must be
 # taken to be put in the compound image
 SWUPDATE_IMAGES_FSTYPES[vyos-image] = ".tar.gz"
+COMPATIBLE_HOST = '(arm|aarch64|mips|powerpc|powerpc64).*-linux'
