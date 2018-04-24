@@ -26,6 +26,11 @@ RDEPENDS_${PN} = " \
 	mmc-utils \
 	util-linux-lscpu \
 	bind-utils \
+	python \
+	python-json \
+	python-subprocess \
+	python-math \
+	python-pystache \
 	"
 
 FILES_${PN} += "/opt"
