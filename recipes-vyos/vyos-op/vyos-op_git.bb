@@ -33,6 +33,7 @@ RDEPENDS_${PN} = " \
 	python-subprocess \
 	python-math \
 	python-pystache \
+	lsscsi \
 	"
 
 FILES_${PN} += "/opt"
