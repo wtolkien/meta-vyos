@@ -3,6 +3,7 @@ SUMMARY = "The VyOS Router Image"
 IMAGE_INSTALL = " \
     packagegroup-core-boot \
     packagegroup-vyos \
+    kernel-modules \
     ${CORE_IMAGE_EXTRA_INSTALL} \
     "
 
@@ -15,10 +16,6 @@ inherit core-image
 # since there will be a persistent data partition, we can easily
 # get away with reducing rootfs size overhead to 20%
 IMAGE_OVERHEAD_FACTOR = "1.2"
-
-IMAGE_INSTALL_append = " \
-    kernel-modules \
-    "
 
 # create home directory for vyos user
 python do_rootfs_append () {
