@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [[ $_ == $0 ]] ; then
+    echo "Error: This script needs to be sourced. Please run as 'source $0'"
+    exit 1
+fi
+
+if [[ -n "$BUILDDIR" ]] ; then
+	echo "Build environment already set."
+	echo "run 'source vyos-deinit-build-env' first"
+else
+    VYOS_PATH_SAFE="$PATH"
+    WD=$(readlink -f $(dirname $BASH_SOURCE))
+
+    if [[ -f $PRD/.templateconf ]] ; then
+            source $PRD/.templateconf
+    fi
+
+    source $WD/sources/poky/oe-init-build-env
+fi
