@@ -2,6 +2,8 @@ DESCRIPTION = "Mainline Linux Kernel with VyOS patches"
 SECTION = "kernel"
 LICENSE = "GPLv2"
 
+FILESEXTRAPATHS_prepend := "${THISDIR}/vyos-kernel-patches-4.4:${THISDIR}/linux-vyos-4.4:"
+
 inherit kernel
 
 PR = "r1"
@@ -16,8 +18,6 @@ SRC_URI[kernel.sha256sum] = "c392fb360290e70a88b9bd81d3ab9d42b915ee1cb24fabcf44e
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
 S = "${WORKDIR}/linux-${PV}"
-
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 COMPATIBLE_MACHINE = "qemuarm|qemuarm64|qemux86|qemuppc|qemumips|qemumips64|qemux86-64|genericx86|genericx86-64"
 
