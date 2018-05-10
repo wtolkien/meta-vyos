@@ -1,1 +1,1 @@
-PACKAGE_INSTALL += "kernel-modules"
+PACKAGE_INSTALL += "kernel-modules kmod bash"
