@@ -37,13 +37,9 @@ EXTRA_OECONF = "\
 	"
 
 
-# perform some post-installation actions, but only on target device, not at
-# build time
-pkg_postinst_${PN} () {
-	if [ x"$D" = "x" ]; then
-
+pkg_postinst_ontarget_${PN} () {
 # TODO: check what needs to be done here, for now just leave one dummy cmd...
-		DUMMY=1
+	DUMMY=1
 
 #prefix=/opt/vyatta
 #exec_prefix=${prefix}
@@ -79,7 +75,4 @@ pkg_postinst_${PN} () {
 #if [ -d /var/lib/sitefilter ]; then
 #    mv /var/lib/sitefilter $urlfilterdatadir
 #fi
-	else
-		exit 1
-	fi
 }

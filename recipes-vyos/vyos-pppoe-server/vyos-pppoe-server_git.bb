@@ -57,20 +57,11 @@ do_install_append () {
 	done
 }
 
-# perform some post-installation actions, but only on target device, not at
-# build time (a lot of this probably should be moved to build time, for now
-# they were just copied here from Debian's postinst script)
-pkg_postinst_${PN} () {
-	if [ x"$D" = "x" ]; then
-
+pkg_postinst_ontarget_${PN} () {
 # TODO: check what needs to be done here, for now just leave one dummy cmd...
 		DUMMY=1
 # remove init of daemons that we start/stop
 #for init in pppoe-server; do
 #  update-rc.d -f ${init} remove >/dev/null
 #done
-
-	else
-		exit 1
-	fi
 }

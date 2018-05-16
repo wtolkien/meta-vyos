@@ -63,13 +63,9 @@ do_install() {
 	install -m 0644 ${WORKDIR}/squidGuard.conf ${D}${sysconfdir}/squid/squidGuard.conf
 }
 
-# perform some post-installation actions, but only on target device, not at
-# build time
-pkg_postinst_${PN} () {
-	if [ x"$D" = "x" ]; then
-
+pkg_postinst_ontarget_${PN} () {
 # TODO: check what needs to be done here, for now just leave one dummy cmd...
-		DUMMY=1
+	DUMMY=1
 
 #CONF="/etc/default/squidguard"
 
@@ -104,8 +100,4 @@ pkg_postinst_${PN} () {
 #esac
 
 #exit 0
-
-	else
-   		exit 1
-	fi
 }

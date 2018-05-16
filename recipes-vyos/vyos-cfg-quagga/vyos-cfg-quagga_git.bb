@@ -56,16 +56,11 @@ do_install_append () {
 	install -d -m 770 ${D}/opt/vyatta/etc/quagga
 }
 
-pkg_postinst_${PN} () {
-	if [ x"$D" = "x" ]; then
+pkg_postinst_ontarget_${PN} () {
+	# get owner/group setting changes out of the way...
+	chgrp vyattacfg /opt/vyatta/etc/quagga
 
-		# get owner/group setting changes out of the way...
-		chgrp vyattacfg /opt/vyatta/etc/quagga
-
-		if [ -f /usr/bin/vtysh ] && [ ! -f /opt/vyatta/sbin/policy/vtysh ]; then
-   			ln -s /usr/bin/vtysh /opt/vyatta/sbin/policy/vtysh
-		fi
-	else
-   		exit 1
+	if [ -f /usr/bin/vtysh ] && [ ! -f /opt/vyatta/sbin/policy/vtysh ]; then
+		ln -s /usr/bin/vtysh /opt/vyatta/sbin/policy/vtysh
 	fi
 }

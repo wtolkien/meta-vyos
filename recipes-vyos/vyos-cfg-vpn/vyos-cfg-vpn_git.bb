@@ -35,24 +35,17 @@ EXTRA_OECONF = "\
 	--sysconfdir=/opt/vyatta/etc \
 	"
 
-# perform some post-installation actions, but only on target device, not at
-# build time
-pkg_postinst_${PN} () {
-	if [ x"$D" = "x" ]; then
+pkg_postinst_ontarget_${PN} () {
+	# remove init of daemons that we start/stop
+	for init in openswan ipsec setkey; do
+		update-rc.d -f ${init} remove >/dev/null
+	done
 
-		# remove init of daemons that we start/stop
-		for init in openswan ipsec setkey; do
-  			update-rc.d -f ${init} remove >/dev/null
-		done
-
-		# remove keys
-		rm -f /etc/ipsec.secrets
-		touch /etc/ipsec.secrets
-		chown root:root /etc/ipsec.secrets
-		chmod 600 /etc/ipsec.secrets
-		rm -f /etc/ipsec.d/private/localhost.localdomainKey.pem
-		rm -f /etc/ipsec.d/certs/localhost.localdomainCert.pem
-	else
-		exit 1
-	fi
+	# remove keys
+	rm -f /etc/ipsec.secrets
+	touch /etc/ipsec.secrets
+	chown root:root /etc/ipsec.secrets
+	chmod 600 /etc/ipsec.secrets
+	rm -f /etc/ipsec.d/private/localhost.localdomainKey.pem
+	rm -f /etc/ipsec.d/certs/localhost.localdomainCert.pem
 }

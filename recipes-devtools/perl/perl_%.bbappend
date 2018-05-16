@@ -58,14 +58,9 @@ FILES_${PN}-lib_append = " \
 		${libdir}/perl/site_perl/${PV} \
 		"
 
-pkg_postinst_${PN} () {
-	# make sure this gets only executed on the device, not at build time
-	if [ x"$D" = "x" ]; then
-		cd /usr/lib/perl/include
-		h2ph -r .
-		cd /
-#		rm -rf /usr/lib/perl/include
-	else
-   		exit 1
-	fi
+pkg_postinst_ontarget_${PN} () {
+	cd /usr/lib/perl/include
+	h2ph -r .
+	cd /
+#	rm -rf /usr/lib/perl/include
 }
