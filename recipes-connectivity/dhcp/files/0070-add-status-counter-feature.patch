@@ -1,0 +1,57 @@
+--- a/server/dhcp.c	2018-05-14 13:01:08.179010619 -0700
++++ b/server/dhcp.c	2018-05-14 13:05:30.166585194 -0700
+@@ -40,6 +40,12 @@ static int reuse_lease (struct packet* p
+ static int locate_network6(struct packet *packet);
+ #endif
+
++//vyatta request/response output file
++FILE *fd_pckt_ct = NULL;
++static const char *dhcp_packet_count_file = "/var/log/dhcpd.status";
++long pckt_req_ct = 0;
++long pckt_resp_ct = 0;
++
+ int outstanding_pings;
+
+ #if defined(DELAYED_ACK)
+@@ -95,6 +101,31 @@ dhcp (struct packet *packet) {
+ 	const char *errmsg;
+ 	struct data_string data;
+
++  //vyatta
++  if (packet &&
++      packet->packet_type == DHCPREQUEST) {
++    pckt_req_ct++;
++  }
++
++  if (fd_pckt_ct == NULL) {
++    unlink(dhcp_packet_count_file);
++    int file_pckt_ct = open (dhcp_packet_count_file, O_WRONLY | O_EXCL | O_CREAT, 0664);
++    if (file_pckt_ct < 0) {
++      log_error ("Can't create new lease file: %m");
++    } else {
++      if ((fd_pckt_ct = fdopen (file_pckt_ct, "w")) == NULL) {
++        log_error ("Can't fdopen new lease file!");
++      }
++    }
++  }
++  if (fd_pckt_ct != NULL) {
++    fseek(fd_pckt_ct, 0, SEEK_SET);
++    fprintf(fd_pckt_ct, "request-count: %ld\n", pckt_req_ct);
++    fprintf(fd_pckt_ct, "response-count: %ld\n", pckt_resp_ct);
++    fflush(fd_pckt_ct);
++  }
++  //vyatta
++
+ 	if (!locate_network(packet) &&
+ 	    packet->packet_type != DHCPREQUEST &&
+ 	    packet->packet_type != DHCPINFORM &&
+@@ -435,6 +466,9 @@ void dhcpdiscover (packet, ms_nulltp)
+ 	when = cur_time + 120;
+ 	if (when < lease -> ends)
+ 		when = lease -> ends;
++//vyatta
++  pckt_resp_ct++;
++//vyatta
+
+ 	ack_lease (packet, lease, DHCPOFFER, when, msgbuf, ms_nulltp,
+ 		   (struct host_decl *)0);

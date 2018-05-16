@@ -1,0 +1,17 @@
+--- a/omapip/errwarn.c	2018-05-14 12:56:12.038653622 -0700
++++ b/omapip/errwarn.c	2018-05-14 12:58:35.076855882 -0700
+@@ -72,13 +72,14 @@ void log_fatal (const char * fmt, ... )
+ 	  IGNORE_RET (write (STDERR_FILENO, mbuf, strlen (mbuf)));
+ 	  IGNORE_RET (write (STDERR_FILENO, "\n", 1));
+   }
+-
++#if 0
+   log_error ("%s", "");
+   log_error ("If you think you have received this message due to a bug rather");
+   log_error ("than a configuration issue please read the section on submitting");
+   log_error ("bugs on either our web page at www.isc.org or in the README file");
+   log_error ("before submitting a bug.  These pages explain the proper");
+   log_error ("process and the information we find helpful for debugging.");
++#endif
+   log_error ("%s", "");
+   log_error ("exiting.");
