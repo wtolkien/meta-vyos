@@ -42,8 +42,9 @@ S = "${WORKDIR}/git"
 EXTRA_AUTORECONF += "--exclude=autoheader"
 
 # additional options to be passed to the configure script:
+# TODO: disable/enable job control sometimes fails to compile. Not sure why.
 EXTRA_OECONF = "\
-	--enable-job-control \
+	--disable-job-control \
 	--with-curses \
 	--disable-net-redirections \
 	--enable-largefile \
