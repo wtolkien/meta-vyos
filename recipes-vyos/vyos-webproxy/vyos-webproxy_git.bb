@@ -19,7 +19,7 @@ S = "${WORKDIR}/git"
 DEPENDS = "vyos-bash"
 RDEPENDS_${PN} = "perl vyos-cfg vyos-cfg-system vyos-op squid squidguard"
 
-FILES_${PN} += "/opt"
+FILES_${PN} += "/opt /usr/bin/cgi-bin"
 
 
 # NOTE: this software seems not capable of being built in a separate build directory
