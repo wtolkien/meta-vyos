@@ -2,7 +2,6 @@
 RDEPENDS_${PN} += " \
 	iputils-arping \
 	iputils-ping \
-	iputils-ping6 \
     "
 
 # add 'arping' link in /usr/bin to match VyOS/Debian
