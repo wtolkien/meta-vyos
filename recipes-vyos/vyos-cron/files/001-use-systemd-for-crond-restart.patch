@@ -1,0 +1,11 @@
+--- a/scripts/vyatta-restart-crond.sh	2018-05-07 16:39:45.410868671 -0700
++++ b/scripts/vyatta-restart-crond.sh	2018-05-07 16:40:32.039616155 -0700
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+
+ if cli-shell-api existsActive system task-scheduler; then
+-   /etc/init.d/cron restart
++   /bin/systemctl restart crond.service
+ else
+    echo "Task scheduler is not configured"
+ fi
