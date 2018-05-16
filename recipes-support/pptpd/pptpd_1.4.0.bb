@@ -17,14 +17,14 @@ SRC_URI = "${SOURCEFORGE_MIRROR}/poptop/pptpd-${PV}.tar.gz \
            file://fix-plugins-install.patch \
            file://include-dummy-pppd-h.patch \
            file://pptpd.init \
+           file://pptpd.service \
            file://pptpd-1.4.0/plugins/pppd.h"
 
 S = "${WORKDIR}/pptpd-${PV}"
 
 FILES_${PN} += "/usr/lib"
 
-inherit autotools-brokensep
-#inherit update-rc.d
+inherit autotools-brokensep systemd
 
 do_install_append() {
         # Install init script
@@ -34,6 +34,9 @@ do_install_append() {
         install -d ${D}${sbindir} ${D}/${sysconfdir} ${D}/${sysconfdir}/ppp
         install -m 0644 samples/options.pptpd ${D}/${sysconfdir}/ppp/
         install -m 0644 samples/pptpd.conf ${D}/${sysconfdir}/
+
+        install -d ${D}${systemd_unitdir}/system
+        install -m 0644 ${WORKDIR}/pptpd.service ${D}${systemd_unitdir}/system
 
         # broken (doesn't cross-compile, maybe other issues...)
 	sed -ri "s,^[:space:]*logwtmp[:space:]*,# logwtmp," ${D}/${sysconfdir}/pptpd.conf
@@ -52,8 +55,8 @@ CONFFILES_${PN} = "${sysconfdir}/pptpd.conf \
                    ${sysconfdir}/ppp/options.pptpd"
 
 # no autostart at startup - VyOS will control this
-#INITSCRIPT_NAME = "pptpd"
-#INITSCRIPT_PARAMS = "defaults 92 8"
+SYSTEMD_SERVICE_${PN} = "pptpd.service"
+SYSTEMD_AUTO_ENABLE = "disable"
 
 SRC_URI[md5sum] = "36f9f45c6ffa92bc3b6e24ae2d053505"
 SRC_URI[sha256sum] = "8fcd8b8a42de2af59e9fe8cbaa9f894045c977f4d038bbd6346a8522bb7f06c0"

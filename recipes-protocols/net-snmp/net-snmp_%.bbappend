@@ -9,7 +9,10 @@ SRC_URI += " \
     "
 
 # disable /etc/init.d/snmpd startup script (VyOS takes care of this)
-INITSCRIPT_PARAMS_${PN}-server-snmpd = "remove"
+SYSTEMD_AUTO_ENABLE_${PN}-server-snmpd = "disable"
+SYSTEMD_AUTO_ENABLE_${PN}-server-snmptrapd = "disable"
+# obsolete for sysvinit:
+#INITSCRIPT_PARAMS_${PN}-server-snmpd = "remove"
 
 do_install_append() {
     install -d ${D}${sysconfdir}/default

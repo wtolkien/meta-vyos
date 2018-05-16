@@ -13,7 +13,9 @@ PACKAGECONFIG ??= "cap openssl \
 "
 
 # disable /etc/init.d/ntp startup script (VyOS takes care of this)
-INITSCRIPT_PARAMS_${PN} = "remove"
+SYSTEMD_AUTO_ENABLE_${PN} = "disable"
+SYSTEMD_AUTO_ENABLE_ntpdate = "disable"
+SYSTEMD_AUTO_ENABLE_sntp = "disable"
 
 do_install_append() {
     install -d ${D}${sysconfdir}/default
@@ -22,8 +24,6 @@ do_install_append() {
     install ${WORKDIR}/ntp.dhclient-exit-hooks ${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d/ntp
     install -d ${D}${sysconfdir}/cron.daily
     install ${WORKDIR}/ntp.cron ${D}${sysconfdir}/cron.daily/ntp
-
-    ln -s ntpd ${D}/${sysconfdir}/init.d/ntp
 
     install -d ${D}${localstatedir}/volatile/log/ntpstats
 

@@ -20,7 +20,7 @@ SRC_URI[sha256sum] = "d5bdd25530acf60989222fd92fbfd596e06ecc356a820f4c1015708b76
 
 DEPENDS = "libnfnetlink openssl"
 
-inherit autotools pkgconfig systemd update-rc.d
+inherit autotools pkgconfig systemd
 
 PACKAGECONFIG ??= "libnl snmp \
     ${@bb.utils.filter('DISTRO_FEATURES', 'systemd', d)} \
@@ -33,16 +33,8 @@ EXTRA_OECONF = "--disable-libiptc"
 EXTRA_OEMAKE = "initdir=${sysconfdir}/init.d"
 
 do_install_append() {
-    install -d ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/keepalived.init ${D}${sysconfdir}/init.d/${BPN}
-
     install -d ${D}${sysconfdir}/default
     install -m 0755 ${WORKDIR}/keepalived.default ${D}${sysconfdir}/default/${BPN}
-
-    #if [ -f ${D}${sysconfdir}/init.d/${BPN} ]; then
-    #    chmod 0755 ${D}${sysconfdir}/init.d/${BPN}
-    #    sed -i 's#rc.d/##' ${D}${sysconfdir}/init.d/${BPN}
-    #fi
 
     if ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'true', 'false', d)}; then
         install -D -m 0644 ${B}/${BPN}/${BPN}.service ${D}${systemd_system_unitdir}/${BPN}.service
@@ -55,8 +47,5 @@ do_install_append() {
 
 FILES_${PN} += "${datadir}/snmp/mibs"
 
-INITSCRIPT_NAME = "keepalived"
-INITSCRIPT_PARAMS = "defaults 30"
-
 SYSTEMD_SERVICE_${PN} = "keepalived.service"
-SYSTEMD_AUTO_ENABLE ?= "disable"
+SYSTEMD_AUTO_ENABLE = "disable"

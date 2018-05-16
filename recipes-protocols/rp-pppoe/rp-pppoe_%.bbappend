@@ -8,8 +8,9 @@ SRC_URI += " \
     "
 
 # disable /etc/init.d/pppoe-server startup script (VyOS takes care of this)
-INITSCRIPT_PARAMS_${PN}-server = "remove"
-
+SYSTEMD_AUTO_ENABLE = "disable"
+# obsolete for sysvinit:
+#INITSCRIPT_PARAMS_${PN}-server = "remove"
 
 do_install_append() {
     install -d ${D}${sysconfdir}/ppp/peers

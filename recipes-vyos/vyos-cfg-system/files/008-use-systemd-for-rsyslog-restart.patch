@@ -1,0 +1,29 @@
+--- a/templates/system/time-zone/node.def	2018-05-07 14:31:25.509591505 -0700
++++ b/templates/system/time-zone/node.def	2018-05-07 14:40:28.845589032 -0700
+@@ -51,7 +51,7 @@ allowed: shopt -s nullglob
+            fi
+          done
+ end: if [ "$COMMIT_ACTION" == "SET" -o "$COMMIT_ACTION" == "DELETE" ]; then
+-        sudo /etc/init.d/rsyslog restart
++        sudo /bin/systemctl restart rsyslog.service syslog.socket
+      fi
+ comp_help:Enter the local timezone by specifying "Region/City"
+   or GMT[+|-][0-12]. Use auto-completion to see available regions
+--- a/templates/system/syslog/node.def	2018-05-07 15:21:52.237146173 -0700
++++ b/templates/system/syslog/node.def	2018-05-07 15:22:39.761880474 -0700
+@@ -1,5 +1,5 @@
+ priority: 400
+ help: System logging daemon
+ end: if /opt/vyatta/sbin/vyatta_update_syslog.pl; then
+-          sudo /usr/sbin/invoke-rc.d rsyslog restart
++          sudo /bin/systemctl restart rsyslog.service syslog.socket
+      fi
+--- a/scripts/system/vyatta_update_hosts.pl	2018-05-07 15:24:45.647764657 -0700
++++ b/scripts/system/vyatta_update_hosts.pl	2018-05-07 15:25:35.744473200 -0700
+@@ -110,5 +110,5 @@ set_mailname $mail_name;
+ # Restart services that use the system hostname;
+ # add more ase needed.
+ if ($restart_services) {
+-    system("/usr/sbin/invoke-rc.d rsyslog restart");
++    system("/bin/systemctl restart rsyslog.service syslog.socket");
+ }

@@ -1,13 +1,12 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-SRC_URI += "file://initscript"
+SRC_URI += "file://sudo.service"
 
 do_install_append() {
-    install -d ${D}${sysconfdir}/init.d
-    install -m 755 ${WORKDIR}/initscript ${D}${sysconfdir}/init.d/sudo
+    install -d ${D}${systemd_unitdir}/system
+    install -m 755 ${WORKDIR}/sudo.service ${D}${systemd_unitdir}/system
 }
 
-inherit update-rc.d
+inherit systemd
 
-INITSCRIPT_NAME = "sudo"
-INITSCRIPT_PARAMS = "defaults 2"
+SYSTEMD_SERVICE_${PN} = "sudo.service"

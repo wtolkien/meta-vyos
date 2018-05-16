@@ -25,6 +25,8 @@ do_compile () {
 	:
 }
 
+# TODO: a) check usefulness of scripts in ppp/ip-up.d   b) check compatibility
+# with systemd
 do_install () {
     install -d ${D}${sysconfdir}
     install ${WORKDIR}/ddclient.conf ${D}${sysconfdir}
@@ -46,3 +48,5 @@ do_install () {
 
     install -d ${D}${localstatedir}/ddclient
 }
+
+

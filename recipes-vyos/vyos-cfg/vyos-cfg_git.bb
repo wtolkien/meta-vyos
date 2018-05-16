@@ -45,8 +45,9 @@ FILES_${PN} += "/opt /usr/share /etc/apt"
 
 # NOTE: this software seems not capable of being built in a separate build directory
 # from the source, therefore using 'autotools-brokensep' instead of 'autotools'
-inherit setuptools3 cpan autotools-brokensep python3native python3-dir \
-	update-rc.d
+#inherit setuptools3
+inherit cpan autotools-brokensep python3native python3-dir \
+	systemd
 
 # TODO: replace std::auto_ptr with std::unique_ptr - for now just turn
 # compiler errors into warnings
@@ -108,14 +109,19 @@ do_install_append () {
 	else
 		install ${VYOSCONFIGDIR}/default-config ${D}/opt/vyatta/etc/config.boot.default
 	fi
+
+	# install systemd service file
+    install -d ${D}${systemd_unitdir}/system
+	install -m 0644 ${S}/debian/vyatta-cfg.vyatta-router.service \
+		${D}${systemd_unitdir}/system/vyatta-router.service
 }
 
-INITSCRIPT_PACKAGES = "${PN}"
-INITSCRIPT_NAME_${PN} = "vyatta-router"
-INITSCRIPT_PARAMS_${PN} = "start 90 2 3 4 5 ."
+SYSTEMD_PACKAGES = "${PN}"
+SYSTEMD_SERVICE_${PN} = "vyatta-router.service"
 
-# HACK: we need to perform some post-installation actions, but only on target
-# device, not at build time.
-# However, Yocto does not support using the update-rc.d class and
-# pkg_postinst_${PN} at the same time. Therefore we are moving postinst actions
-# from this package to the 'vyos-cfg-system' package
+pkg_postinst_ontarget_${PN} () {
+	for vy_bin in my_cli_bin my_cli_shell_api; do
+		touch -ac /opt/vyatta/sbin/${vy_bin}
+  		setcap cap_sys_admin=pe /opt/vyatta/sbin/${vy_bin}
+	done
+}

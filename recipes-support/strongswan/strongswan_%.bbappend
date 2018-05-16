@@ -52,7 +52,9 @@ EXTRA_OECONF += " \
 # sends these Cisco options.
 
 # aesni is for x86 only...
-PACKAGECONFIG_append = "${@bb.utils.contains('HOST_ARCH', 'i586', ' aesni', '', d)}"
+PACKAGECONFIG_append = " ${@bb.utils.contains('HOST_ARCH', 'i586', ' aesni', '', d)}"
+
+PACKAGECONFIG_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', ' systemd-charon', '', d)}"
 
 PACKAGECONFIG_append = " swanctl connmark pkcs11 scep"
 PACKAGECONFIG_remove = "sqlite3"
@@ -66,10 +68,8 @@ PACKAGECONFIG[fast] = "--enable-fast, --disable-fast, ,${PN}-plugin-fast"
 PACKAGECONFIG[tpm] = "--enable-tpm, --disable-tpm,"
 PACKAGECONFIG[des] = "--enable-des, --disable-des, ,${PN}-plugin-des"
 
-FILES_${PN} += "/usr/lib"
 
-do_compile_append () {
-    rm -rf ${D}/usr/sbin/.debug
-}
+FILES_${PN} += "/usr/lib /lib/systemd/system"
+FILES_${PN}-dbg += "/usr/sbin/.debug"
 
 RDEPENDS_${PN}_remove = "${PN}-plugin-des"
