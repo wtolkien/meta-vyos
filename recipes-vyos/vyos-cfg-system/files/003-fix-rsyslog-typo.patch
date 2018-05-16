@@ -1,0 +1,11 @@
+--- a/sysconf/rsyslog.conf	2018-04-27 14:03:03.923419236 -0700
++++ b/sysconf/rsyslog.conf	2018-04-27 14:03:23.059567907 -0700
+@@ -12,7 +12,7 @@ $ModLoad imuxsock # provides support for
+ $ModLoad imklog   # provides kernel logging support (previously done by rklogd)
+ #$ModLoad immark  # provides --MARK-- message capability
+
+-$OmitLocalLogging no
++$OmitLocalLogging off
+ $SystemLogSocketName /run/systemd/journal/syslog
+
+ $KLogPath /proc/kmsg
