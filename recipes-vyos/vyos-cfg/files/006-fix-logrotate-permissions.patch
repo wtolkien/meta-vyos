@@ -1,0 +1,8 @@
+--- a/etc/logrotate.d/vyatta-config-logs	2018-05-09 10:36:07.770647125 -0700
++++ b/etc/logrotate.d/vyatta-config-logs	2018-05-09 10:36:30.650991419 -0700
+@@ -3,4 +3,5 @@
+ 	size 1M
+ 	rotate 2
+ 	create 664 root vyattacfg
++	su root vyattacfg
+ }
