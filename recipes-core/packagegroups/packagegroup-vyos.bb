@@ -97,6 +97,10 @@ VYOS_SWUPDATE = " \
     swupdate-www \
     "
 
+VYOS_DEBUG = " \
+    strace \
+    "
+
 RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-core', '${VYOS_CORE}', '',d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-config', '${VYOS_CONFIG}', '',d)} \
@@ -114,4 +118,5 @@ RDEPENDS_${PN} = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-redundancy', '${VYOS_REDUNDANCY}', '',d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-proxy', '${VYOS_PROXY}', '',d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-swupdate', '${VYOS_SWUPDATE}', '',d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'vyos-debug', '${VYOS_DEBUG}', '',d)} \
     "
