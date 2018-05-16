@@ -26,6 +26,8 @@ RDEPENDS_${PN} = " \
 	mmc-utils \
 	util-linux-lscpu \
 	bind-utils \
+	iperf2 \
+	iperf3 \
 	python \
 	python-json \
 	python-subprocess \
