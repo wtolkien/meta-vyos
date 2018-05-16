@@ -2,7 +2,7 @@ DESCRIPTION = "Squid URL redirector"
 HOMEPAGE = "http://www.squidguard.org/"
 SECTION = "network"
 DEPENDS = "gettext-native autoconf-native libtool-native \
-		virtual/db openldap mysql5 zlib"
+		db openldap mysql5 zlib"
 RDEPENDS_${PN} += "squid db perl liburi-perl libwww-perl"
 LICENSE = "GPLv2"
 PR = "r2"
