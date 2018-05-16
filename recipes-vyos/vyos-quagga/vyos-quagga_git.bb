@@ -17,14 +17,16 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "readline net-snmp"
+DEPENDS += " ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'libpam', '', d)}"
+
 RDEPENDS_${PN} += "dpkg net-snmp vyos-bash"
+RDEPENDS_${PN} += " ${@bb.utils.contains('DISTRO_FEATURES', 'pam', 'pam-plugin-wheel', '', d)}"
 
 FILES_${PN} += "/usr/lib /usr/share /var/run"
 
 # NOTE: this software seems not capable of being built in a separate build directory
 # from the source, therefore using 'autotools-brokensep' instead of 'autotools'
-inherit autotools-brokensep
-inherit update-rc.d
+inherit autotools-brokensep update-rc.d
 
 # additional options to be passed to the configure script:
 EXTRA_OECONF = "\
@@ -72,7 +74,7 @@ do_install_append () {
 	install -d ${D}${sysconfdir}/init.d
 	install ${S}/debian/vyatta-quagga.init.d ${D}${sysconfdir}/init.d/vyatta-quagga
 	install -d ${D}${sysconfdir}/pam.d
-	install ${S}/debian/vyatta-quagga.quagga.pam ${D}${sysconfdir}/pam.d/quagga
+	install -m 0644 ${S}/debian/vyatta-quagga.quagga.pam ${D}${sysconfdir}/pam.d/quagga
 
 	install -d ${D}${sysconfdir}/logrotate.d
 
