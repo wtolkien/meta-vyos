@@ -26,6 +26,7 @@ RDEPENDS_${PN} = " \
 	sudo \
 	at \
 	ddclient \
+	dnsmasq \
 	procps \
 	iproute2 \
 	iputils \
