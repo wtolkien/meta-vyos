@@ -20,10 +20,11 @@ sbindir = "/sbin"
 
 export CC_FOR_BUILD = "${BUILD_CC}"
 
+# set lower priority than regular bash - we want /bin/sh to point to bash
 ALTERNATIVE_${PN} = "sh"
 ALTERNATIVE_LINK_NAME[sh] = "${base_bindir}/sh"
 ALTERNATIVE_TARGET[sh] = "${base_bindir}/vbash"
-ALTERNATIVE_PRIORITY = "200"
+ALTERNATIVE_PRIORITY = "90"
 
 
 SRC_URI = "git://github.com/vyos/vyatta-bash.git;branch=current;protocol=https \
