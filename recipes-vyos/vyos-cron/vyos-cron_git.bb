@@ -17,7 +17,7 @@ PV = "1.0+git${SRCPV}"
 S = "${WORKDIR}/git"
 
 DEPENDS = "vyos-bash"
-RDEPENDS_${PN} = "perl"
+RDEPENDS_${PN} = "perl cronie"
 
 FILES_${PN} += "/opt"
 
