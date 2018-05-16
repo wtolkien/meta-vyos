@@ -1,0 +1,11 @@
+--- a/sysconf/sudoers	2018-05-04 14:46:00.839724454 -0700
++++ b/sysconf/sudoers	2018-05-04 14:46:37.776155721 -0700
+@@ -1,6 +1,9 @@
+ #
+ # Vyatta modifications to sudo configuration
+ #
++
++Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
++
+ Defaults syslog_goodpri=info
+ Defaults env_keep+=VYATTA_*

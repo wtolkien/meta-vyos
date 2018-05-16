@@ -9,12 +9,18 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 SRC_URI = "git://github.com/vyos/vyatta-cfg-system.git;branch=current;protocol=https \
 		  file://001-invoke-rc-path.patch \
 		  file://002-update-timezone-node.patch \
+		  file://003-fix-rsyslog-typo.patch \
+		  file://004-rename-ssh-to-sshd.patch \
+		  file://005-disable-ssh-keygen.patch \
+		  file://006-rename-ntp-to-ntpd.patch \
+		  file://007-add-sudo-secure-path.patch \
+		  file://008-use-systemd-for-rsyslog-restart.patch \
 		  file://git/vyatta-postconfig-bootup.script \
 		  file://git/bashrc.template \
 	      "
 
-# snapshot from Jul 13, 2017:
-SRCREV = "9d71d68dac2e865838c1bb872004e0cb843b42f1"
+# snapshot from Apr 13, 2018:
+SRCREV = "70f95999744fbb6606aebbc87ba9b326cf453728"
 
 PV = "1.0+git${SRCPV}"
 
