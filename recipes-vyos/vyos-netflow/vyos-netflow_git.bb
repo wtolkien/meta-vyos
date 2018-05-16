@@ -9,8 +9,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=16de935ebcebe2420535844d4f6faefc"
 SRC_URI = "git://github.com/vyos/vyatta-netflow.git;branch=current;protocol=https \
 	  "
 
-# snapshot from Aug 14, 2017:
-SRCREV = "3201ba29c4bb510440ed1141301d18c6593aa376"
+# snapshot from April 13, 2018:
+SRCREV = "af326e6ae9c9f12993acdd18434446a92c874cb9"
 
 PV = "1.0+git${SRCPV}"
 

@@ -9,8 +9,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 SRC_URI = "git://github.com/vyos/vyatta-cfg-firewall.git;branch=current;protocol=https \
 	  "
 
-# snapshot from Aug 10, 2017:
-SRCREV = "c903db0a63b627e1cdfa91ded522c73abb3b0516"
+# snapshot from Apr 13, 2018:
+SRCREV = "c22fd4e612bdc9e95474baa0bc7d0cf3d2144ebc"
 
 PV = "1.0+git${SRCPV}"
 
