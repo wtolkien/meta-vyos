@@ -1,0 +1,10 @@
+--- a/etc/logrotate.d/auth	2018-05-09 12:54:13.510265828 -0700
++++ b/etc/logrotate.d/auth	2018-05-09 12:54:52.570846015 -0700
+@@ -8,6 +8,6 @@
+         delaycompress
+         sharedscripts
+         postrotate
+-                invoke-rc.d rsyslog rotate > /dev/null
++		/bin/kill -HUP `cat /var/run/rsyslogd.pid 2> /dev/null` 2> /dev/null || true
+         endscript
+ }
