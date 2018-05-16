@@ -39,6 +39,7 @@ RDEPENDS_${PN} = " \
 	less \
 	lsof \
 	ntp \
+	openssh \
 	iptables \
 	conntrack-tools \
 	unionfs-fuse \
