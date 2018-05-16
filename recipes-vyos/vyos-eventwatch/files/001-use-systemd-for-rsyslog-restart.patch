@@ -1,0 +1,20 @@
+--- a/templates/system/event-handler/feed/node.tag/source/preset/node.def	2018-05-07 14:20:55.896662184 -0700
++++ b/templates/system/event-handler/feed/node.tag/source/preset/node.def	2018-05-07 14:21:50.253405496 -0700
+@@ -14,7 +14,7 @@ update:	case $VAR(@) in
+ 	      fi
+ 	      echo "*.notice;local7.debug |/var/log/syslog.pipe" >> /tmp/eventwatch-log.conf
+ 	      sudo cp /tmp/eventwatch-log.conf /etc/rsyslog.d/
+-	      sudo /etc/init.d/rsyslog restart 2>&1 > /dev/null
++         sudo /bin/systemctl restart rsyslog.service syslog.socket
+ 	      ;;
+ 	   *)
+ 	      echo "Error, Undefined preset value"
+@@ -24,7 +24,7 @@ update:	case $VAR(@) in
+ delete:	case $VAR(@) in
+ 	   syslog)
+        	      sudo sed -i -e '/syslog.pipe/d' /etc/rsyslog.d/eventwatch-log.conf
+-	      sudo /etc/init.d/rsyslog restart 2>&1 > /dev/null
++         sudo /bin/systemctl restart rsyslog.service syslog.socket
+ 	      sudo rm -f /var/log/syslog.pipe
+ 	      ;;
+ 	   *)
