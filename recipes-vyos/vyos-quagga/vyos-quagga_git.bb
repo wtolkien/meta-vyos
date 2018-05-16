@@ -54,8 +54,11 @@ EXTRA_OECONF = "\
 		--with-libpam \
 		--disable-doc \
        	--enable-snmp \
+		--disable-capabilities \
 		"
-
+# it would be desirable to enable capabilites support, however this currently
+# throws an error during compile - libcap does not get linked. TODO: fix it!
+EXTRA_OECONF += " --disable-capabilities"
 
 INSANE_SKIP_${PN} = "dev-so"
 
