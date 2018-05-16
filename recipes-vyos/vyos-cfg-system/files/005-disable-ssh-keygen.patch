@@ -1,0 +1,14 @@
+--- a/scripts/rl-system.init	2018-05-04 11:18:30.903555542 -0700
++++ b/scripts/rl-system.init	2018-05-04 11:19:55.280522412 -0700
+@@ -188,8 +188,9 @@ start () {
+     chmod 775 /var/run/vyatta /var/log/vyatta
+
+     update_interface_config
+-    create_ssh_host_keys || \
+-	log_failure_msg "can't initialize ssh host keys"
++    # Note: sshdgenkeys.service will be used to generate host keys
++    # create_ssh_host_keys || \
++    #	log_failure_msg "can't initialize ssh host keys"
+     clear_or_override_config_files || \
+ 	log_failure_msg "can\'t reset config files"
+     setup_ntp_config_file

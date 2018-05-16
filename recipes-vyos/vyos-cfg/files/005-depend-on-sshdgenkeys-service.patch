@@ -1,0 +1,13 @@
+--- a/debian/vyatta-cfg.vyatta-router.service	2018-05-04 11:22:25.458250247 -0700
++++ b/debian/vyatta-cfg.vyatta-router.service	2018-05-04 11:23:44.739165360 -0700
+@@ -1,8 +1,9 @@
+ [Unit]
+ SourcePath=/etc/init.d/vyatta-router
+ Description=VyOS Router
++Wants=sshdgenkeys.service
+ Before=runlevel2.target runlevel3.target runlevel4.target runlevel5.target shutdown.target getty@tty1.service getty@tty2.service getty@rrt3.service getty@tty4.service getty@tty5.service getty@tty6.service
+-After=systemd-journald-dev-log.socket time-sync.target local-fs.target vyatta-unicast.service
++After=systemd-journald-dev-log.socket time-sync.target local-fs.target vyatta-unicast.service sshdgenkeys.service
+ Conflicts=shutdown.target
+
+ [Service]
