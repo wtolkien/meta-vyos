@@ -24,11 +24,15 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 
 ## Current Status:
 
+OE-VyOS boots on MT7623 SoCs and basic router functionality has been verified: Obtain IP using DHCP on one interface, run NAT and a DHCP server on another interface.
+
+---
+
 |Component|VyOS Package|Based on|Status|Comment|
 |---|---|---|---|---|
-| Operating System| vyos-kernel| linux-4.4.48| using upstream ver 4.4 + patches| see note 1)|
+| Operating System| vyos-kernel| linux-4.14.26| using upstream ver 4.14.26 + patches| see note 1)|
 | | vyatta-bash| bash|ported| see note 2)|
-| | vyatta-busybox| busybox-1.19.0| | not used ?|
+| | vyatta-busybox| busybox-1.19.0| busybox 1.27.2 | required ?|
 | | ipaddrcheck| | | not used ?|
 | |
 | Config System| vyatta-cfg| | ported| |
@@ -43,20 +47,20 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |conntrack-tools| conntrack-tools-1.4.2| using upstream ver 1.4.4 | VyOS version does not contain custom patches |
 | | vyatta-conntrack-sync| | ported| |
 | | vyatta-nat| | ported| |
-| | vyatta-iproute| iproute2-3.12.0| using upstream ver 4.10.0 | fix-ups as per bbappend file |
-| | vyos-iptables| iptables-1.4.21| using upstream ver 1.6.1 | fix-ups as per bbappend file |
+| | vyatta-iproute| iproute2-3.12.0| using upstream ver 4.14.1 | fix-ups as per bbappend file |
+| | vyos-iptables| iptables-1.4.21| using upstream ver 1.6.2 | fix-ups as per bbappend file |
 | | vyatta-wanloadbalance| | ported| |
 | | vyatta-lldp| | ported| |
-| | lldpd| lldpd-0.6.0| using upstream ver 0.9.6 | VyOS version is old but heavily patched. TODO: check functionality, possibly switch to VyOS version |
+| | lldpd| lldpd-0.6.0| using upstream ver 0.9.8 | VyOS version is old but heavily patched. TODO: check functionality, possibly switch to VyOS version |
 | | vyos-keepalived| keepalived-1.2.19| using upstream ver 1.3.9 | replaces 'vyatta-keepalived', VyOS patches were obsolete (for 2.6 kernels) |
 | | igmpproxy| igmpproxy-0.1 | ported | contains Ubiquiti ERL patches|
 | | vyos-igmpproxy| | ported| derived from Ubiquiti ERL 1.4.1 |
 | | vyatta-zone| | ported| |
 | | vyatta-watchdog| | ported| |
 | | ipset| ipset-6.23| using upstream ver 6.34 | Didn't find any VyOS patches other than turning it into a Debian package |
-| | iputils| iputils-20121221| using upstream ver 20151218 | |
+| | iputils| iputils-20121221| using upstream ver 20161105 | |
 | | ppp| ppp-2.4.6| using upstream ver 2.4.7 | TODO: check postinst script from VyOS ppp repo (seems not being used any more) |
-| | openssl| openssl-1.0.0| using upstream ver 1.0.2n | |
+| | openssl| openssl-1.0.0| using upstream ver 1.0.2o | |
 | | netplug| netplug 1.2.9| not used any more?| (network cable hotplug daemon) |
 | |
 | WLAN| vyatta-wireless| | ported| |
@@ -67,7 +71,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | | vyatta-op-quagga| | ported| |
 | | vyos-frr| frr-?| TBD | may replace quagga in the future|
 | | vyatta-ipv6-rtadv| | ported| |
-| | radvd| radvd-1.15| using upstream ver 2.14 | using VyOS startup script |
+| | radvd| radvd-1.15| using upstream ver 2.17 | using VyOS startup script |
 | |
 | WWAN| vyatta-wirelessmodem| | ported| TODO: remove and develop updated version |
 | |
@@ -77,9 +81,9 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | VPN| vyatta-cfg-vpn| | ported| |
 | | vyatta-op-vpn| | ported| |
-| | vyos-strongswan| strongswan-5.3.5| using upstream ver 5.5.3 + patches| |
+| | vyos-strongswan| strongswan-5.3.5| using upstream ver 5.6.2 + patches| |
 | | vyatta-openvpn| | ported| |
-| | openvpn| Debian openvpn-2.3.4| using upstream ver 2.4.3| |
+| | openvpn| Debian openvpn-2.3.4| using upstream ver 2.4.4| |
 | | vyatta-ravpn| | ported| |
 | | vyos-opennhrp| opennhrp-0.14.1| ported| using vyos version instead of upstream |
 | | vyos-nhrp| | ported| |
@@ -97,7 +101,7 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 | |
 | DHCP| vyatta-op-dhcp-server| | ported| |
 | | vyatta-cfg-dhcp-server| | ported| |
-| | vyatta-dhcp3| Debian isc-dhcp-4.3.1| using upstream ver 4.3.5 | added Debian patches and scripts |
+| | vyatta-dhcp3| Debian isc-dhcp-4.3.1| using upstream ver 4.3.6 | added Debian patches and scripts |
 | | vyatta-cfg-dhcp-relay| | ported| |
 | |
 | Monitoring| vyatta-netflow| | ported| |
@@ -158,12 +162,11 @@ easy to run VyOS router software on a wide variety of embedded platforms.
 
 
 ### Notes:
-1) this project currently builds for the 'qemux86' target. Other targets will require
-    a different kernel package.
+1) different target hardware will required differnet kernels. Initial development was to build the 
+    'qemux86' target, however now primary development has switched to embedded platforms using the MT7623 SoC.
+    Contributions to support more target hardware is welcome.
 2) VyOS uses two shells: a VyOS-modified version of bash 4.1, installed as 'vbash' and
-    generic bash 4.3 installed as 'bash'. This project currently installs 'vbash' and symlinks
-    'bash' to it.
-
+    generic bash 4.3 installed as 'bash'. 
 
 There is a lot more work to do and any help from interested parties is very welcome.
 
@@ -172,21 +175,21 @@ There is a lot more work to do and any help from interested parties is very welc
 - Most VyOS source packages build with GNU autotools, however they don't allow
   building outside of the source directory. This prevents the usage of the
   'devtool' command that's useful for local developmend with OpenEmbedded/bitbake.
-- Image management is not working, and it may never work in the same way usually
-  does with Debian VyOS. Debian VyOS uses Debian's LiveCD architecture with
-  initramfs/squashfs to handle multiple images. It is not clear yet how this
-  translates into the embedded realm, or even if it makes sense at all.
-- Even for packages that have already been ported, there are likely going to be
-  a fair number of other bugs that stem from differences between core Debian
-  vs. OpenEmbedded packages.
-
+- Upstream VyOS's image management and upgrade mechanism is not well suited for 
+  embedded systems with limited storage. This project aims to use 'swupdate' instead.
 
 ### Rough roadmap:
 
-- Port over more VyOS features by creating recipes for other VyOS packages
-- Resolve issues related to image management / firmware upgrade. Either find a
-  way to use the existing 'VyOS way' with OpenEmbedded, or design something new
-  that possibly makes more sense in an embedded environment
+- Testing! It is now possible to boot into a VyOS prompt and configure basic router functionality.
+  Firmware upgrades are possible using swupdate and the built-in Web-GUI at port 8080. Configuration
+  is retained across upgrades.
+  However, a lot of subsystems and services have not been tested yet. 
+- Sync up with upstream VyOS. Since this project started, VyOS has seen significant improvements. Many meta-vyos 
+  packages took a snapshot from upstream around 08/2017 and need to be brought up to date.
+- Add hardware support. Currently only MT7623 SoCs are supported. Other attractive targets would be 
+   - the EspressoBin board
+   - Ubiquity hardware
+   - any platform with native Gig-E ports.
 - Deal with issues related to logging and frequent file system write access that
   could wear out an embedded flash filesystem
 - Debug!
@@ -194,7 +197,7 @@ There is a lot more work to do and any help from interested parties is very welc
 
 # Build Instructions:
 
-Development is currently done against OpenEmbedded/Yocto, release 'rocko'
+Development is currently done against OpenEmbedded/Yocto, release 'sumo'
 
 If you are not familiar with OpenEmbedded (or the 'Yocto' derivative), extensive documentation can be found here:
 
@@ -204,18 +207,18 @@ https://www.yoctoproject.org/documentation
 
 https://www.yoctoproject.org/docs/current/ref-manual/ref-manual.html#intro-requirements
 
-* get the Yocto core packages, and the 'meta-openembedded' layer:
+* get the Yocto core packages, plus the 'meta-openembedded' and 'meta-swupdate' layers:
 ```
-git clone -b rocko git://git.yoctoproject.org/poky.git yocto-rocko
-cd yocto-rocko
-git clone -b rocko git://git.openembedded.org/meta-openembedded
-
+git clone -b sumo git://git.yoctoproject.org/poky.git yocto-sumo
+cd yocto-sumo
+git clone -b sumo git://git.openembedded.org/meta-openembedded
+git clone https://github.com/sbabic/meta-swupdate
 ````
 * get this project's source:
 ```
 git clone https://github.com/wtolkien/meta-vyos.git
 ```
-* from the ```yocto-rocko``` directory, initialize the build-environment:
+* from the ```yocto-sumo``` directory, initialize the build-environment:
 ```
 source oe-init-build-env
 ```
@@ -225,9 +228,9 @@ source oe-init-build-env
   your path
 ```
 BBLAYERS ?= " \
-  [your existing path]/yocto-rocko/meta \
-  [your existing path]/yocto-rocko/meta-poky \
-  [your existing path]/yocto-rocko/meta-yocto-bsp \
+  [your existing path]/yocto-sumo/meta \
+  [your existing path]/yocto-sumo/meta-poky \
+  [your existing path]/yocto-sumo/meta-yocto-bsp \
   \
   ${TOPDIR}/../meta-vyos \
   ${TOPDIR}/../meta-openembedded/meta-oe \
@@ -235,6 +238,8 @@ BBLAYERS ?= " \
   ${TOPDIR}/../meta-openembedded/meta-python \
   ${TOPDIR}/../meta-openembedded/meta-perl \
   ${TOPDIR}/../meta-openembedded/meta-filesystems \
+  \
+  ${TOPDIR}/../meta-swupdate \
   "
 ```
 * add the following line to the OpenEmbedded config file ```conf/local.conf``` to
@@ -242,13 +247,23 @@ BBLAYERS ?= " \
 ```
 DISTRO ?= "vyos"
 ```
-* you are now ready to start the build process. From the ```yocto-rocko/build``` directory,
+* if you are building an embedded target, add the corresponding machine layer (for example 
+  `meta-mediatek`) and set the `MACHINE` environment variable:
+```
+export MACHINE=mt7623-bpi-r2
+```
+* you are now ready to start the build process. From the ```yocto-sumo/build``` directory,
   enter:
 ```
 bitbake vyos-image
 ```
+or 
+```
+bitbake vyos-image-swu
+```
+to build a swupdate upgrade file.
 * When done (likely after an hour or more), an image will be in the
-  ```yocto-rocko/build/tmp-glibc/deploy/image/qemux86``` directory. It can be started by entering
+  ```yocto-sumo/build/tmp-glibc/deploy/image/$MACHINE``` directory. In case of `qemux86` can be started by entering
 ```
 runqemu
 ```
