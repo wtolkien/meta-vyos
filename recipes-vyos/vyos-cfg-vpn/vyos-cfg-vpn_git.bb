@@ -7,7 +7,8 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
 SRC_URI = "git://github.com/vyos/vyatta-cfg-vpn.git;branch=current;protocol=https \
-	  "
+	file://001-fix-logrotate-permissions.patch \
+	"
 
 # snapshot from Aug 5, 2017:
 SRCREV = "18f30fbda88e075fbd48459f2f6d646ba333ff3c"
