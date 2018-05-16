@@ -36,6 +36,7 @@ RDEPENDS_${PN} += " \
 	boost \
 	glib-2.0 \
 	file \
+	tree \
 	vyos-bash \
 	vyos-cfg-system \
 	vyos-config-migrate \
