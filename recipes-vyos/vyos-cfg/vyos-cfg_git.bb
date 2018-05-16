@@ -6,15 +6,17 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
 SRC_URI = "git://github.com/vyos/vyatta-cfg.git;branch=current;protocol=https \
-	   file://001-fix-namespace-ambiguity.patch \
 	   file://002-remove-debian-apt-dependency.patch \
 	   file://003-allow-perl-cross-compile.patch \
 	   file://004-unionfs-fuse-path.patch \
+	   file://005-depend-on-sshdgenkeys-service.patch \
+	   file://006-fix-logrotate-permissions.patch \
+	   file://007-no-invokerc-for-auth-logrotate.patch \
 	   file://010-startup-load-persistent-data-part.patch \
 	  "
 
-# snapshot from Jul 10, 2017:
-SRCREV = "3b8b2e11f322994cfa82fc6b09ce6af4ed715dfa"
+# snapshot from April 13, 2018:
+SRCREV = "2a925cdc203cab2d8b8a3bd08ab6380f399b8bc9"
 
 PV = "1.0+git${SRCPV}"
 
@@ -75,15 +77,15 @@ PARALLEL_MAKE = "-j 1"
 #    that autotools routines have priority
 # b) we append the setuputils3 routines here, after changing into the correct
 #    subdirectory first
-do_compile_append () {
-	cd python;
-	distutils3_do_compile
-}
+#do_compile_append () {
+#	cd python;
+#	distutils3_do_compile
+#}
 
 do_install_append () {
-	cd python;
-	distutils3_do_install
-	cd ${S}
+#	cd python;
+#	distutils3_do_install
+#	cd ${S}
 
 	# create an empty Debian apt-sources file
 	install -d ${D}/etc/apt
