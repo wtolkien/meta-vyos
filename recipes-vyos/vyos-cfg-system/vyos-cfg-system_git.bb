@@ -67,7 +67,11 @@ FILES_${PN} += "/opt /lib /usr/share"
 
 # NOTE: this software seems not capable of being built in a separate build directory
 # from the source, therefore using 'autotools-brokensep' instead of 'autotools'
-inherit cpan autotools-brokensep
+inherit cpan autotools-brokensep update-rc.d
+
+INITSCRIPT_PACKAGES = "${PN}"
+INITSCRIPT_NAME_${PN} = "vyos-intfwatchd"
+INITSCRIPT_PARAMS_${PN} = "start 95 2 3 4 5 ."
 
 # additional options to be passed to the configure script:
 EXTRA_OECONF = "\
