@@ -7,8 +7,6 @@ LIC_FILES_CHKSUM = "file://COPYRIGHT;md5=ed4b1320404827af6b24b60c0c53656f \
 
 SRC_URI = "https://sourceforge.net/projects/ddclient/files/ddclient/ddclient-${PV}/ddclient-${PV}.tar.bz2 \
     file://ddclient.init \
-    file://ddclient.dhclient-exit-hooks \
-    file://ddclient.ppp.ip-up \
     file://ddclient.conf \
     file://ddclient.default \
 	"
@@ -25,28 +23,18 @@ do_compile () {
 	:
 }
 
-# TODO: a) check usefulness of scripts in ppp/ip-up.d   b) check compatibility
-# with systemd
 do_install () {
     install -d ${D}${sysconfdir}
-    install ${WORKDIR}/ddclient.conf ${D}${sysconfdir}
+    install -m 0600 ${WORKDIR}/ddclient.conf ${D}${sysconfdir}
 
     install -d ${D}${sysconfdir}/default
-    install ${WORKDIR}/ddclient.default ${D}${sysconfdir}/default/ddclient
+    install -m 0600 ${WORKDIR}/ddclient.default ${D}${sysconfdir}/default/ddclient
 
     install -d ${D}${sysconfdir}/init.d
-    install ${WORKDIR}/ddclient.init ${D}${sysconfdir}/init.d/ddclient
-
-    install -d ${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d
-    install ${WORKDIR}/ddclient.dhclient-exit-hooks ${D}${sysconfdir}/dhcp/dhclient-exit-hooks.d/ddclient
-
-    install -d ${D}${sysconfdir}/ppp/ip-up.d
-    install ${WORKDIR}/ddclient.ppp.ip-up ${D}${sysconfdir}/ppp/ip-up.d/ddclient
+    install -m 0755 ${WORKDIR}/ddclient.init ${D}${sysconfdir}/init.d/ddclient
 
 	install -d ${D}${sbindir}
 	install -m 0755 ${S}/ddclient ${D}${sbindir}
 
     install -d ${D}${localstatedir}/ddclient
 }
-
-
