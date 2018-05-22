@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [[ $_ == $0 ]] ; then
+    echo "Error: This script needs to be sourced. Please run as 'source $0'"
+    exit 1
+fi
+
+if [[ -n "$VYOS_PATH_SAFE" ]] ; then
+	export PATH="$VYOS_PATH_SAFE"
+	unset VYOS_PATH_SAFE
+else
+	echo "environment variable 'VYOS_PATH_SAFE' was not set"
+fi
+
+unset TEMPLATECONF
+unset POKY_DISTRO_VERSION
+unset POKY_DISTRO_CODENAME
+unset BUILDDIR
+unset BB_ENV_EXTRAWHITE
+
+echo "Deinitialized build environment"

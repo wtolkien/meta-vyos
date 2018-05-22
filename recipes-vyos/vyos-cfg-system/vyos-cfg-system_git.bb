@@ -68,7 +68,11 @@ RDEPENDS_${PN} = " \
 	tzdata \
 	vyos-bash \
 	vyos-wireless \
+	util-linux-swaponoff \
 	"
+
+RDEPENDS_${PN}_append_x86 = " dmidecode"
+RDEPENDS_${PN}_append_x86-64 = " dmidecode"
 
 # add directories that otherwise wouldn't automatically get packaged up...
 FILES_${PN} += "/opt /lib /usr/share"
