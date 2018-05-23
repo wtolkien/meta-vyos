@@ -19,6 +19,4 @@ DEPENDS += "openssl-native util-linux-native"
 SRC_URI[kernel.md5sum] = "4f1260eb0812204bf7279c9c016859fd"
 SRC_URI[kernel.sha256sum] = "2f34e9ea4eefc35633a98fcb92a78dc0c2974d5b2b1eca3ef65840ead61e3af7"
 
-COMPATIBLE_MACHINE = "qemuarm|qemuarm64|qemuppc|qemumips|qemumips64|qemux86-64|genericx86-64"
-
 LINUX_VERSION_EXTENSION = "-vyos"
