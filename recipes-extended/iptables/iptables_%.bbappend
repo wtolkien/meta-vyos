@@ -1,5 +1,4 @@
-RDEPENDS_${PN} += " vyos-bash"
-
+RDEPENDS_${PN} += " vyos-bash bash"
 
 # enable libnfnetlink to pull in OSF (Operating system
 # fingerprinting) support
