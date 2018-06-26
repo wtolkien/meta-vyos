@@ -8,6 +8,8 @@ SRC_URI += " \
     file://snmpd.conf \
     "
 
+PACKAGECONFIG_append = " perl"
+
 # disable /etc/init.d/snmpd startup script (VyOS takes care of this)
 SYSTEMD_AUTO_ENABLE_${PN}-server-snmpd = "disable"
 SYSTEMD_AUTO_ENABLE_${PN}-server-snmptrapd = "disable"
