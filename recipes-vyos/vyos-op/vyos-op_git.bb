@@ -2,13 +2,13 @@ SUMMARY = "VyOS operational command completion script"
 HOMEPAGE = "https://github.com/vyos/vyatta-op"
 SECTION = "vyos/config"
 
-
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=eb723b61539feef013de476e68b5c50a"
 
-SRC_URI = "git://github.com/vyos/vyatta-op.git;branch=current;protocol=https \
-		file://git/vyatta-tmpfs \
-	  	"
+SRC_URI = " \
+	git://github.com/vyos/vyatta-op.git;branch=current;protocol=https \
+	file://git/vyatta-tmpfs \
+	"
 
 # snapshot from Jul 13, 2017:
 SRCREV = "76822101f04681402df67fcb194e8c0fdd71c96d"
@@ -33,10 +33,16 @@ RDEPENDS_${PN} = " \
 	python-subprocess \
 	python-math \
 	python-pystache \
-	python-modules \
+	${@bb.utils.contains('DISTRO_FEATURES', 'vyos-non-embedded', 'lsscsi', '',d)} \
 	"
 
-FILES_${PN} += "/opt"
+PACKAGES = "${PN}-non-embedded ${PN}"
+
+FILES_${PN} = "/etc /opt"
+FILES_${PN}-non-embedded = " \
+	/opt/vyatta/share/vyatta-op/templates/show/hardware/scsi \
+	/opt/vyatta/share/vyatta-op/templates/show/raid \
+"
 
 # NOTE: this software seems not capable of being built in a separate build directory
 # from the source, therefore using 'autotools-brokensep' instead of 'autotools'
@@ -44,8 +50,8 @@ inherit autotools-brokensep update-rc.d
 
 # additional options to be passed to the configure script:
 EXTRA_OECONF = "\
-    --prefix=/opt/vyatta \
-    --exec_prefix=/opt/vyatta \
+	--prefix=/opt/vyatta \
+	--exec_prefix=/opt/vyatta \
 	--sbindir=/opt/vyatta/sbin \
 	--bindir=/opt/vyatta/bin \
 	--datadir=/opt/vyatta/share \
