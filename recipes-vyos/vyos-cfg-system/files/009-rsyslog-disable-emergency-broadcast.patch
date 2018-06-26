@@ -1,0 +1,8 @@
+--- a/sysconf/rsyslog.conf	2018-06-26 09:48:57.401433906 -0700
++++ b/sysconf/rsyslog.conf	2018-06-26 09:49:13.153579291 -0700
+@@ -63,5 +63,5 @@ daemon.*            /var/log/messages
+ auth,authpriv.*			/var/log/auth.log
+
+ # Emergencies are sent to everybody logged in.
+-*.emerg				:omusrmsg:*
++#*.emerg				:omusrmsg:*

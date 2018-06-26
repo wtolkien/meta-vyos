@@ -15,6 +15,7 @@ SRC_URI = "git://github.com/vyos/vyatta-cfg-system.git;branch=current;protocol=h
 		  file://006-rename-ntp-to-ntpd.patch \
 		  file://007-add-sudo-secure-path.patch \
 		  file://008-use-systemd-for-rsyslog-restart.patch \
+		  file://009-rsyslog-disable-emergency-broadcast.patch \
 		  file://git/vyatta-postconfig-bootup.script \
 		  file://git/bashrc.template \
 	      "
