@@ -12,6 +12,7 @@ SRC_URI = "git://github.com/vyos/vyatta-cfg.git;branch=current;protocol=https \
 	   file://005-depend-on-sshdgenkeys-service.patch \
 	   file://006-fix-logrotate-permissions.patch \
 	   file://007-no-invokerc-for-auth-logrotate.patch \
+	   file://008-remove-obsolete-sysvstartpriority.patch \
 	   file://010-startup-load-persistent-data-part.patch \
 	  "
 

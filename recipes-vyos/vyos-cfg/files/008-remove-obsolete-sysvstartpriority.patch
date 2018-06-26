@@ -1,0 +1,10 @@
+--- a/debian/vyatta-cfg.vyatta-router.service	2018-06-18 16:33:10.948823770 -0700
++++ b/debain/vyatta-cfg.vyatta-router.service	2018-06-18 16:34:11.401533471 -0700
+@@ -14,7 +14,6 @@ IgnoreSIGPIPE=no
+ KillMode=process
+ GuessMainPID=no
+ RemainAfterExit=yes
+-SysVStartPriority=4
+ ExecStart=/etc/init.d/vyatta-router start
+ ExecStop=/etc/init.d/vyatta-router stop
+ StandardOutput=journal+console
