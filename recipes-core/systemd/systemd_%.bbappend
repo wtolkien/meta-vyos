@@ -32,6 +32,7 @@ do_install_append () {
 # disable a few more systemd startup services...
 SYSTEMD_MASKED_SCRIPTS = " \
     systemd-networkd-wait-online \
+    systemd-timesyncd \
     plymouth-quit-wait \
     plymouth-start \
     display-manager \
