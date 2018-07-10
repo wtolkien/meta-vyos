@@ -46,7 +46,8 @@ FILES_${PN}-non-embedded = " \
 
 # NOTE: this software seems not capable of being built in a separate build directory
 # from the source, therefore using 'autotools-brokensep' instead of 'autotools'
-inherit autotools-brokensep update-rc.d
+inherit autotools-brokensep 
+#update-rc.d
 
 # additional options to be passed to the configure script:
 EXTRA_OECONF = "\
@@ -59,8 +60,8 @@ EXTRA_OECONF = "\
 	"
 
 do_install_append () {
-	install -d ${D}${sysconfdir}/init.d
-	install vyatta-tmpfs ${D}${sysconfdir}/init.d
+#	install -d ${D}${sysconfdir}/init.d
+#	install vyatta-tmpfs ${D}${sysconfdir}/init.d
 
 	# TODO: this needs to get cleaned up upstream: this package provides templates
 	# for vxlan which conflict with files from the vyos-vxlan package. For now we
@@ -68,6 +69,6 @@ do_install_append () {
 	rm -rf ${D}/opt/vyatta/share/vyatta-op/templates/show/interfaces/vxlan
 }
 
-INITSCRIPT_PACKAGES = "${PN}"
-INITSCRIPT_NAME_${PN} = "vyatta-tmpfs"
-INITSCRIPT_PARAMS_${PN} = "start 00 1 2 3 4 5 6 ."
+#INITSCRIPT_PACKAGES = "${PN}"
+#INITSCRIPT_NAME_${PN} = "vyatta-tmpfs"
+#INITSCRIPT_PARAMS_${PN} = "start 00 1 2 3 4 5 6 ."
