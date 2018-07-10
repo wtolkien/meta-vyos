@@ -39,7 +39,7 @@ do_install_append() {
         install -m 0644 ${WORKDIR}/pptpd.service ${D}${systemd_unitdir}/system
 
         # broken (doesn't cross-compile, maybe other issues...)
-	sed -ri "s,^[:space:]*logwtmp[:space:]*,# logwtmp," ${D}/${sysconfdir}/pptpd.conf
+	sed -ri "s,^[[:space:]]*logwtmp[[:space:]]*,# logwtmp," ${D}/${sysconfdir}/pptpd.conf
         rm -f ${D}${libdir}/pptpd/pptpd-logwtmp.so
 	# Use mppe option in OE style
 	sed -ri "s|^[[:space:]]*require-mppe-128[[:space:]]*$|mppe required,no40,no56|" ${D}/${sysconfdir}/ppp/options.pptpd
