@@ -12,6 +12,8 @@ SRC_URI = "git://github.com/vyos/vyatta-wirelessmodem.git;branch=current;protoco
 # snapshot from Aug 1, 2017:
 SRCREV = "991b024a6f550bd000c4b80d343b1112a61b1a94"
 
+RPROVIDES_${PN} = "virtual/vyos-wwan"
+
 PV = "1.0+git${SRCPV}"
 
 S = "${WORKDIR}/git"

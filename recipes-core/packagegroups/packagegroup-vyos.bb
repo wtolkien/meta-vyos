@@ -43,7 +43,7 @@ VYOS_ROUTING = " \
     "
 
 VYOS_WWAN = " \
-    vyos-wirelessmodem \
+    virtual/vyos-wwan \
     "
 
 VYOS_TUNNEL = " \
