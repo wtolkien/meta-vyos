@@ -1,0 +1,24 @@
+From 24ae55af7b72b1e3cf59e09787fc3a73f8864a8e Mon Sep 17 00:00:00 2001
+From: Christian Poessinger <christian@poessinger.com>
+Date: Mon, 12 Mar 2018 20:14:42 +0100
+Subject: [PATCH 2/6] Fix missing 'REPORTING-BUGS' file for make-kpkg
+
+In v4.10, the file was moved (and renamed and edited) to
+"Documentation/admin-guide/reporting-bugs.rst".
+
+Debian install script needs to be updated.
+---
+ REPORTING-BUGS | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 120000 REPORTING-BUGS
+
+diff --git a/REPORTING-BUGS b/REPORTING-BUGS
+new file mode 120000
+index 0000000..3fcf0e1
+--- /dev/null
++++ b/REPORTING-BUGS
+@@ -0,0 +1 @@
++Documentation/admin-guide/reporting-bugs.rst
+\ No newline at end of file
+--
+2.1.4
