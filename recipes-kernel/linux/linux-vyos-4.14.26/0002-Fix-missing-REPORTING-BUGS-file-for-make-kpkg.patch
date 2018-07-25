@@ -1,0 +1,21 @@
+From 216b8fc11f5b387da9aa3021687ebc9e9be19299 Mon Sep 17 00:00:00 2001
+From: Christian Poessinger <christian@poessinger.com>
+Date: Mon, 12 Mar 2018 20:14:42 +0100
+Subject: [PATCH 2/3] Fix missing 'REPORTING-BUGS' file for make-kpkg
+
+---
+ REPORTING-BUGS | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 120000 REPORTING-BUGS
+
+diff --git a/REPORTING-BUGS b/REPORTING-BUGS
+new file mode 120000
+index 00000000..3fcf0e12
+--- /dev/null
++++ b/REPORTING-BUGS
+@@ -0,0 +1 @@
++Documentation/admin-guide/reporting-bugs.rst
+\ No newline at end of file
+-- 
+2.17.1
+

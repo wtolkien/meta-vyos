@@ -1,10 +1,25 @@
---- a/fs/notify/inotify/Kconfig	2018-03-11 08:23:23.000000000 -0700
-+++ b/fs/notify/inotify/Kconfig	2018-03-18 08:49:58.000000000 -0700
+From 3259f1fb6ed5e5439cacb30aaccd8142a5fcd113 Mon Sep 17 00:00:00 2001
+From: Alex Harpin <development@landsofshadow.co.uk>
+Date: Wed, 31 Dec 2014 10:33:38 +0000
+Subject: [PATCH 3/3] VyOS: add inotify support for stackable filesystems
+ (overlayfs)
+
+---
+ fs/notify/inotify/Kconfig        |   9 +++
+ fs/notify/inotify/inotify_user.c | 112 ++++++++++++++++++++++++++++++-
+ fs/overlayfs/super.c             |  24 ++++++-
+ include/linux/inotify.h          |  28 ++++++++
+ 4 files changed, 170 insertions(+), 3 deletions(-)
+
+diff --git a/fs/notify/inotify/Kconfig b/fs/notify/inotify/Kconfig
+index b981fc0c..1ccd92e5 100644
+--- a/fs/notify/inotify/Kconfig
++++ b/fs/notify/inotify/Kconfig
 @@ -15,3 +15,12 @@ config INOTIFY_USER
  	  For more information, see <file:Documentation/filesystems/inotify.txt>
  
  	  If unsure, say Y.
-+	  
++
 +config INOTIFY_STACKFS
 +	bool "Inotify support for stackable filesystem"
 +	select INOTIFY_USER
@@ -13,8 +28,10 @@
 +	  Say Y here to enable inotify support for stackable filesystem.
 +
 +	  If unsure, say N.
---- a/fs/notify/inotify/inotify_user.c	2018-03-11 08:23:23.000000000 -0700
-+++ b/fs/notify/inotify/inotify_user.c	2018-03-18 08:49:58.000000000 -0700
+diff --git a/fs/notify/inotify/inotify_user.c b/fs/notify/inotify/inotify_user.c
+index 7cc7d3fb..6b7af050 100644
+--- a/fs/notify/inotify/inotify_user.c
++++ b/fs/notify/inotify/inotify_user.c
 @@ -24,6 +24,7 @@
  
  #include <linux/file.h>
@@ -118,7 +135,7 @@
  static inline __u32 inotify_arg_to_mask(u32 arg)
  {
  	__u32 mask;
-@@ -327,7 +416,7 @@ static const struct file_operations inot
+@@ -327,7 +416,7 @@ static const struct file_operations inotify_fops = {
  /*
   * find_inode - resolve a user-given path to a specific inode
   */
@@ -127,7 +144,7 @@
  {
  	int error;
  
-@@ -341,6 +430,27 @@ static int inotify_find_inode(const char
+@@ -341,6 +430,27 @@ static int inotify_find_inode(const char __user *dirname, struct path *path, uns
  	return error;
  }
  
@@ -155,8 +172,10 @@
  static int inotify_add_to_idr(struct idr *idr, spinlock_t *idr_lock,
  			      struct inotify_inode_mark *i_mark)
  {
---- a/fs/overlayfs/super.c	2018-03-11 08:23:23.000000000 -0700
-+++ b/fs/overlayfs/super.c	2018-03-18 08:49:58.000000000 -0700
+diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+index b8f8d666..1a501b32 100644
+--- a/fs/overlayfs/super.c
++++ b/fs/overlayfs/super.c
 @@ -17,6 +17,7 @@
  #include <linux/statfs.h>
  #include <linux/seq_file.h>
@@ -165,7 +184,7 @@
  #include "overlayfs.h"
  #include "ovl_entry.h"
  
-@@ -1208,6 +1209,18 @@ static void ovl_inode_init_once(void *fo
+@@ -1208,6 +1209,18 @@ static void ovl_inode_init_once(void *foo)
  	inode_init_once(&oi->vfs_inode);
  }
  
@@ -215,8 +234,10 @@
  }
  
  module_init(ovl_init);
---- a/include/linux/inotify.h	2018-03-11 08:23:23.000000000 -0700
-+++ b/include/linux/inotify.h	2018-03-18 08:49:58.000000000 -0700
+diff --git a/include/linux/inotify.h b/include/linux/inotify.h
+index 44f9ffe7..4152c337 100644
+--- a/include/linux/inotify.h
++++ b/include/linux/inotify.h
 @@ -9,6 +9,8 @@
  
  #include <linux/sysctl.h>
@@ -226,7 +247,7 @@
  
  extern struct ctl_table inotify_table[]; /* for sysctl */
  
-@@ -20,4 +22,30 @@ extern struct ctl_table inotify_table[];
+@@ -20,4 +22,30 @@ extern struct ctl_table inotify_table[]; /* for sysctl */
  			  IN_DONT_FOLLOW | IN_EXCL_UNLINK | IN_MASK_ADD | \
  			  IN_ISDIR | IN_ONESHOT)
  
@@ -234,7 +255,7 @@
 +
 +struct inotify_stackfs {
 +	struct list_head	list;		/* entry in inotify_fs_list */
-+	struct file_system_type	*fs_type;	/* registed file_system_type */	
++	struct file_system_type	*fs_type;	/* registed file_system_type */
 +	inotify_path_proc	func;		/* registed callback function */
 +};
 +
@@ -257,3 +278,6 @@
 +#endif	/* CONFIG_INOTIFY_STACKFS */
 +
  #endif	/* _LINUX_INOTIFY_H */
+-- 
+2.17.1
+
